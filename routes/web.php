@@ -51,6 +51,7 @@ Route::get('check_bill/{id}',function($id){
 })->name('check_bill')->middleware('auth');
 
 Route::resource('users',usersController::class)->middleware('auth');
+Route::get('Print_invoice/{id}',[PurchasesbillConttroller::class, 'Print_invoice']);
 
 Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('invicebill')->middleware('auth');
 
