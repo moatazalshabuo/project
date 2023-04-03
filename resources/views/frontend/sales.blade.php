@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('title')
+فاتورة المبيعات المبيعات
+@endsection
 @section('css')
 <!-- Interenal Accordion Css -->
 <link href="{{URL::asset('assets/plugins/accordion/accordion.css')}}" rel="stylesheet" />

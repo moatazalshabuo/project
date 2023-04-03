@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@section('title')
+	حساب مورد
+@endsection
 @section('css')
 @endsection
 @section('page-header')

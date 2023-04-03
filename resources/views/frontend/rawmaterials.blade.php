@@ -1,5 +1,7 @@
 @extends('layouts.master')
-
+@section('title')
+	المواد الخام 
+@endsection
 @section('css')
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />

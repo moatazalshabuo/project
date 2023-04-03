@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@section('title')
+	فاتورة المشتريات
+@endsection
 @section('css')
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
 <!-- Default theme -->
