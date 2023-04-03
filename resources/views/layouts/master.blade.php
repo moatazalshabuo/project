@@ -30,7 +30,7 @@
 		@include('layouts.main-sidebar')		
 		<!-- main-content -->
 		<div class="main-content app-content">
-			{{-- @include('layouts.main-header')			 --}}
+			@include('layouts.main-header')			
 			<!-- container -->
 			<div class="container-fluid">
 				@yield('page-header')
