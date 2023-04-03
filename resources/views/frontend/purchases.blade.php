@@ -78,7 +78,7 @@
 					
 				</div>
 				<div class="row m-1">
-					<div class="col-5">
+					<div class="col-md-5">
 						<select id="custom" class="form-control select2-no-search mb-1 select" @if($data->status == 0) disabled @endif>
 							<option label="المورد">
 							</option>
@@ -86,7 +86,7 @@
 						</select>
 						<div class="text-danger" id="client-err"></div>
 					</div>
-					<div class="col-1">
+					<div class="col-md-1">
 						<button class="btn btn-primary" data-target="#select2modal" data-toggle="modal"><i class="mdi mdi-plus"></i></button>
 					</div>
 				</div>
@@ -101,7 +101,7 @@
 								<form id="input-item">
 									@csrf
 									<div class="row">
-										<div class="col-4">
+										<div class="col-md-4">
 											<label>الصنف</label>
 											<select name="material" class="form-control select" id="mate">
 												<option >اختر الصنف</option>
@@ -111,7 +111,7 @@
 											</select>
 											<div class="text-danger" id="product_error"></div>
 										</div>
-										<div class="col-3">
+										<div class="col-md-3">
 											<label>الكمية الموجودة</label>
 											<input class="form-control" disabled placeholder="الكمية" id="old_quant" type="number">
 											
@@ -120,22 +120,22 @@
 											<label>اخر سعر</label>
 											<input class="form-control" id="old_price" disabled type="number">
 										</div>
-										<div class="col-2"></div>
-										<div class="col-2">
+										<div class="col-md-2"></div>
+										<div class="col-md-2">
 											<label>الكمية</label>
 											<input class="form-control" @if($data->status == 0)disabled @endif placeholder="الكمية" id="quant" name="quant" type="number">
 											<div class="text-danger" id="q_error"></div>
 										</div>
-										<div class="col-2">
+										<div class="col-md-2">
 											<label>السعر الحالي</label>
 											<input class="form-control" placeholder="السعر" value="0" type="number" id="price" name="price" @if($data->status == 0)disabled @endif>
 											<div class="text-danger" id="price_error"></div>
 										</div>
-										<div class="col-2">
+										<div class="col-md-2">
 											اجمالي السعر
 											<input class="form-control" disabled placeholder="الاجمالي" type="number" id="totel">
 										</div>
-										<div class="col-1">
+										<div class="col-md-1">
 											<br>
 											<button class="btn btn-primary" id="addItem" type="button">حفظ</button>
 										</div>

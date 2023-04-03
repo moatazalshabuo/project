@@ -29,7 +29,7 @@
 								<form action="{{ route("search_cust") }}" method="post">
 									@csrf
 									<div class="row">
-										<div class="col-5">
+										<div class="col-md-5">
 											<label>الموردين</label>
 											<select class="form-control" name="custom">
 												<option value="">اختر المورد</option>
@@ -42,20 +42,20 @@
 											@enderror
 										</div>
 
-										<div class="col-2"></div>
-										<div class="col-2">
+										<div class="col-md-2"></div>
+										<div class="col-md-2">
 											<div class="form-group m-0 p-0">
 												<label>من :</label> 
 												<input type="datetime-local" class="form-control" name="from">
 											</div>
 										</div>
-										<div class="col-2">
+										<div class="col-md-2">
 											<div class="form-group m-0 p-0">
 												<label>الى :</label> 
 												<input type="datetime-local" class="form-control" name="to">
 											</div>
 										</div>
-										<div class="col-1">
+										<div class="col-md-1">
 											<input type="submit" class="btn btn-primary" value="بحث">
 										</div>
 									</div>

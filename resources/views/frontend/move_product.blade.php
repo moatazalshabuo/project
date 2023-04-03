@@ -38,7 +38,7 @@
 					<form action="{{ route("search_moveprod") }}" method="POST">
 						@csrf
 						<div class="row">
-							<div class="col-4">
+							<div class="col-md-4">
 								<label>الزبون</label>
 								<select name="product" class="form-control">
 									<option value="" >اختر الصنف</option>
@@ -50,18 +50,18 @@
 								<div class="text-danger">{{ $message }}</div>
 							@enderror
 							</div>
-							<div class="col-2">
+							<div class="col-md-2">
 								من
 								<input class="form-control" type="datetime-local" value="{{ old('from') }}" name="from">
 							</div>
-							<div class="col-2">
+							<div class="col-md-2">
 								الى
 								<input class="form-control" type="datetime-local" value="" name="to">
 							@error('to')
 								<div class="text-danger">{{ $message }}</div>
 							@enderror
 							</div>
-							<div class="col-1">
+							<div class="col-md-1">
 								<br>
 								<button class="btn btn-primary" id="addItem" type="submit">بحث</button>
 							</div>

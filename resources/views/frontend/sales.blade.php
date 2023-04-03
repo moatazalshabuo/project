@@ -95,34 +95,34 @@
 								<form id="input-item">
 									@csrf
 									<div class="row">
-										<div class="col-4">
+										<div class="col-md-4">
 											<label>الصنف</label>
 											<select name="product" class="form-control" id="product">
 												<optin disabled >اختر الصنف</optin>
 											</select>
 											<div class="text-danger" id="product_error"></div>
 										</div>
-										<div class="col-2">
+										<div class="col-md-2">
 											<label>الكمية</label>
 											<input class="form-control" required @if($data->status == 0)disabled @endif placeholder="الكمية" id="quant" name="quant" type="number">
 											{{-- <input class="form-control" @if($data->status == 0)disabled @endif placeholder="العرض" type="text"> --}}
 											<div class="text-danger" id="q_error"></div>
 										</div>
-										<div class="col-1">
+										<div class="col-md-1">
 											<label>سعر </label>
 											<input class="form-control" id="price" name="price" disabled type="number">
 											{{-- <input class="form-control" @if($data->status == 0)disabled @endif placeholder="العرض" type="text"> --}}
 										</div>
-										<div class="col-2">
+										<div class="col-md-2">
 											<label>التخفيض</label>
 											<input class="form-control" placeholder="التخفيض" value="0" type="number" id="descount" name="descont" @if($data->status == 0)disabled @endif>
 										
 										</div>
-										<div class="col-2">
+										<div class="col-md-2">
 											اجمالي السعر
 											<input class="form-control" disabled placeholder="الاجمالي" type="number" id="totel">
 										</div>
-										<div class="col-1">
+										<div class="col-md-1">
 											<br>
 											<button class="btn btn-primary" id="addItem" type="button">حفظ</button>
 										</div>
