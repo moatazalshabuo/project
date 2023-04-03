@@ -167,15 +167,15 @@
 						</div>
 					</div>
 					<div class="col-lg-2 col-md-2">
-						<div class="card card-primary p-1">
-							<div class="form-group p-1">
+						<div class="card card-primary p-1 row">
+							<div class="form-group p-1 col-lg-12 col-md-12 col-4">
 								الاجمالي : <input type="number" disabled value="0" class="form-control" id="total">
 							</div>
-							<div class="form-group p-1">
+							<div class="form-group p-1 col-lg-12 col-md-12 col-4">
 								الخالص : <input type="number" @if($data->status == 0)disabled @endif  class="form-control" id="sincere">
 							</div>
 							<p class="text-danger" id="sincere-err"></p>
-							<div class="form-group p-1">
+							<div class="form-group p-1 col-lg-12 col-md-12 col-4">
 								المتبقي : <input type="number" disabled value="0" class="form-control" id="Residual">
 							</div>
 						</div>
