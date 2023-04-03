@@ -86,7 +86,7 @@
                 <div class="card-header pb-0">
                     <div class="col-sm-6 col-md-4 col-xl-3">
                         <a class="btn btn-outline-primary btn-block"
-                             href="{{ route('register') }}">إضافة مستخدم</a>
+                             href="{{ route('registeruser') }}">إضافة مستخدم</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -132,8 +132,10 @@
                                             {{-- <td>{{ $dates->password }}</td> --}}
                                             <td>@if ($dates->user_type == 1)
 												ادمن
-												@else
+												@elseif ($dates->user_type == 3)
 												موظف
+                                                @else
+                                                ادارة
 											@endif </td>
                                             <td>{{ $dates->created_at }}</td>
                                             {{-- <td></td>
@@ -150,10 +152,8 @@
                                                          data-user_type="{{ $dates->user_type }}"   data-toggle="modal" href="#exampleModal2"
 														title="تعديل"><i class="las la-pen"></i></a>
     
-                                                <button class="btn btn-outline-danger btn-sm "
-                                                    data-pro_id="{{ $dates->id }}"
-                                                    data-product_name="{{ $dates->name }}" data-toggle="modal"
-                                                    data-target="#modaldemo9">حذف</button>
+                                                <button class="btn btn-outline-danger delete-user btn-sm "
+                                                    id="{{ $dates->id }}">حذف</button>
                                             </td>
                                     </tr>
                         @endforeach
@@ -219,8 +219,9 @@
                     {{-- @foreach ($user as $dates) --}}
 <option value="">اختر الحالة</option>
 
-<option value="1" @if ($dates->user_type  == 1) selected @endif>ادمن</option>
-<option value="0" @if ($dates->user_type  == 0) selected @endif>موظف</option>                       
+<option value="1" @if ($dates->user_type  == 1) selected @endif>مسؤول</option>
+<option value="2" @if ($dates->user_type  == 0) selected @endif>مدير</option>
+<option value="3"  @if ($dates->user_type  == 0) selected @endif>موظف</option> 
                     
                     {{-- @endforeach --}}
                 </select>
@@ -237,7 +238,7 @@
 
 
 
-    <div class="modal fade" id="modaldemo9" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -378,6 +379,23 @@ $('#modaldemo9').on('show.bs.modal', function(event) {
 
     modal.find('.modal-body #pro_id').val(pro_id);
     modal.find('.modal-body #product_name').val(product_name);
+})
+
+$(function(){
+  $(".delete-user").click(function(){
+    Swal.fire({
+        title: 'هل تريد الحذف؟',
+        // showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'حذف',
+        cancelButtonText:"الغاء"
+        }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            location.replace("{{ route('deleteuser','') }}/"+$(this).attr('id'))
+        }
+        })
+  })  
 })
 </script>
 

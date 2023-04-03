@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Salesbill;
+use App\Models\SalesItem;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -11,17 +13,17 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function invicebill($id)
     {
-        if(view()->exists($id)){
-            return view($id);
-        }
-        else
-        {
-            return view('404');
-        }
+        // if(view()->exists($id)){
 
-     //   return view($id);
+            $last_bill = Salesbill::select("users.name","salesbills.*","clients.name as cn","clients.phone")->join("users","users.id","=","salesbills.created_by")->join("clients","clients.id","=","salesbills.client")->where("salesbills.id",$id)->orderby("salesbills.id","DESC")->first();
+            $data = SalesItem::join("products","products.id","=","sales_items.prodid")->select("products.name","products.price","sales_items.*")->where("sales_items.sales_id",$id)->orderBy("id","DESC")->get();
+            if(!empty($data) && !empty($last_bill)){
+                return view("frontend.invoice.invoice_bill",['bill'=>$last_bill,"item"=>$data]);
+            }else{
+                return redirect()->back();
+            }
     }
 
     /**

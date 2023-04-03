@@ -37,12 +37,12 @@
 								<div class="pb-0 mt-0">
 									<div class="d-flex">
 										<div class="">
-											<h4 class="tx-20 font-weight-bold mb-1 text-white">50</h4>
+											<h4 class="tx-20 font-weight-bold mb-1 text-white">{{ $countsals[1] }}</h4>
 											<p class="mb-0 tx-12 text-white op-7">فواتير هذا اليوم</p>
 										</div>
 										<span class="float-right my-auto mr-auto">
 											<i class="fas fa-arrow-circle-up text-white"></i>
-											<span class="text-white op-7"> +2</span>
+											<span class="text-white op-7">{{$countsals[0]}}</span>
 										</span>
 									</div>
 								</div>
@@ -59,12 +59,12 @@
 								<div class="pb-0 mt-0">
 									<div class="d-flex">
 										<div class="">
-											<h4 class="tx-20 font-weight-bold mb-1 text-white">40</h4>
+											<h4 class="tx-20 font-weight-bold mb-1 text-white">{{ $countpur[1] }}</h4>
 											<p class="mb-0 tx-12 text-white op-7">فواتير اليوم</p>
 										</div>
 										<span class="float-right my-auto mr-auto">
 											<i class="fas fa-arrow-circle-down text-white"></i>
-											<span class="text-white op-7">+2</span>
+											<span class="text-white op-7">{{ $countpur[0] }}</span>
 										</span>
 									</div>
 								</div>
@@ -81,12 +81,12 @@
 								<div class="pb-0 mt-0">
 									<div class="d-flex">
 										<div class="">
-											<h4 class="tx-20 font-weight-bold mb-1 text-white">60</h4>
+											<h4 class="tx-20 font-weight-bold mb-1 text-white">{{ $countpay[1] }}</h4>
 											<p class="mb-0 tx-12 text-white op-7">ايصالات صرف اليوم</p>
 										</div>
 										<span class="float-right my-auto mr-auto">
 											<i class="fas fa-arrow-circle-up text-white"></i>
-											<span class="text-white op-7"> +5</span>
+											<span class="text-white op-7">{{ $countpay[0] }}</span>
 										</span>
 									</div>
 								</div>
@@ -103,12 +103,12 @@
 								<div class="pb-0 mt-0">
 									<div class="d-flex">
 										<div class="">
-											<h4 class="tx-20 font-weight-bold mb-1 text-white">56</h4>
+											<h4 class="tx-20 font-weight-bold mb-1 text-white">{{ $countexc[1] }}</h4>
 											<p class="mb-0 tx-12 text-white op-7">ايصالات قبض اليوم</p>
 										</div>
 										<span class="float-right my-auto mr-auto">
 											<i class="fas fa-arrow-circle-down text-white"></i>
-											<span class="text-white op-7"> +3</span>
+											<span class="text-white op-7">{{ $countexc[0] }}</span>
 										</span>
 									</div>
 								</div>

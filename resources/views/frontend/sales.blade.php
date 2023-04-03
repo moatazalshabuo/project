@@ -42,6 +42,9 @@
 					</div>
 					<div class="d-flex my-xl-auto left-content">
 						<div class=" mb-2 mb-xl-0">
+							<button class="btn btn-info ml-2" id="print-bill" >طباعة الفاتورة</button>
+						</div>
+						<div class=" mb-2 mb-xl-0">
 							<a href="{{ route("salesbill_edit",$data->id) }}" @if($data->status)disabled @endif class="btn btn-info ml-2">تعديل الفاتورة</a>
 						</div>
 						<div class=" mb-2 mb-xl-0">
@@ -618,6 +621,21 @@ console.log(re.responseJSON)
 				alertify.error('يوجد خطاء اثناء الحفظ');
 				$("#client-err").text(error.errors.client)
 				$("#sincere-err").text(error.errors.sincere)
+			}
+		})
+	})
+	$('#print-bill').click(function(){
+		$.ajax({
+			url:"{{route('check_bill',$data->id)}}",
+			type:"get",
+			success:function(res){
+				if(res['success']){
+					// location.replace("{{ route('invicebill', $data->id) }}")
+					window.open ("{{ route('invicebill', $data->id) }}",
+						"mywindow","menubar=1,resizable=1,width=1300,height=1000");
+				}else{
+					Swal.fire(res['mass'])
+				}
 			}
 		})
 	})

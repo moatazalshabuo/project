@@ -77,7 +77,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         // return redirect(view('test.404'));
-        return User::create([
+        User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
@@ -85,4 +85,5 @@ class RegisterController extends Controller
         ]);
         // return redirect()->route('users.index')->with('massage',"تم الاضافة بنجاح");
     }
+
 }

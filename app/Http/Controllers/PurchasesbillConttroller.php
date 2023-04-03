@@ -146,7 +146,7 @@ class PurchasesbillConttroller extends Controller
         $data = array();
         $request->validate([
             "bill_id"=>"required",
-            "price"=>"required|digits_between:1,6|min:1"
+            "price"=>"required|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/|min:1"
         ],[
             "bill_id.required"=>"لايمكن ترك رقم الفاتورة فارغ",
             "price.required"=>"يرجى ادخال القيمة"
