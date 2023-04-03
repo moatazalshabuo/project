@@ -65,7 +65,7 @@
 						<div class="mb-2 col-md-1 col-2">
 							<button type="button" class="btn btn-warning  btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
 						</div>
-						<div class="d-flex mb-2 mb-xl-0 col-sm-4 col-5 col-md-3">
+						<div class="d-flex mb-2 mb-xl-0 col-sm-4 col-7 col-md-3">
 							<a type="button" class="btn btn-primary btn-icon" @if ($next) href='{{route('Purchasesbill',$next)}}' @else disabled @endif ><</a>
 						
 							<input type="text" class="form-control" id="bill_id" value="{{ $data->id }}">
