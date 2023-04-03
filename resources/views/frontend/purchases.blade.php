@@ -62,10 +62,10 @@
 						<div class="mb-2 col-md-2 col-sm-3 col-3">
 							<a href="{{ route("Purchasesbill_create") }}" type="button" class="btn btn-danger  ml-2">فاتورة جديدة </a>
 						</div>
-						<div class="mb-2 col-md-1">
+						<div class="mb-2 col-md-1 col-2">
 							<button type="button" class="btn btn-warning  btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
 						</div>
-						<div class="d-flex mb-2 mb-xl-0 col-md-3 col-sm-3 col-3">
+						<div class="d-flex mb-2 mb-xl-0 col-sm-4 col-5 col-md-3">
 							<a type="button" class="btn btn-primary btn-icon" @if ($next) href='{{route('Purchasesbill',$next)}}' @else disabled @endif ><</a>
 						
 							<input type="text" class="form-control" id="bill_id" value="{{ $data->id }}">
@@ -76,7 +76,7 @@
 					
 				</div>
 				<div class="row m-1">
-					<div class="col-md-5">
+					<div class="col-md-5 col-10">
 						<select id="custom" class="form-control select2-no-search mb-1 select" @if($data->status == 0) disabled @endif>
 							<option label="المورد">
 							</option>
@@ -84,7 +84,7 @@
 						</select>
 						<div class="text-danger" id="client-err"></div>
 					</div>
-					<div class="col-md-1">
+					<div class="col-md-1 col-2">
 						<button class="btn btn-primary" data-target="#select2modal" data-toggle="modal"><i class="mdi mdi-plus"></i></button>
 					</div>
 				</div>
@@ -109,27 +109,27 @@
 											</select>
 											<div class="text-danger" id="product_error"></div>
 										</div>
-										<div class="col-md-3">
+										<div class="col-md-3 col-6">
 											<label>الكمية الموجودة</label>
 											<input class="form-control" disabled placeholder="الكمية" id="old_quant" type="number">
 											
 										</div>
-										<div class="col-3">
+										<div class="col-md-3 col-6">
 											<label>اخر سعر</label>
 											<input class="form-control" id="old_price" disabled type="number">
 										</div>
-										<div class="col-md-2"></div>
-										<div class="col-md-2">
+										<div class="col-md-2 "></div>
+										<div class="col-md-2 col-6">
 											<label>الكمية</label>
 											<input class="form-control" @if($data->status == 0)disabled @endif placeholder="الكمية" id="quant" name="quant" type="number">
 											<div class="text-danger" id="q_error"></div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-2 col-6">
 											<label>السعر الحالي</label>
 											<input class="form-control" placeholder="السعر" value="0" type="number" id="price" name="price" @if($data->status == 0)disabled @endif>
 											<div class="text-danger" id="price_error"></div>
 										</div>
-										<div class="col-md-2">
+										<div class="col-md-2 col-6">
 											اجمالي السعر
 											<input class="form-control" disabled placeholder="الاجمالي" type="number" id="totel">
 										</div>
