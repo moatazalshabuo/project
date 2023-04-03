@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-فاتورة المبيعات المبيعات
+فاتورة المبيعات 
 @endsection
 @section('css')
 <!-- Interenal Accordion Css -->
@@ -36,36 +36,34 @@
 @empty(!$data)
 @section('page-header')
 				<!-- breadcrumb -->
-				<div class="breadcrumb-header justify-content-between">
-					<div class="my-auto">
+				<div class="breadcrumb-header row">
+					<div class="my-auto col-md-5">
 						<div class="d-flex">
 							<h4 class="content-title mb-0 my-auto">فاتورة المبيعات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">{{ $data->name }}/{{ $data->created_at }}</span>
 						</div>
 					</div>
-					<div class="d-flex my-xl-auto left-content">
-						<div class=" mb-2 mb-xl-0">
+					<div class="row my-xl-auto left-content col-md-7">
+						<div class="col-md-2 col-sm-3 col-3 mb-2 mb-xl-0">
 							<button class="btn btn-info ml-2" id="print-bill" >طباعة الفاتورة</button>
 						</div>
-						<div class=" mb-2 mb-xl-0">
+						<div class="col-md-2 col-sm-3 mb-2 col-3 mb-xl-0">
 							<a href="{{ route("salesbill_edit",$data->id) }}" @if($data->status)disabled @endif class="btn btn-info ml-2">تعديل الفاتورة</a>
 						</div>
-						<div class=" mb-2 mb-xl-0">
+						<div class="col-md-2 col-sm-3 mb-2 col-3 mb-xl-0">
 							<button class="btn btn-info ml-2" id="close-bill" @if($data->status == 0)disabled @endif>حفظ الفاتورة</button>
 						</div>
-						<div class="mb-2">
+						<div class="mb-2 col-sm-3 col-md-2 col-3">
 							<a href="{{ route("salesbiil_create") }}" type="button" class="btn btn-danger  ml-2">فاتورة جديدة </a>
 						</div>
-						<div class="mb-2 ">
+						<div class="mb-2 col-md-1 col-sm-1 col-1">
 							<button type="button" class="btn btn-warning  btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
 						</div>
-						<div class="mb-2 mb-xl-0">
-							<a type="button" class="btn btn-primary" @if ($next) href='{{route('salesbill',$next)}}' @else disabled @endif ><</a>
-						</div>
-						<div class="col-2 mb-2 mx-1 mb-xl-0">
+						<div class="d-flex mb-2 mb-xl-0 col-sm-3 col-3 col-md-3">
+							<a type="button" class="btn btn-primary btn-icon" @if ($next) href='{{route('salesbill',$next)}}' @else disabled @endif ><</a>
+						
 							<input type="text" class="form-control" id="bill_id" value="{{ $data->id }}">
-						</div>
-						<div class="mb-2 mb-xl-0">
-							<a type="button" class="btn btn-primary" @if ($prev) href='{{route('salesbill',$prev)}}' @else disabled @endif >></a>
+	
+							<a type="button" class="btn btn-primary btn-icon" @if ($prev) href='{{route('salesbill',$prev)}}' @else disabled @endif >></a>
 						</div>
 					</div>
 					

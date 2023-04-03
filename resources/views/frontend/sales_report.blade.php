@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-فاتورة المبيعات
+فواتير المبيعات
 @endsection
 @section('css')
 <!-- Internal Data table css -->
