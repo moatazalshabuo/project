@@ -171,4 +171,13 @@ class PurchasesbillConttroller extends Controller
         }
         echo json_encode($data);
     }
+    public function Print_invoice($id)
+   {
+    $purchases = Purchasesbill::where('id', $id)->first();
+//  $purchases_items = Purchasesitem::where('id', $id)->first();
+    return view('purchases.Print_invoices', compact('$purchases'));
+   }
+
+
+
 }
