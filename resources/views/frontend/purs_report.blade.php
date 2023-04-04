@@ -123,6 +123,25 @@
 														<td>{{ $item->name }}</td>
 														<td>@if($item->status == 1)<p class="btn btn-outline-success">الفاتورة مفتوحة</p> @else <p class="btn btn-outline-danger">الفاتورة مغلقة</p> @endif</td>
 														<td>{{ $item->created_at }}</td>
+                                                       
+ <td>  <div class="dropdown">
+											<button aria-expanded="false" aria-haspopup="true"
+												class="btn ripple btn-primary btn-sm" data-toggle="dropdown"
+												type="button">العمليات<i class="fas fa-caret-down ml-1"></i></button>
+											<div class="dropdown-menu tx-13">
+												<a class="dropdown-item" href="">تعديل
+														الفاتورة</a>
+														<a class="dropdown-item" href="#" data-invoice_id="{{}}"
+                                                            data-toggle="modal" data-target="#delete_invoice"><i
+                                                                class="text-danger fas fa-trash-alt"></i>&nbsp;&nbsp;حذف
+                                                            الفاتورة</a>
+
+
+                                                                <a class="dropdown-item" href="Print_invoice/{{ $item->id }}"><i
+                                                                    class="text-success fas fa-print"></i>&nbsp;&nbsp;طباعة
+                                                                الفاتورة
+                                                            </a>
+												</td>
 													</tr>
 												@endforeach
 											@endif
