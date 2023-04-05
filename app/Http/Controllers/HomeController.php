@@ -29,11 +29,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $countsals = array(Salesbill::where('created_at','%'.date('Y-m-d').'%')->count(),Salesbill::select()->count());
-        $countpur = array(Purchasesbill::where('created_at','%'.date('Y-m-d').'%')->count(),Purchasesbill::select()->count());
-        $countpay = array(pay_receipt::where('created_at','%'.date('Y-m-d').'%')->count(),pay_receipt::select()->count());
-        $countexc = array(Exchange::where('created_at','%'.date('Y-m-d').'%')->count(),Exchange::select()->count());
-
+        $countsals = array(Salesbill::where('created_at','like','%'.date('Y-m-d').'%')->count(),Salesbill::select()->count());
+        $countpur = array(Purchasesbill::where('created_at','like','%'.date('Y-m-d').'%')->count(),Purchasesbill::select()->count());
+        $countpay = array(pay_receipt::where('created_at','like','%'.date('Y-m-d').'%')->count(),pay_receipt::select()->count());
+        $countexc = array(Exchange::where('created_at','like','%'.date('Y-m-d').'%')->count(),Exchange::select()->count());
+      
         return view('frontend/home',['countsals'=>$countsals,'countpur'=>$countpur,'countpay'=>$countpay,'countexc'=>$countexc]);
     }
 

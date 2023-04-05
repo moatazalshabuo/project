@@ -119,7 +119,6 @@ class PurchasesbillConttroller extends Controller
         // }
         echo json_encode($data);
     }
-
     public function get_bill_data($id = 0){
         $salesbill = Purchasesbill::find($id);
         if(isset($salesbill->id)){
@@ -171,13 +170,7 @@ class PurchasesbillConttroller extends Controller
         }
         echo json_encode($data);
     }
-    public function Print_invoice($id)
-   {
-    $purchases = Purchasesbill::where('id', $id)->first();
-//  $purchases_items = Purchasesitem::where('id', $id)->first();
-    return view('purchases.Print_invoices', compact('$purchases'));
-   }
-
+   
 
 
 }

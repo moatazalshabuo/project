@@ -19,7 +19,11 @@ class SalesbillController extends Controller
     public function index($id = "")
     {
         // echo Auth::id();die();
-        $wher = (!empty($id) && !empty(Salesbill::find($id)))?["created_by"=>Auth::id(),"salesbills.id"=>$id]:["created_by"=>Auth::id()];
+        if(Auth::user()->user_type !=1)
+        $wher = (!empty($id) && !empty(Salesbill::find($id)) )?["created_by"=>Auth::id(),"salesbills.id"=>$id]:["created_by"=>Auth::id()];
+        else
+        $wher =(!empty($id) && !empty(Salesbill::find($id)) )?["salesbills.id"=>$id]:[];
+        // $wher = (!empty($id) && !empty(Salesbill::find($id)))?["created_by"=>Auth::id(),"salesbills.id"=>$id]:["created_by"=>Auth::id()];
         $last_bill = Salesbill::select("users.name","salesbills.*")->join("users","users.id","=","salesbills.created_by")->where($wher)->orderby("id","DESC")->first();
         if(!empty($last_bill)){
         $next = isset(Salesbill::find($last_bill->id + 1)->id)?Salesbill::find($last_bill->id + 1)->id:"";
