@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\DB;
 
 class Products extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['manager']);
+    }
     public function index(){
         $products = Product::all();
         return view('frontend/products',['product'=>$products]);

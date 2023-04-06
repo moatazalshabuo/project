@@ -25,16 +25,16 @@ class Reports extends Controller
         // $this->middleware(check_type::class);
         // echo Auth::user();
         // print_r(User::find(Auth::id()));die();
-        
+   
+        $this->middleware(['manager']);
+    
     }
 
     //
     public function pay_index()
     {
         # code...
-        if(Auth::user()->user_type == 3 || Auth::user()->user_type == 2){
-            return redirect()->back()->with("back","غير مخول لك");
-        }
+        
         $client = client::all();
         return view("frontend/pay_report",['client'=>$client]);
     }

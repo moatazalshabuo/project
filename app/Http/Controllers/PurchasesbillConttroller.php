@@ -16,20 +16,40 @@ class PurchasesbillConttroller extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        $this->middleware(['manager']);
+    }
     public function index($id = "")
     {
-        // echo Auth::id();die();
-        // $data = Purchasesbill::find($id);
-        if(Auth::user()->user_type !=1)
+            
+    if(Auth::user()->user_type !=1){
+        
         $wher = (!empty($id) && !empty(Purchasesbill::find($id)) )?["created_by"=>Auth::id(),"purchasesbills.id"=>$id]:["created_by"=>Auth::id()];
-        else
+        $pages = Purchasesbill::where("created_by",Auth::id())->get();    
+        
+    }else{
+
         $wher =(!empty($id) && !empty(Purchasesbill::find($id)) )?["purchasesbills.id"=>$id]:[];
+        $pages = Purchasesbill::all(); 
+           
+    }
         $last_bill = Purchasesbill::select("users.name","purchasesbills.*")
         ->join("users","users.id","=","purchasesbills.created_by")->where($wher)->orderby("id","DESC")->first();
         $rawmate = rawmaterials::all();
         if(!empty($last_bill)){
-        $next = isset(Purchasesbill::find($last_bill->id + 1)->id)?Purchasesbill::find($last_bill->id + 1)->id:"";
-        $prev = isset(Purchasesbill::find($last_bill->id - 1)->id)?Purchasesbill::find($last_bill->id - 1)->id:"";
+            // البحث عن الصفحة التالية والسابقة بناء على المستخدم 
+            $index = array();
+
+			foreach($pages as $val)
+			{
+				array_push($index, $val['id']);
+			}
+            // احضار انديكس الصفحة الحالة 
+			$current = array_search($last_bill->id,$index);
+
+			$next = isset($index[$current + 1])?$index[$current + 1]:"";
+			$prev = isset($index[$current - 1])?$index[$current - 1]:"";
         }else{
             $next= "";
             $prev ="";

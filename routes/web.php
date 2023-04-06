@@ -55,4 +55,5 @@ Route::resource('users',usersController::class)->middleware('auth');
 
 Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('invicebill')->middleware('auth');
 
+Route::get('/invicereport', [AdminController::class, 'report'])->name('invicereport')->middleware('auth');
 

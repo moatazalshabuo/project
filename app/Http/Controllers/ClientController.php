@@ -19,6 +19,11 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
+    
+    public function __construct()
+    {
+        $this->middleware(['manager']);
+    }
     public function show_select($id = "")
     {
         $client = client::all();

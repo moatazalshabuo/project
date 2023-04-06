@@ -60,15 +60,17 @@ Route::get("get-item",function(){
             echo "</td>
                 <td>".Helper::cost($item->id)."</td>
                 <td>$item->price</td><td>";
+                if(Auth::user()->user_type==1)
                 if($item->status == 1){
                     echo " <button class='btn btn-danger ml-1 unactive-prod' id='$item->id' >ايقاف</button>";
                 }else{
                     echo " <button class='btn btn-success ml-1 active-prod' id='$item->id' >تفعيل</button>";
                 }
-                echo "</td><td class='d-flex justify-content-center'>
-                    <button class='btn btn-danger ml-1 btn-icon dele' id='$item->id' ><i class='mdi mdi-delete'></i></button>
-                    <button  data-target='#modaldemo6' data-toggle='modal' class='btn btn-info btn-icon edit_product' id='$item->id'><i class='mdi mdi-transcribe'></i></button>
-                </td>
+                echo "</td><td class='d-flex justify-content-center'>";
+                if(Auth::user()->user_type==1)   
+                echo "<button class='btn btn-danger ml-1 btn-icon dele' id='$item->id' ><i class='mdi mdi-delete'></i></button>
+                    <button  data-target='#modaldemo6' data-toggle='modal' class='btn btn-info btn-icon edit_product' id='$item->id'><i class='mdi mdi-transcribe'></i></button>";
+                echo "</td>
             </tr>";
         }
 })->name("getitem")->middleware('auth');

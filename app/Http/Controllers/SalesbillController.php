@@ -18,17 +18,33 @@ class SalesbillController extends Controller
      */
     public function index($id = "")
     {
-        // echo Auth::id();die();
-        if(Auth::user()->user_type !=1)
-        $wher = (!empty($id) && !empty(Salesbill::find($id)) )?["created_by"=>Auth::id(),"salesbills.id"=>$id]:["created_by"=>Auth::id()];
-        else
-        $wher =(!empty($id) && !empty(Salesbill::find($id)) )?["salesbills.id"=>$id]:[];
-        // $wher = (!empty($id) && !empty(Salesbill::find($id)))?["created_by"=>Auth::id(),"salesbills.id"=>$id]:["created_by"=>Auth::id()];
-        $last_bill = Salesbill::select("users.name","salesbills.*")->join("users","users.id","=","salesbills.created_by")->where($wher)->orderby("id","DESC")->first();
-        if(!empty($last_bill)){
-        $next = isset(Salesbill::find($last_bill->id + 1)->id)?Salesbill::find($last_bill->id + 1)->id:"";
-        $prev = isset(Salesbill::find($last_bill->id - 1)->id)?Salesbill::find($last_bill->id - 1)->id:"";
+        if(Auth::user()->user_type !=1){
+
+            $wher = (!empty($id) && !empty(Salesbill::find($id)) )?["created_by"=>Auth::id(),"salesbills.id"=>$id]:["created_by"=>Auth::id()];
+            $pages = Salesbill::where("created_by",Auth::id())->get();
         }else{
+
+            $wher =(!empty($id) && !empty(Salesbill::find($id)) )?["salesbills.id"=>$id]:[];
+            $pages = Salesbill::all();      
+        }
+
+        $last_bill = Salesbill::select("users.name","salesbills.*")->join("users","users.id","=","salesbills.created_by")->where($wher)->orderby("id","DESC")->first();
+        
+        if(!empty($last_bill)){
+    
+            $index = array();
+
+			foreach($pages as $val)
+			{
+				array_push($index, $val['id']);
+			}
+            // احضار انديكس الصفحة الحالة 
+			$current = array_search($last_bill->id,$index);
+
+			$next = isset($index[$current + 1])?$index[$current + 1]:"";
+			$prev = isset($index[$current - 1])?$index[$current - 1]:"";
+            
+    }else{
             $next = "";
             $prev ="";
         }
