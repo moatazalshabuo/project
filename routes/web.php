@@ -52,7 +52,7 @@ Route::get('check_bill/{id}',function($id){
 })->name('check_bill')->middleware('auth');
 
 Route::resource('users',usersController::class)->middleware('auth');
-
+Route::resource('mange_system',SystemMangController::class);
 Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('invicebill')->middleware('auth');
 
 
