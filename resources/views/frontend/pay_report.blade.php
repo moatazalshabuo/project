@@ -110,7 +110,11 @@
 														<td>{{ $item->price }}</td>
 														<td>{{ $item->name }}</td>
 														<td>{{ $item->created_at }}</td>
-														<td><button class="btn btn-danger dele" id="{{ $item->id }}"><i class='mdi mdi-transcribe'></i></button></td>
+														<td>
+															@if(Auth::user()->user_type==1)
+															<button class="btn btn-danger dele" id="{{ $item->id }}"><i class='mdi mdi-transcribe'></i></button>
+															@endif
+														</td>
 													</tr>
 												@endforeach
 											@endif
