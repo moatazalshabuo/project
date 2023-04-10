@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('purchases_id')->constrained("purchasesbills")->onDelete('cascade');
             $table->double("qoun",15, 8);
             $table->double("descont",15, 8);
-            $table->double("total",15, 8)->nullable();
+            $table->double("total",15, 2)->nullable();
             $table->foreignId("rawmati")->constrained("rawmaterials");
             $table->foreignId("user_id")->constrained("users");
             $table->timestamps();

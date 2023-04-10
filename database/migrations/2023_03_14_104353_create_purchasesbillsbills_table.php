@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('purchasesbills', function (Blueprint $table) {
             $table->id();
             $table->foreignId("created_by")->constrained("users");
-            $table->double("tolal",15, 8)->default(0);
-            $table->double("sincere",15, 8)->default(0);
-            $table->double("Residual",15, 8)->default(0);
+            $table->double("tolal",15, 2)->default(0);
+            $table->double("sincere",15, 2)->default(0);
+            $table->double("Residual",15, 2)->default(0);
             $table->boolean("status")->default(1);
             $table->integer("custom")->nullable();
             $table->timestamps();

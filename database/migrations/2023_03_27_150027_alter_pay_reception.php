@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->integer("bill_id")->nullable();
             $table->string('desc')->nullable();
-            $table->double("price",15, 8);
+            $table->double("price",15, 2);
             $table->integer("type");
             $table->foreignId("created_by")->constrained("users");
             $table->timestamps();

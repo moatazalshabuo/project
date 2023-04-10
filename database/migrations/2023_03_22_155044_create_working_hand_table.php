@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('working_hand', function (Blueprint $table) {
             $table->id();
-            $table->string("name")->unique();
-            $table->double("price",15, 8);
+            $table->string("name");
+            $table->double("price",15, 2);
             $table->timestamps();
             $table->foreignId("proid")->constrained('products')->onDelete('cascade');
         });

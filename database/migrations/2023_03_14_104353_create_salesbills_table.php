@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('salesbills', function (Blueprint $table) {
             $table->id();
             $table->foreignId("created_by")->constrained("users")->onDelete('cascade');;
-            $table->double("total",15, 8)->default(0);
-            $table->double("sincere",15, 8)->default(0);
-            $table->double("Residual",15, 8)->default(0);
+            $table->double("total",15, 2)->default(0);
+            $table->double("sincere",15, 2)->default(0);
+            $table->double("Residual",15, 2)->default(0);
             $table->boolean("status")->default(1);
             $table->integer("client")->nullable();
             $table->timestamps();

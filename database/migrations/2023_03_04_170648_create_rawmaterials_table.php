@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('rawmaterials', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('material_name');
-            $table->boolean('hisba_type');
-            $table->double('quantity',15, 8);
-            $table->double('price',15, 8);
+            $table->integer('hisba_type');
+            $table->double('quantity',15, 8)->default(0);
+            $table->double('price',15, 8)->default(0);
             $table->string('created_by');
             $table->timestamps();
         });
