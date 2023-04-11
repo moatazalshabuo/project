@@ -10,6 +10,11 @@
 <link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+<style>
+	/* .m3{
+		display: none !important;
+	} */
+</style>
 @endsection
 @section('title')
 المواد الخام
@@ -26,7 +31,7 @@
 			<button type="button" class="btn btn-info btn-icon ml-2"><i class="mdi mdi-filter-variant"></i></button>
 		</div>--}}
 		<div class="pr-1 mb-3 mb-xl-0">
-			<button type="button" class="btn btn-danger btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
+			<button type="button" id="refresh" class="btn btn-danger btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
 		</div> 
 		@if (Auth::user()->user_type == 1)
 		<div class="pr-1 mb-3 mb-xl-0">
@@ -127,40 +132,42 @@
 					</div>
 					<form action="{{ route('rawmaterials.store') }}" id="form-add" method="POST">
 						@csrf
-					<!--'material_name'=>'required|unique:rawmaterials|max:255',
-					'hisba_type'=>'required',
-					'quantity'=>'required',
-					'price'=>'required', -->
+					
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="exampleInputEmail1">اسم المادة</label>
 							<input type="text" class="form-control" id="material_name" name="material_name" required>
 						</div>
-						<div class="text text-danger" id="error_material_name"></div>
+						<div class="text text-danger error_add" id="error_material_name"></div>
                         <div class="form-group">
 							<label for="exampleFormControlTextarea1">نوع الكمية</label>
 						<select name="hisba_type" id="hisba_type"  class="form-control">
                         <option value="">حدد نوع الكمية</option>
                         <option value="1">بالمتر</option>
+						<option value="3"> بالمتر المربع</option>
                         <option value="2">بالطرف</option>
                     </select>
 						</div>
-						<div class="text text-danger" id="error_hisba_type"></div>
+						<div class="text text-danger error_add" id="error_hisba_type"></div>
 
                         <div class="form-group">
 							<label for="exampleFormControlTextarea1">كمية المخزون</label>
-                            <input type="number" class="form-control" id="quantity" name="quantity" required>
+							<div class="d-flex">
+								<input type="number" class="form-control m3 m-1" id="length" disabled name="length" placeholder="طول">
+								<input type="number" class="form-control m3 m-1" id="width" disabled name="width" placeholder="العرض">
+                            </div>
+							<input type="number" class="form-control m2" id="quantity" name="quantity" required>
 						</div>
-						<div class="text text-danger" id="error_quantity"></div>
+						<div class="text text-danger error_add" id="error_quantity"></div>
                         <div class="form-group">
 							<label for="exampleFormControlTextarea1">السعر</label>
                             <input type="number" class="form-control" id="" name="price" required>
 						</div>
-						<div class="text text-danger" id="error_price"></div>						
+						<div class="text text-danger error_add" id="error_price"></div>						
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-success" id="add-mate">تأكيد</button>
-						<button type="button" class="btn btn-secondary">إغلاق</button>
+						<button type="button" class="btn btn-secondary close_add" data-dismiss="modal">إغلاق</button>
 
 					</div>
 				</form>
@@ -185,33 +192,33 @@
 							<label for="exampleInputEmail1">اسم المادة</label>
 							<input type="text" class="form-control" id="material_name_e" name="material_name" required>
 						</div>
-						<div class="text text-danger" id="error_material_name_e"></div>
+						<div class="text text-danger error_edit" id="error_material_name_e"></div>
                         <div class="form-group">
 							<label for="exampleFormControlTextarea1">نوع الكمية</label>
 						<select name="hisba_type" id="hisba_type_e" class="form-control">
                         <option value="">حدد نوع الكمية</option>
                         <option value="1">بالمتر</option>
+						<option value="3">بالمتر المكعب</option>
                         <option value="2">بالطرف</option>
 						<input type="hidden" name="id" id="material_id">
                     </select>
 						</div>
-						<div class="text text-danger" id="error_hisba_type_e"></div>
+						<div class="text-danger error_edit" id="error_hisba_type_e"></div>
 
                         <div class="form-group">
 							<label for="exampleFormControlTextarea1">كمية المخزون</label>
                             <input type="number" class="form-control" id="quantity_e" name="quantity" required>
 						</div>
-						<div class="text text-danger" id="error_quantity_e"></div>
+						<div class="text text-danger error_edit" id="error_quantity_e"></div>
                         <div class="form-group">
 							<label for="exampleFormControlTextarea1">السعر</label>
                             <input type="number" class="form-control" id="price_e" name="price" required>
 						</div>
-						<div class="text text-danger" id="error_price_e"></div>						
+						<div class="text text-danger error_edit" id="error_price_e"></div>						
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-success" id="update">تأكيد</button>
-						<button type="button" class="btn btn-secondary">إغلاق</button>
-
+						<button type="button" class="btn btn-secondary close_edit" data-dismiss="modal">إغلاق</button>
 					</div>
 				</form>
 				</div>
@@ -243,7 +250,11 @@
 <script src="{{URL::asset('assets/js/modal.js')}}"></script>
 <script>
 	$(function(){
-		function getitem(){
+
+// الدوال اولا تم تاتي العمليات 
+// دالة احضار عناصر المواد الخام وعرضها في الصفحة
+$(".m3").hide()
+function getitem(){
 			$.ajax({
 				url:"{{route('getitem-mate')}}",
 				type:"get",
@@ -252,10 +263,9 @@
 				}
 			})
 		}
-		getitem()
-		$('#add-mate').click(function(){
-			reset();
-		$.ajax({
+// دالة ارسال بايانات المادة الخام والتاكد منها
+function sendMetadata(){
+	$.ajax({
 			url:"{{ route('rawmaterials.store') }}",
 			type:"post",
 			data:$('#form-add').serialize(),
@@ -267,25 +277,50 @@
 				getitem();
 			},error:function(e){
 				$data = e.responseJSON;
-				
 				$("#error_material_name").text($data.errors.material_name)
 				$("#error_hisba_type").text($data.errors.hisba_type)
-				$("#error_quantity").text($data.errors.quantity)
+				$("#error_quantity").text($data.errors.quantity || $data.errors.length + " " + $data.errors.width)
 				$("#error_price").text($data.errors.price)
-
 			}
 		})
-	})
-	function reset(){
-		$("#error_material_name").text("")
-		$("#error_hisba_type").text("")
-		$("#error_quantity").text("")
-		$("#error_price").text("")
-		$("#error_material_name_e").text("")
-		$("#error_hisba_type_e").text("")
-		$("#error_quantity_e").text("")
-		$("#error_price_e").text("")
+}
+// دالة تهيئة رسائل الاخطاء كلها 
+function reset_add_form(){
+		$(".error_add").text("")
 	}
+// دالة تهيئة رسائل الاخطاء كلها 
+function reset_edit_form(){
+		$(".error_edit").text("")
+	}
+		$(".close_add").click(function(){
+			reset_add_form();
+			$('#form-add').trigger("reset");
+		})
+		$(".close_edit").click(function(){
+			reset_edit_form();
+			$('#form-edit').trigger("reset");
+		})
+		$("#hisba_type").change(function(){
+			if($(this).val() == 3){
+				$(".m3").removeAttr('disabled');
+				$('.m3').show()
+				$(".m2").attr('disabled','disabled');
+				$('.m2').hide()
+			}else{
+				$(".m2").removeAttr('disabled');
+				$('.m2').show()
+				$(".m3").attr('disabled','disabled');
+				$('.m3').hide()
+			}
+		})
+		
+		getitem()
+		$('#add-mate').click(function(){
+			reset_add_form();
+			sendMetadata();
+	})
+
+	
 	$(document).on("click",".edit_mate",function(){
 		$.ajax({
 			url:"{{ route('materialedit','') }}/"+$(this).attr('id'),
@@ -301,34 +336,10 @@
 			}
 		})
 	})
-//==================================================
-	$('#add-mate').click(function(){
-			reset();
-		$.ajax({
-			url:"{{ route('rawmaterials.store') }}",
-			type:"post",
-			data:$('#form-add').serialize(),
-			success:function(res){
-				// console.log(res);
-				$('#form-add').trigger("reset");
-				$("#modaldemo1").modal('hide')
-				alertify.success('تم الاضافة بنجاح');
-				getitem();
-			},error:function(e){
-				$data = e.responseJSON;
-				
-				$("#error_material_name").text($data.errors.material_name)
-				$("#error_hisba_type").text($data.errors.hisba_type)
-				$("#error_quantity").text($data.errors.quantity)
-				$("#error_price").text($data.errors.price)
-
-			}
-		})
-	})
 
 	//============================================
 	$('#update').click(function(){
-			reset();
+			reset_edit_form();
 			// console.log($('#form-edit').serialize());
 		$.ajax({
 			url:"{{ route('materialupdate') }}",
@@ -342,7 +353,7 @@
 				getitem();
 			},error:function(e){
 				$data = e.responseJSON;
-				
+				console.log($data)
 				$("#error_material_name_e").text($data.errors.material_name)
 				$("#error_hisba_type_e").text($data.errors.hisba_type)
 				$("#error_quantity_e").text($data.errors.quantity)
@@ -352,6 +363,9 @@
 		})
 	})
 	
+	$('#refresh').click(function(){
+		location.reload();
+	})
 	})
 </script>
 @endsection

@@ -27,24 +27,30 @@ class RawmaterialsController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $validtiondata = $request->validate([
-         'material_name'=>'required|unique:rawmaterials|max:255',
-         'hisba_type'=>'required',
-         'quantity'=>'required|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/|min:0',
-         'price'=>'required|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/|min:0',
-        ],[
+        $roule = [
+            'material_name'=>'required|unique:rawmaterials,material_name|max:255',
+            'hisba_type'=>'required',
+            'price'=>'required|numeric|max:9999999|min:0',
+        ];
+        if(!isset($request->quantity)){
+            $roule['length'] = 'required|numeric|max:9999999|min:0';
+            $roule['width'] = 'required|numeric|max:9999999|min:0';
+        }else{
+            $roule['quantity'] = 'required|numeric|max:9999999|min:0';
+        }
+        $validtiondata = $request->validate($roule,[
          'material_name.required'=>'يرجى ادخال اسم المادة',
          'material_name.unique'=>'هذه المادة موجدود من قبل!!',
          'hisba_type.required'=>'يرجى ادخال نوع الكمية للمادة',
-         'quantity.required'=>'يرجى ادخال نوع الكمية',
+        //  'quantity.max'=>' الكمية',
          'price.required'=>'يرجى ادخال سعر المادة',
- 
          ]
      );
+     $quantity = isset($request->quantity)?$request->quantity:$request->length * $request->width;
              rawmaterials::create([
                  'material_name'=>$request->material_name,
                  'hisba_type'=>$request->hisba_type,
-                 'quantity'=>$request->quantity,
+                 'quantity'=>$quantity,
                  'price'=>$request->price,
                  'created_by'=>(auth()->user()->name),
              ]);
@@ -80,8 +86,8 @@ class RawmaterialsController extends Controller
         $rouls = [
             'material_name'=>"required|max:255|unique:rawmaterials,material_name,".$request->id,
             'hisba_type'=>'required',
-            'quantity'=>'required|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/|min:0',
-            'price'=>'required|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/|min:0',
+            'quantity'=>'required|numeric|max:9999999|min:0|',
+            'price'=>'required|numeric|max:9999999|min:0',
         ];
         $message = [
             'material_name.required'=>'يرجى ادخال اسم المادة',
@@ -91,7 +97,7 @@ class RawmaterialsController extends Controller
             'price.required'=>'يرجى ادخال سعر المادة',
     
             ];
-        $this->validate($request,$rouls,$message);
+            $request->validate($rouls,$message);
      $rawmaterials = rawmaterials::find($request->id);
      $rawmaterials->material_name=$request->material_name;
      $rawmaterials->hisba_type = $request->hisba_type;
@@ -100,13 +106,6 @@ class RawmaterialsController extends Controller
      $rawmaterials->update();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    // public function destroy($id)
-    // {
-    //     print_r($id);
-    // }
     public function delete($id)
     {
         // print_r($id);

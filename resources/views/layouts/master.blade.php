@@ -111,6 +111,79 @@
 				</div>
 			</div>
 		</div>
+		<!--  ايصال القبض طريقة جديدة بنحذف الاول -->
+
+		<!-- Button trigger modal-->
+
+		<!-- Modal: modalCart -->
+		<div class="modal fade" id="modalCart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+			<!--Header-->
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">ايصال القبض</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<!--Body-->
+			<div class="modal-body">
+
+				<div class="row">
+					<div class="col-md-6">
+						<label>اختر الزبون</label>
+						<select class="form-control">
+							<option value="">....</option>
+						</select>
+					</div>
+					<div class="col-md-6">
+					<label> الفاتورة (اختياري)</label>
+					<select class="form-control">
+						<option value="">....</option>
+					</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>قيمة السداد</label>
+							<input type="number" name="price" id="price_t" class="form-control">
+							<p class="text-danger" id=price_t_err></p>
+						</div>
+						ملاحظات(اختياري)
+						<textarea rows="6" cols="6" class="form-control" name="descrip" placeholder="ملاحظات ....">
+						</textarea>
+						<small>{{ Auth::user()->name }}</small>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>المتبقي</label>
+							<input type="number" disabled id="Residual_t" class="form-control">
+						</div>
+						<div class="form-group">
+							<label>الخالص</label>
+							<input type="number" disabled id="sincere_t" class="form-control">
+						</div>
+						<div class="form-group">
+							<label>الاجمالي</label>
+							<input type="number" disabled id="total_t" class="form-control">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--Footer-->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-primary" data-dismiss="modal">اغلاق</button>
+				<button class="btn btn-primary">حفظ</button>
+				<button class="btn btn-primary">حفظ و طباعة الايصال</button>
+			</div>
+			</div>
+		</div>
+		</div>
+		<!-- Modal: modalCart -->
+
+		<!--  نهاية الموديل متاع ايصال القبض -->
 		<div class="modal" id="modaldemo17">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content modal-content-demo">
