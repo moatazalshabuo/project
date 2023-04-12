@@ -66,11 +66,11 @@
 							<button type="button" class="btn btn-warning  btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
 						</div>
 						<div class="d-flex mb-2 mb-xl-0 col-sm-4 col-7 col-md-3">
-							<a type="button" class="btn btn-primary btn-icon" @if ($next) href='{{route('Purchasesbill',$next)}}' @else disabled @endif ><</a>
+							<a type="button" class="btn btn-primary btn-icon" @if ($prev) href='{{route('Purchasesbill',$prev)}}' @else disabled @endif ><</a>
 						
 							<input type="text" class="form-control" id="bill_id" value="{{ $data->id }}">
+							<a type="button" class="btn btn-primary btn-icon" @if ($next) href='{{route('Purchasesbill',$next)}}' @else disabled @endif >></a>
 						
-							<a type="button" class="btn btn-primary btn-icon" @if ($prev) href='{{route('Purchasesbill',$prev)}}' @else disabled @endif >></a>
 						</div>
 					</div>
 					
@@ -119,9 +119,13 @@
 											<input class="form-control" id="old_price" disabled type="number">
 										</div>
 										<div class="col-md-2 "></div>
-										<div class="col-md-2 col-6">
+										<div class="col-md-3 col-6">
 											<label>الكمية</label>
-											<input class="form-control" @if($data->status == 0)disabled @endif placeholder="الكمية" id="quant" name="quant" type="number">
+											<div class="d-flex">
+												<input type="number" @if($data->status == 0)disabled @endif class="form-control  m3 m-1" id="length" disabled name="length" placeholder="طول">
+												<input type="number" @if($data->status == 0)disabled @endif class="form-control mateFiled m3 m-1" id="width" disabled name="width" placeholder="العرض">
+											</div>
+											<input class="form-control m2" @if($data->status == 0)disabled @endif placeholder="الكمية" id="quant" name="quant" type="number">
 											<div class="text-danger" id="q_error"></div>
 										</div>
 										<div class="col-md-2 col-6">
@@ -256,6 +260,8 @@
 				location.replace("{{ route('Purchasesbill','') }}/"+$(this).val())
 			}
 		})
+		// ====================================== 
+
 		function get_totel(){
 		$.ajax({
 			url:"{{ route('getItempurbill',$data->id) }}",
@@ -272,7 +278,11 @@
 		})
 	}
 	get_totel()
+
+//=========================================
+
 		$("#mate").change(function(){
+			if($(this).val() != ""){
 			$.ajax({
 				url:"{{ route('getoldprice','') }}/"+$(this).val(),
 				type:"get",
@@ -281,10 +291,28 @@
 					data = JSON.parse(res)
 					$("#old_price").val(data['price'])
 					$("#old_quant").val(data['quantity'])
-
 				}
 			})
+			$.ajax({
+			'url':"{{route('get_type','')}}/"+$(this).val(),
+			'type':"get",
+			success:function(res){
+			if(res == 3){
+					$(".m3").removeAttr('disabled');
+					$('.m3').show()
+					$(".m2").attr('disabled','disabled');
+					$('.m2').hide()
+				}else{
+					$(".m2").removeAttr('disabled');
+					$('.m2').show()
+					$(".m3").attr('disabled','disabled');
+					$('.m3').hide()
+				}
+			}
 		})
+		}
+		})
+//==================================
 		function reset(){
 			$("#q_error").text("")
 			$("#product_error").text("")
@@ -293,37 +321,55 @@
 			$("#phone_err").html("")
 			$(".war").text("")
 		}
-		$("#addItem").click(function(){
-		reset();
-		// console.log($("#input-item").serialize());
-		$.ajax({
+// ======================================
+		function add_item(){
+			reset();
+			$.ajax({
 			url:"{{ route('add_puritem') }}",
 			type:"POST",
 			data:$("#input-item").serialize()+"&id={{ $data->id }}",
 			success:function(r){
-				// console.log(r)
-				// get_totel()
 				if(r == 1){
-					get_totel()
+				get_totel()
 				alertify.success('تم الاضافة بنجاح');
-			$("#input-item").trigger("reset");	
+				$("#input-item").trigger("reset");	
 			}else{
 					Swal.fire(r)
 				}
 			},error:function(ers){
 				r = ers.responseJSON;
 				// console.log(r.errors.quant)
-				$("#q_error").text(r.errors.quant)
+				$("#q_error").text(r.errors.quant || r.errors.length + " "+ r.errors.width)
 				$("#product_error").text(r.errors.material)
 				$("#price_error").text(r.errors.price)
 			}
 		})
+		}
+//=========================================
+
+$(".m3").hide()
+
+
+// =========================================
+
+		$("#addItem").click(function(){
+		add_item();
 	})
-	$("#price").keyup(function(){
-		$("#totel").val($(this).val()*$("#quant").val())
+
+	$('#price').keypress(function(e){
+			if (e.which ==13) 
+			{
+				add_item()
+			}
+			})
+//========================================
+			$("#price").keyup(function(){
+				var quan = $("#quant").val() || $("#length").val()*$("#width").val() 
+		$("#totel").val($(this).val()*quan)
 	});
 
 	$(document).on('click',".dele",function(){
+		$(this).attr("disabled","disabled")
 		$.ajax({
 			url:"{{ route('deletePurItem','') }}/"+$(this).attr('id'),
 			type:"get",
@@ -339,6 +385,7 @@
 		})
 	})
 	$(document).on('click',".edit-item",function(){
+		$(this).attr("disabled","disabled")
 		$.ajax({
 			url:"{{ route('editPurItem','') }}/"+$(this).attr('id'),
 			type:"get",
@@ -355,8 +402,6 @@
 					Swal.fire(data['massege'])
 				}
 				
-				// if(r == 1){
-				// alertify.success('تم الاضافة بنجاح');
 			},error:function(r){
 				console.log(r.responseJSON)
 			}

@@ -30,24 +30,34 @@ class PurchasesitemsController extends Controller
         $salesbill = Purchasesbill::find($request->id);
         // print($salesbill->id);die();
         if($salesbill->status == 1):
-            $rules = ["material"=>"required|numeric","quant"=>"required|numeric|min:1|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/","price"=>"required|numeric|min:1|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/"];
-            $message = ["product.required"=>"يجب ادخال الصنف","quant.required"=>"الكمية يجب ان لاتكوم فارغة",
-            "quant.required"=>"الكمية يجب ان لاتكوم فارغة","price.required"=>"يجب ادخال السعر"];
+            $rules = ["material"=>"required|numeric",
+            "price"=>"required|numeric|min:1|max:9999999"];
+            $message = ["product.required"=>"يجب ادخال الصنف",
+            "price.required"=>"يجب ادخال السعر"];
+            if(isset($request->quant)){
+                $rules['quant'] = "required|numeric|min:1|max:9999999";
+            }else{
+                $rules['length'] = 'required|numeric|min:1|max:9999999';
+                $rules['width'] = 'required|numeric|min:1|max:9999999';
+            }
             $request->validate($rules,$message);
-            // echo $salesbill->id;die();
+
+            $quantity = isset($request->quant)?$request->quant:$request->length * $request->width;
+
+            $raw = rawmaterials::find($request->material);
+            $raw->quantity = ($raw->quantity + $quantity);
+            $raw->price = $request->price;
+            $raw->update();
+
             $id = Purchasesitem::create([
             "purchases_id"=>$salesbill->id,
             'rawmati'=>$request->material,
-            "qoun"=>$request->quant,
-            "total"=>($request->quant*$request->price),
+            "qoun"=>$quantity,
+            "total"=>ceil($quantity*$request->price),
             "descont"=>0,
             "user_id"=>Auth::id()])->id;
-            $raw = rawmaterials::find($request->material);
-            $raw->quantity = ($raw->quantity + $request->quant);
-            $raw->price = $request->price;
-            $raw->update();
-            echo 1;
             Helper::Collect_purbill($salesbill->id);
+            echo 1;
         else:
             echo "الفاتورة مغلقة";
         endif;
@@ -58,9 +68,7 @@ class PurchasesitemsController extends Controller
      */
     public function edit_item($id)
     {
-        // die();
         $salesItem = Purchasesitem::find($id);
-        // die();
         $salesbill = Purchasesbill::find($salesItem->purchases_id);
         if($salesbill->status == 1){
         $data = array(
@@ -69,13 +77,10 @@ class PurchasesitemsController extends Controller
             "price" => ($salesItem->total + $salesItem->descont)/$salesItem->qoun,
             "qoun"=>$salesItem->qoun,
             "total"=>$salesItem->total+$salesItem->descont,
-            // "descont"=>$salesItem->descont
         );
-        
-
         $salesItem->delete();
-        Helper::Collect_purbill($salesbill->id);
-        }else{
+        Helper::Collect_purbill($salesbill->id);    
+    }else{
             $data=array("type"=>2,"massege"=>"الفتورة مغلقة");
             
         }
@@ -111,9 +116,7 @@ class PurchasesitemsController extends Controller
         $salesItem = Purchasesitem::find($id);
         $salesbill = Purchasesbill::find($salesItem->purchases_id);
         if($salesbill->status == 1){
-        // Helper::add_from_mate($salesItem->id);
         $raw = rawmaterials::find($salesItem->rawmati);
-        // print_r($salesItem->raw);die();
         $raw->quantity = ($raw->quantity - $salesItem->qoun);
         $raw->update();
         $salesItem->delete();

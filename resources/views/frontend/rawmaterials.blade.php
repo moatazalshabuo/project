@@ -123,12 +123,13 @@
 					<!--/div-->
 
 					<!--div-->
+					
 							<!-- Basic modal -->
 		<div class="modal" id="modaldemo1">
-			<div class="modal-dialog" role="document">
+			<div class="modal-dialog " role="document">
 				<div class="modal-content modal-content-demo">
-					<div class="modal-header">
-						<h6 class="modal-title">اضافة </h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+					<div class="modal-header bg-primary text-white">
+						<h6 class="modal-title text-white">اضافة </h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
 					</div>
 					<form action="{{ route('rawmaterials.store') }}" id="form-add" method="POST">
 						@csrf
@@ -166,8 +167,8 @@
 						<div class="text text-danger error_add" id="error_price"></div>						
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-success" id="add-mate">تأكيد</button>
-						<button type="button" class="btn btn-secondary close_add" data-dismiss="modal">إغلاق</button>
+						<button type="button" class="btn btn-outline-primary" id="add-mate">تأكيد</button>
+						<button type="button" class="btn btn-outline-danger close_add" data-dismiss="modal">إغلاق</button>
 
 					</div>
 				</form>
@@ -176,10 +177,10 @@
 		</div>
 
 		<div class="modal" id="edit_material">
-			<div class="modal-dialog" role="document">
+			<div class="modal-dialog modal-danger" role="document">
 				<div class="modal-content modal-content-demo">
-					<div class="modal-header">
-						<h6 class="modal-title">اضافة </h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+					<div class="modal-header bg-primary">
+						<h6 class="modal-title text-white">تعديل </h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
 					</div>
 					<form action="{{ route('rawmaterials.store') }}" id="form-edit" method="POST">
 						@csrf
@@ -217,8 +218,8 @@
 						<div class="text text-danger error_edit" id="error_price_e"></div>						
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-success" id="update">تأكيد</button>
-						<button type="button" class="btn btn-secondary close_edit" data-dismiss="modal">إغلاق</button>
+						<button type="button" class="btn btn-outline-primary" id="update">تأكيد</button>
+						<button type="button" class="btn btn-outline-danger close_edit" data-dismiss="modal">إغلاق</button>
 					</div>
 				</form>
 				</div>

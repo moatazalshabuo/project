@@ -265,8 +265,9 @@
 				
 				
 				<script>
+					
 					$(function(){
-						// Swal.fire(5)		
+						
 						$("#get_bill_id").click(function(){
 					reset()
 							Pay($("#sales_bill_t").val())

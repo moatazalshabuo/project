@@ -35,7 +35,7 @@ class Products extends Controller
         $data['name'] = $request->name;
         $data['type_Q'] = $request->type_Q;
         $data['price'] = 0;
-        Product::create($data);
+        return Product::create($data)->id;
         
     }
 
@@ -68,7 +68,7 @@ class Products extends Controller
     }
     public function update(Request $request){
         $rouls = ['name'=>"required|max:255|unique:products,name,".
-        $request->id,"price"=>"required||max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/|min:0",
+        $request->id,"price"=>"required|numeric|min:1|max:9999999",
         "type_Q"=>"required"];
         $massage = ['name.required'=>"اسم الصنف لايمكن ان يكون فارغ",
         "price.required"=>"السعر لايمكن ان يكون فارغ",
@@ -86,7 +86,7 @@ class Products extends Controller
         $mymaterial = material_product::join("rawmaterials","rawmaterials.id","=","proudct_material.rawid")->select(["rawmaterials.material_name","rawmaterials.hisba_type","proudct_material.*"])
         ->where(['proudct_material.proid'=>$id])->get();
         $ar = array();
-        $data = array("myMate"=>"","mate"=>"");
+        $data = array("myMate"=>"","mate"=>"<option value=''>اختر العنصر</option>");
         foreach($mymaterial as $val){
             array_push($ar,$val->rawid);
             $type = ($val->hisba_type == 1)?"متر":"قطعة";
@@ -112,7 +112,8 @@ class Products extends Controller
     }
 
     public function addWork(Request $request){
-        $rouls = ['work_name'=>"required|max:255","price_work"=>"required|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/|min:1","proid"=>"required"];
+        $rouls = ['work_name'=>"required|max:255",
+        "price_work"=>"required|numeric|min:1|max:9999999","proid"=>"required"];
         $massage = ["work_name.required"=>"يجب ادخال اسم الخدمة","price_work.required"=>"يجب تحديد سعر الخدمة"];
         $request->validate($rouls,$massage);
         WorkHand::create([
@@ -123,15 +124,22 @@ class Products extends Controller
     }
 
     public function addMeta(Request $request){
-        $rouls = ['s_name'=>"required","quan"=>"required|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/|min:1","proid"=>"required"];
-        $massage = ["s_name.required"=>"يجب اختيار مادة","quan.required"=>"يرجب تحديد كمية استهلاك الصنف من المادة"];
+        $rouls = ['s_name'=>"required",
+        "proid"=>"required"];
+        $massage = ["s_name.required"=>"يجب اختيار مادة"];
+        if(isset($request->quan)){
+            $rouls['quan'] = "required|numeric|min:1|max:9999999";
+        }else{
+            $rouls['length'] = 'required|numeric|min:1|max:9999999';
+            $rouls['width'] = 'required|numeric|min:1|max:9999999';
+        }
+        $quantity = isset($request->quan)?$request->quan:$request->length * $request->width;
         $request->validate($rouls,$massage);
         material_product::create([
             "rawid"=>$request->s_name,
             "proid"=>$request->proid,
-            "quan"=>$request->quan,
+            "quan"=>$quantity,
         ]);
-
     }
     public function delMeta($id){
         $delMate = material_product::find($id);
@@ -151,5 +159,8 @@ class Products extends Controller
         $data['proid'] = $delMate->proid;
         $delMate->delete();
         echo json_encode($data);
+    }
+    public function get_type($id){
+        return rawmaterials::find($id)->hisba_type;
     }
 }

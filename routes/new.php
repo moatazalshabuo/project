@@ -37,12 +37,14 @@ Route::controller(Products::class)->group(function(){
         Route::get("product/get-mati/{id}","getMatiSel")->name("get-mati");
         Route::post("product/add-mate","addMeta")->name("add-mate");
         Route::get("product/del-mate/{id}","delMeta")->name("del-mate");
+        Route::get("get_type/{id}","get_type")->name("get_type");
     
         /* work hand in product  */
         Route::get("product/get-work/{id}","getWork")->name("get-work");
         Route::post("product/add-work","addwork")->name("add-work");
         Route::get("product/del-work/{id}","delWork")->name("del-work");
         Route::get("product/edit-work/{id}","editWork")->name("edit-work");
+
     });
 });
 Route::get("get-item",function(){
@@ -89,7 +91,9 @@ Route::get("get-item-mate",function(){
               { echo  "بمقاس المتر";}
             elseif ($dates->hisba_type == 2)
              {  echo "بمقاس الطرف";
-            }
+            }elseif ($dates->hisba_type == 3)
+            {  echo "بمقاس المتر المربع";
+           }
             echo "</td><td> $dates->quantity </td>
             <td> $dates->price </td>
             <td>$dates->created_by </td>";

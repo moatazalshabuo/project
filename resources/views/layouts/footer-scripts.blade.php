@@ -24,6 +24,8 @@
 <script src="{{URL::asset('assets/plugins/sidebar/sidebar-rtl.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/sidebar/sidebar-custom.js')}}"></script>
 <!-- Eva-icons js -->
+<script src="{{URL::asset('assets/plugins/select2/js/select2.min.js')}}"></script>	
+
 <script src="{{URL::asset('assets/js/eva-icons.min.js')}}"></script>
 <script src="{{ URL::asset('assets\plugins\sweet-alert\sweetalert.min.js') }}"></script>
 @yield('js')

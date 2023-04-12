@@ -277,9 +277,12 @@ class Reports extends Controller
 
         }else{
 
-            $prus = Purchasesitem::select("rawmaterials.material_name","rawmaterials.id as rawm","purchases_items.*","users.name as username")
+            $prus = Purchasesitem::select("rawmaterials.material_name","rawmaterials.id as rawm",
+            DB::raw("sum(purchases_items.`qoun`) as qaunt"),
+            "purchases_items.created_at","users.name as username")
             ->join("users","users.id","=","purchases_items.user_id")
-            ->join("rawmaterials","rawmaterials.id","=","purchases_items.rawmati")->where('purchases_items.rawmati',$raw)
+            ->join("rawmaterials","rawmaterials.id","=","purchases_items.rawmati")
+            ->where('purchases_items.rawmati',$raw)->groupBy("purchases_items.purchases_id")
             ->get();
 
             $prus1 = SalesItem::select('sales_items.sales_id',DB::raw("(sales_items.qoun * proudct_material.quan) as qaunt"),"sales_items.created_at","users.name","rawmaterials.material_name","rawmaterials.id as rawm")
@@ -293,7 +296,7 @@ class Reports extends Controller
             ['id_bill'=>$val->purchases_id,
             'name'=>$val->material_name,
             'rawid'=>$val->rawm,
-            "qoa"=>$val->qoun,
+            "qoa"=>$val->qaunt,
             'created_at'=>$val->created_at,
             "username"=>$val->username,
             "type"=>1

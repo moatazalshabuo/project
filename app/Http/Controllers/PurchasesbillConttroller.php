@@ -102,11 +102,8 @@ class PurchasesbillConttroller extends Controller
         if($salesbill->tolal > 0){
             $salesbill->status = 0;
             $salesbill->Residual = $salesbill->tolal;
-            // $salesbill->sincere = $request->sincere;
-            // $salesbill->Residual = $salesbill->total - $request->sincere;
             $salesbill->custom = $request->client;
             $salesbill->update();
-            // return redirect()->route("salesbill",$salesbill->id);
             $data = array("id"=>$salesbill->id);
         }else{
             $data=array("mass"=>"لايمكنك اغلاق فاتورة فارغة ");            
