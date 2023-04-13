@@ -52,7 +52,7 @@ class Helper
         $salesItem = SalesItem::find($id);
         $mate = DB::table('proudct_material')->select(DB::raw("($salesItem->qoun * proudct_material.quan) as coun"),"proudct_material.*")
         ->where(['proudct_material.proid'=> $salesItem->prodid])->get();
-        // print_r($mate);
+        
         foreach($mate as $val){
             $raw = rawmaterials::find($val->rawid);
             $raw->quantity = ($raw->quantity - $val->coun);

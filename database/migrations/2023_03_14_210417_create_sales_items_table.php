@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("prodid")->constrained("products");
             $table->foreignId('sales_id')->constrained("salesbills")->onDelete('cascade');
-            $table->string("descripe",191)->default("");
+            $table->string("descripe",191)->nullable();
             $table->double("qoun",15, 8);
             $table->double("descont",15, 8);
             $table->double("total",15, 2)->nullable();

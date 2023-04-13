@@ -2,7 +2,7 @@
 <html lang="en" dir="rtl">
   <head>
     <meta charset="utf-8">
-    <title>Example 2</title>
+    <title>فاتورة مبيعات</title>
     <link rel="stylesheet" href="style.css" media="all" />
 	<style>
 
@@ -41,7 +41,7 @@ header {
 }
 
 #logo img {
-  height: 70px;
+  height: 90px;
 }
 
 #company {
@@ -97,7 +97,7 @@ table {
 
 table th,
 table td {
-  padding: 20px;
+  padding: 5px;
   background: #EEEEEE;
   text-align: center;
   border-bottom: 1px solid #FFFFFF;
@@ -212,11 +212,12 @@ footer {
   border-collapse: collapse;
   border-spacing: 0;
   margin-bottom: 20px;
+  margin-top: 80px !important;
 }
 
 table th,
 table td {
-  padding: 20px;
+  padding: 5px;
   background: #EEEEEE;
   text-align: center;
   border-bottom: 1px solid #FFFFFF;
@@ -225,6 +226,8 @@ table td {
 table th {
   white-space: nowrap;        
   font-weight: normal;
+  background-color: #555555 !important;
+  color: #fff !important;
 }
 
 table td {
@@ -321,14 +324,15 @@ table tfoot tr:last-child td {
           <div class="email"><a href="mailto:john@example.com">john@example.com</a></div>
         </div>
         <div id="invoice">
-          <h1>فاتورة {{ $bill->id }}</h1>
           <div class="date">تاريخ الفاتورة: {{ $bill->created_at }}</div>
         </div>
       </div>
+      <h1 style="text-align: center">فاتورة {{ $bill->id }}</h1>
       <table border="0" cellspacing="0" cellpadding="0">
         <thead>
           <tr>
             <th class="no">#</th>
+            <th class="unit">الصنف</th>
             <th class="desc">الصنف</th>
             <th class="unit">الكمية</th>
             <th class="qty">السعر</th>
@@ -342,8 +346,9 @@ table tfoot tr:last-child td {
 			@endphp
 			@foreach ($item as $ite)
 				<tr>
-					<td class="no">{{ $i }}</td>
+					<td class="no" style="font-size: 10px">{{ $i }}</td>
 					<td class="desc"><h3>{{ $ite->name }}</h3></td>
+          <td class="desc"><h3>{{ $ite->descripe }}</h3></td>
 					<td class="unit">{{ $ite->qoun }}</td>
 					<td class="qty">${{ $ite->price }}</td>
 					<td class="qty">${{ $ite->descont }}</td>
@@ -357,19 +362,19 @@ table tfoot tr:last-child td {
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="2"></td>
-            <td colspan="2">الخالص</td>
+            <td colspan="4"></td>
+            <td colspan="1">الاجمالي</td>
+            <td>${{$bill->total}}</td>
+          </tr>
+          <tr>
+            <td colspan="4"></td>
+            <td colspan="1">الخالص</td>
             <td>${{ $bill->sincere }}</td>
           </tr>
           <tr>
-            <td colspan="2"></td>
-            <td colspan="2">المتبقي</td>
+            <td colspan="4"></td>
+            <td colspan="1">المتبقي</td>
             <td>${{ $bill->Residual }}</td>
-          </tr>
-          <tr>
-            <td colspan="2"></td>
-            <td colspan="2">الاجمالي</td>
-            <td>${{$bill->total}}</td>
           </tr>
         </tfoot>
       </table>

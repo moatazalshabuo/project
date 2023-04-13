@@ -163,4 +163,8 @@ class Products extends Controller
     public function get_type($id){
         return rawmaterials::find($id)->hisba_type;
     }
+
+    public function get_type_product($id){
+        return Product::find($id)->type_Q;
+    }
 }

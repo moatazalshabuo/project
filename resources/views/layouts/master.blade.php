@@ -15,9 +15,7 @@
 		<script src="{{ URL::asset('assets\js\swet.js') }}"></script>
 
 		<style>
-		.btn:focus{
-				box-shadow: 0px 1px 6px 1px blue;
-			}
+		
 		</style>
 	</head>
 

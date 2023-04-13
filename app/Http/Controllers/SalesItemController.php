@@ -29,19 +29,39 @@ class SalesItemController extends Controller
         // print($salesbill->id);die();
         if($salesbill->status == 1):
             
-            $rules = ["product"=>"required|numeric","quant"=>"required|numeric|min:1|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/"];
-            $message = ["product.required"=>"يجب ادخال صنف","product.numeric"=>"يجب ادخال صنف","quant.required"=>"الكمية يجب ان لاتكوم فارغة","quant.required"=>"الكمية يجب ان لاتكوم فارغة",];
+            $rules = ["product"=>"required|numeric",];
+            $message = ["product.required"=>"يجب ادخال صنف",
+            "product.numeric"=>"يجب ادخال صنف"];
+            if(isset($request->quant)){
+                if(!empty(Product::find($request->product)) &&  Product::find($request->product)->type_Q == 2){
+                    $rules['quant'] = "required|integer|min:1|max:9999999";    
+                }else{
+                    $rules['quant'] = "required|numeric|min:1|max:9999999";
+                }
+            }else{
+                $rules['length'] = 'required|numeric|min:1|max:9999999';
+                $rules['width'] = 'required|numeric|min:1|max:9999999';
+            }
             $request->validate($rules,$message);
-            // print($request->quant);die();
+
+            $quantity = isset($request->quant)?$request->quant:$request->length * $request->width;
+
             $product = Product::find($request->product);
             if($product->price > 0){
-            $error = Helper::check_materil($request->product,$request->quant);
+            $error = Helper::check_materil($request->product,$quantity);
             if(empty($error)){
+                $price = !empty($request->descont)?$request->descont:$product->price;
+                $descout = 0;
+                // if(!empty($))
                 $id = SalesItem::create(['prodid'=>$request->product,
                 "sales_id"=>$salesbill->id,
-                "qoun"=>$request->quant,
-                "descont"=>$request->descont,
-                "total"=>($request->quant*$product->price)-$request->descont,
+                "qoun"=>$quantity,
+                "new_price"=>$request->descont,
+                "descont"=>ceil(($quantity*$product->price)-($quantity*$price)),
+                "descripe"=>$request->descripe,
+                "total"=>ceil($quantity*$price),
+                "length"=>$request->length,
+                "width"=>$request->width,
                 "user_id"=>Auth::id()])->id;
                 Helper::Collect_bill($salesbill->id);
                 Helper::minus_from_mate($id);
@@ -65,16 +85,21 @@ class SalesItemController extends Controller
         //
         $bill = Salesbill::find($id);
         $data = SalesItem::join("products","products.id","=","sales_items.prodid")->
-        select("products.name","sales_items.*")->where("sales_items.sales_id",$id)->orderBy("id","DESC")->get();
+        select("products.name","products.type_Q","sales_items.*")->where("sales_items.sales_id",$id)->orderBy("id","DESC")->get();
         $total = array("total"=>$bill->total,"sincere"=>$bill->sincere,"Residual"=>$bill->Residual,"tbody"=>"");
         $i = 0;
         foreach($data as $val){
             $i++;
-            $total['tbody'] .= "<tr >
+            $total['tbody'] .= "<tr>
             <td>".$i."</td>
             <td>".$val->name."</td>
-            <td>".$val->qoun."</td>
-            <td>".$val->descont."</td>
+            <td>".$val->descripe."</td>
+            ";
+            if($val->type_Q == 3)
+            $total['tbody'] .= "<td>".$val->length." * ".$val->width."</td>";
+            else
+            $total['tbody'] .= "<td>".$val->qoun."</td>";
+            $total['tbody'] .= "<td>".$val->descont."</td>
             <td>".$val->total."</td>
             <td>".$val->created_at."</td>
             <td class='d-flex justify-content-end'>

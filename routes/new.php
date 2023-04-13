@@ -32,7 +32,7 @@ Route::controller(Products::class)->group(function(){
         Route::post("/product/update-prod","update")->name("up_prod");
         Route::get("/product/activeprod/{id}","active")->name("activeprod");
         Route::get("/product/unactiveprod/{id}","unactive")->name("unactiveprod");
-        
+        Route::get("get_type_product/{id}","get_type_product")->name('get_type_product');
         /* material in page product */
         Route::get("product/get-mati/{id}","getMatiSel")->name("get-mati");
         Route::post("product/add-mate","addMeta")->name("add-mate");

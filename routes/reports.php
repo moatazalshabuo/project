@@ -6,6 +6,8 @@ use App\Http\Controllers\Reports;
 use Laravel\Ui\Presets\React;
 use SebastianBergmann\CodeCoverage\Report\Xml\Report;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\WorkController;
+
 Route::prefix("pay")->group(function(){
     Route::middleware('auth')->group(function(){
         Route::get('index',[Reports::class,"pay_index"])->name("pay_index");
@@ -64,7 +66,16 @@ Route::prefix("custom")->group(function(){
     });
 });
 
+Route::controller(WorkController::class)->group(function(){
+    Route::prefix("works")->group(function(){
 
-// Route::get("clint",function(){
-//     return view('rawmaterials/clint');
-// });
+        Route::middleware('auth')->group(function(){
+            Route::get("in_progress","in_progress")->name("in_progress");
+            Route::get("its_done/{id}","its_done")->name("its_done");
+            Route::get("completed_works","completed_works")->name("completed_works");
+            Route::get("its_completed/{id}","its_completed")->name("its_completed");
+        });
+
+    });
+});
+

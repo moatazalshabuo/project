@@ -42,39 +42,37 @@
 @endempty
 
 @empty(!$data)
+@section('num')
+<div class="btn-group m-1" role="group" aria-label="First group">
+	<button type="button" class="btn btn-warning  btn-icon mx-1"><i class="mdi mdi-refresh"></i></button>
+
+	<a type="button" class="btn btn-primary btn-icon" @if ($prev) href='{{route('Purchasesbill',$prev)}}' @else disabled @endif ><</a>
+	<input type="text" class="form-control w-32" id="bill_id" value="{{ $data->id }}">
+	<a type="button" class="btn btn-primary btn-icon" @if ($next) href='{{route('Purchasesbill',$next)}}' @else disabled @endif >></a>
+</div>
+@endsection
 @section('page-header')
 				<!-- breadcrumb -->
 				
 
 				<div class="breadcrumb-header row">
-					<div class="my-auto col-md-5">
+					<div class="my-auto col-md-4">
 						<div class="d-flex">
 							<h4 class="content-title mb-0 my-auto">فاتورة مشتريات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">{{ $data->name }}</span>
 						</div>
 					</div>
-					<div class="col-md-7 row my-xl-auto ">
-						<div class="col-md-3 col-sm-3 col-3 mb-2 mb-xl-0">
-							<a href="{{ route("purchasesbill_edit",$data->id) }}" @if($data->status)disabled @endif class="btn btn-info ml-2">تعديل الفاتورة</a>
-						</div>
-						<div class="col-md-3 col-sm-3 col-3 mb-2 mb-xl-0">
-						<button class="btn btn-info ml-2" id="close-bill" @if($data->status == 0)disabled @endif>حفظ الفاتورة</button>
-						</div>
-						<div class="mb-2 col-md-2 col-sm-3 col-3">
-							<a href="{{ route("Purchasesbill_create") }}" type="button" class="btn btn-danger  ml-2">فاتورة جديدة </a>
-						</div>
-						<div class="mb-2 col-md-1 col-2">
-							<button type="button" class="btn btn-warning  btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
-						</div>
-						<div class="d-flex mb-2 mb-xl-0 col-sm-4 col-7 col-md-3">
-							<a type="button" class="btn btn-primary btn-icon" @if ($prev) href='{{route('Purchasesbill',$prev)}}' @else disabled @endif ><</a>
-						
-							<input type="text" class="form-control" id="bill_id" value="{{ $data->id }}">
-							<a type="button" class="btn btn-primary btn-icon" @if ($next) href='{{route('Purchasesbill',$next)}}' @else disabled @endif >></a>
-						
+					<div class="col-md-8">
+						<div class="btn-group">
+							@if (Auth::user()->user_type == 1)
+								<button type="button"  data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo1" class="btn btn-primary m-1"><i class="mdi mdi-plus"></i> اضافة مادة </button>
+							@endif
+							<a href="{{ route("purchasesbill_edit",$data->id) }}" @if($data->status)disabled @endif class="btn btn-info m-1">تعديل فاتورة</a>
+							<button id="print-bill" class="btn btn-info m-1">طباعة فاتورة</button>
+							<button class="btn btn-info m-1" id="close-bill" @if($data->status == 0)disabled @endif>حفظ الفاتورة</button>
+							<a href="{{ route("Purchasesbill_create") }}" type="button" class="btn btn-danger m-1">فاتورة جديدة </a>							
 						</div>
 					</div>
-					
-				</div>
+				</div>				
 				<div class="row m-1">
 					<div class="col-md-5 col-10">
 						<select id="custom" class="form-control select2-no-search mb-1 select" @if($data->status == 0) disabled @endif>
@@ -239,6 +237,58 @@
 				</div>
 			</div>
 		</div>
+		<!-- ================== add rawmaterial ========== -->
+		<div class="modal" id="modaldemo1">
+			<div class="modal-dialog " role="document">
+				<div class="modal-content modal-content-demo">
+					<div class="modal-header bg-primary text-white">
+						<h6 class="modal-title text-white">اضافة </h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+					</div>
+					<form action="{{ route('rawmaterials.store') }}" id="form-add" method="POST">
+						@csrf
+					
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="exampleInputEmail1">اسم المادة</label>
+							<input type="text" class="form-control" id="material_name" name="material_name" required>
+						</div>
+						<div class="text text-danger error_add" id="error_material_name"></div>
+                        <div class="form-group">
+							<label for="exampleFormControlTextarea1">نوع الكمية</label>
+						<select name="hisba_type" id="hisba_type"  class="form-control">
+                        <option value="">حدد نوع الكمية</option>
+                        <option value="1">بالمتر</option>
+						<option value="3"> بالمتر المربع</option>
+                        <option value="2">بالطرف</option>
+                    </select>
+						</div>
+						<div class="text text-danger error_add" id="error_hisba_type"></div>
+
+                        <div class="form-group">
+							<label for="exampleFormControlTextarea1">كمية المخزون</label>
+							<div class="d-flex">
+								<input type="number" class="form-control m3 m-1" id="length" disabled name="length" placeholder="طول">
+								<input type="number" class="form-control m3 m-1" id="width" disabled name="width" placeholder="العرض">
+                            </div>
+							<input type="number" class="form-control m2" id="quantity" name="quantity" required>
+						</div>
+						<div class="text text-danger error_add" id="error_quantity"></div>
+                        <div class="form-group">
+							<label for="exampleFormControlTextarea1">السعر</label>
+                            <input type="number" class="form-control" id="price_mate" name="price" required>
+						</div>
+						<div class="text text-danger error_add" id="error_price_mate"></div>						
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-outline-primary" id="add-mate">تأكيد</button>
+						<button type="button" class="btn btn-outline-danger close_add" data-dismiss="modal">إغلاق</button>
+
+					</div>
+				</form>
+				</div>
+			</div>
+		</div>
+		<!-- ===================== end ============== -->
 @endsection
 
 @section('js')
@@ -280,38 +330,37 @@
 	get_totel()
 
 //=========================================
-
-		$("#mate").change(function(){
-			if($(this).val() != ""){
-			$.ajax({
-				url:"{{ route('getoldprice','') }}/"+$(this).val(),
-				type:"get",
-				success:function(res){
-					// console.log(res)
-					data = JSON.parse(res)
-					$("#old_price").val(data['price'])
-					$("#old_quant").val(data['quantity'])
-				}
-			})
-			$.ajax({
-			'url':"{{route('get_type','')}}/"+$(this).val(),
-			'type':"get",
-			success:function(res){
-			if(res == 3){
-					$(".m3").removeAttr('disabled');
-					$('.m3').show()
-					$(".m2").attr('disabled','disabled');
-					$('.m2').hide()
-				}else{
-					$(".m2").removeAttr('disabled');
-					$('.m2').show()
-					$(".m3").attr('disabled','disabled');
-					$('.m3').hide()
-				}
-			}
-		})
+$("#mate").change(function(){
+	if($(this).val() != ""){
+	$.ajax({
+		url:"{{ route('getoldprice','') }}/"+$(this).val(),
+		type:"get",
+		success:function(res){
+			// console.log(res)
+			data = JSON.parse(res)
+			$("#old_price").val(data['price'])
+			$("#old_quant").val(data['quantity'])
 		}
-		})
+	})
+	$.ajax({
+	'url':"{{route('get_type','')}}/"+$(this).val(),
+	'type':"get",
+	success:function(res){
+	if(res == 3){
+			$("#input-item .m3").removeAttr('disabled');
+			$('#input-item .m3').show()
+			$("#input-item .m2").attr('disabled','disabled');
+			$('#input-item .m2').hide()
+		}else{
+			$("#input-item .m2").removeAttr('disabled');
+			$('#input-item .m2').show()
+			$("#input-item .m3").attr('disabled','disabled');
+			$('#input-item .m3').hide()
+		}
+	}
+})
+}
+})
 //==================================
 		function reset(){
 			$("#q_error").text("")
@@ -435,6 +484,7 @@ $(".m3").hide()
 				getClient(e)
 				$("#select2modal").modal("hide")
 				$("#form-client-add").trigger("reset")
+				// location.reload()
 				alertify.success('تم الاضافة بنجاح');
 				reset()
 			},error:function(e){
@@ -450,6 +500,7 @@ $(".m3").hide()
 	$("#close-bill").click(function(){
 		// console.log($('#form-client').serialize())
 		// console.log("_token={{ csrf_token() }}"+$('#form-client').serialize()+"&sincere="+$("#sincere").val()+"&id={{ $data->id }}")
+		console.log($("#custom").val())
 		$.ajax({
 			url:"{{ route('purchasesbill_save') }}",
 			type:"post",
@@ -471,8 +522,74 @@ $(".m3").hide()
 			}
 		})
 	})
+// ====================================
 
+$("#hisba_type").change(function(){
+	if($(this).val() == 3){
+		$("#form-add .m3").removeAttr('disabled');
+		$('#form-add .m3').show()
+		$("#form-add .m2").attr('disabled','disabled');
+		$('#form-add .m2').hide()
+	}else{
+		$("#form-add .m2").removeAttr('disabled');
+		$('#form-add .m2').show()
+		$("#form-add .m3").attr('disabled','disabled');
+		$('#form-add .m3').hide()
+	}
+})
+function reset_add_form(){
+		$(".error_add").text("")
+	}
+
+function sendMetadata(){
+$.ajax({
+	url:"{{ route('rawmaterials.store') }}",
+	type:"post",
+	data:$('#form-add').serialize(),
+	success:function(res){
+		// console.log(res);
+		$('#form-add').trigger("reset");
+		$("#modaldemo1").modal('hide')
+		alertify.success('تم الاضافة بنجاح');
+		getitem();
+	},error:function(e){
+		$data = e.responseJSON;
+		$("#error_material_name").text($data.errors.material_name)
+		$("#error_hisba_type").text($data.errors.hisba_type)
+		$("#error_quantity").text($data.errors.quantity || $data.errors.length + " " + $data.errors.width)
+		$("#error_price_mate").text($data.errors.price)
+	}
+})
+}
+
+$('#add-mate').click(function(){
+	reset_add_form();
+	sendMetadata();
+	location.reload()
+})
+$("#price_mate").keypress(function(e){
+	if(e.which == 13){
+		reset_add_form();
+		sendMetadata();
+		location.reload()	
+	}
+})
+$('#print-bill').click(function(){
+		$.ajax({
+			url:"{{route('check_purbill',$data->id)}}",
+			type:"get",
+			success:function(res){
+				if(res['success']){
+					// location.replace("{{ route('invicebill', $data->id) }}")
+					window.open ("{{ route('invicepur', $data->id) }}",
+						"mywindow","menubar=1,resizable=1,width=1300,height=1000");
+				}else{
+					Swal.fire(res['mass'])
+				}
+			}
+		})
 	})
+})
 </script>
 @endempty
 @endsection

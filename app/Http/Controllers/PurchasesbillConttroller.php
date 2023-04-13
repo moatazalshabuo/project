@@ -20,6 +20,7 @@ class PurchasesbillConttroller extends Controller
     {
         $this->middleware(['manager']);
     }
+
     public function index($id = "")
     {
             
@@ -96,7 +97,7 @@ class PurchasesbillConttroller extends Controller
             "client.required"=>"يرجى اختيار المورد",
         ]);
         
-        Helper::Collect_bill($request->id);
+        Helper::Collect_purbill($request->id);
         $salesbill = Purchasesbill::find($request->id);
         if($salesbill->status == 1){
         if($salesbill->tolal > 0){
@@ -136,6 +137,8 @@ class PurchasesbillConttroller extends Controller
         // }
         echo json_encode($data);
     }
+
+
     public function get_bill_data($id = 0){
         $salesbill = Purchasesbill::find($id);
         if(isset($salesbill->id)){

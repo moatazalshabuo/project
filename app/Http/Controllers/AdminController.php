@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Purchasesbill;
+use App\Models\Purchasesitem;
 use App\Models\Salesbill;
 use App\Models\SalesItem;
 use Illuminate\Http\Request;
@@ -26,6 +28,18 @@ class AdminController extends Controller
             }
     }
 
+    public function invicepur($id)
+    {
+        // if(view()->exists($id)){
+
+            $last_bill = Purchasesbill::select("users.name","purchasesbills.*","customers.name as cn","customers.phone")->join("users","users.id","=","purchasesbills.created_by")->join("customers","customers.id","=","purchasesbills.custom")->where("purchasesbills.id",$id)->orderby("purchasesbills.id","DESC")->first();
+            $data = Purchasesitem::join("rawmaterials","rawmaterials.id","=","purchases_items.rawmati")->select("rawmaterials.material_name","rawmaterials.price","purchases_items.*")->where("purchases_items.purchases_id",$id)->orderBy("id","DESC")->get();
+            if(!empty($data) && !empty($last_bill)){
+                return view("frontend.invoice.invoice_pur",['bill'=>$last_bill,"item"=>$data]);
+            }else{
+                return redirect()->back();
+            }
+    }
     public function report(){
         return view('frontend.invoice.reports');
     }

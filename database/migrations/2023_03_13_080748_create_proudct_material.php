@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId("proid")->constrained("products")->onDelete('cascade');
             $table->double("quan",15, 8);
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
     }
 

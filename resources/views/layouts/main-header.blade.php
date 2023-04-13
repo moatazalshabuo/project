@@ -9,7 +9,9 @@
 						</div>
 						
 					</div>
-					
+					<div class="main-header-rigth">
+						@yield('num')
+					</div>
 				</div>
 			</div>
 <!-- /main-header -->

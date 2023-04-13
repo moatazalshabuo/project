@@ -11,6 +11,7 @@ use App\Http\Controllers\SystemMangControl;
 use App\Http\Controllers\SystemMangController;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\usersController;
+use App\Models\Purchasesbill;
 use App\Models\Salesbill;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Facades\Auth;
@@ -54,8 +55,17 @@ Route::get('check_bill/{id}',function($id){
     }
 })->name('check_bill')->middleware('auth');
 
+Route::get('check_purbill/{id}',function($id){
+    if(Purchasesbill::find($id)->status == 0){
+        return response()->json(["success"=>"تم الحذف بنجاح"], 200);  
+    }else{
+        return response()->json(["mass"=>"يجب اغلاق الفاتورة اولا"], 200);  
+    }
+})->name('check_purbill')->middleware('auth');
+
 Route::resource('users',usersController::class)->middleware('auth');
 
 Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('invicebill')->middleware('auth');
+Route::get('/invicepur/{id}', [AdminController::class, 'invicepur'])->name('invicepur')->middleware('auth');
 Route::get('/invicereport', [AdminController::class, 'report'])->name('invicereport')->middleware('auth');
 

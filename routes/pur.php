@@ -33,7 +33,7 @@ Route::controller(PurchasesbillConttroller::class)->group(function(){
             Route::get("index/{id?}","index")->name("Purchasesbill");
             Route::get('create',"create")->name("Purchasesbill_create");
             Route::get("edit/{salesbill}","edit")->name("purchasesbill_edit");
-            Route::post("save","save")->name("purchasesbill_save");
+            Route::post("save/","save")->name("purchasesbill_save");
             // Route::get("change_prod/{id}","select_prod")->name("selectprod");
             Route::get("get_bill/{id?}","get_bill_data")->name("get_purbill");
             Route::post('exchnge_receipt', "pay")->name("Exchange_receipt");

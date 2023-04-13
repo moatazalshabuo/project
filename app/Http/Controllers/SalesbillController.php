@@ -40,15 +40,18 @@ class SalesbillController extends Controller
 			}
             // احضار انديكس الصفحة الحالة 
 			$current = array_search($last_bill->id,$index);
-
+            $first = $index[0];
+            $last = $index[count($index) - 1];
 			$next = isset($index[$current + 1])?$index[$current + 1]:"";
 			$prev = isset($index[$current - 1])?$index[$current - 1]:"";
             
     }else{
             $next = "";
             $prev ="";
+            $last = "";
+            $first = "";
         }
-        return view("frontend/sales",['data'=>$last_bill,'next'=>$next,"prev"=>$prev]);
+        return view("frontend/sales",['data'=>$last_bill,'next'=>$next,"prev"=>$prev,"last"=>$last,"first"=>$first]);
     }
 
     /**

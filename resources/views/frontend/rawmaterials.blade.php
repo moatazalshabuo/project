@@ -162,7 +162,7 @@
 						<div class="text text-danger error_add" id="error_quantity"></div>
                         <div class="form-group">
 							<label for="exampleFormControlTextarea1">السعر</label>
-                            <input type="number" class="form-control" id="" name="price" required>
+                            <input type="number" class="form-control" id="price_meta" name="price" required>
 						</div>
 						<div class="text text-danger error_add" id="error_price"></div>						
 					</div>
@@ -285,6 +285,29 @@ function sendMetadata(){
 			}
 		})
 }
+
+function update_mate(){
+	$.ajax({
+			url:"{{ route('materialupdate') }}",
+			type:"post",
+			data:$('#form-edit').serialize(),
+			success:function(res){
+				// console.log(res);
+				$('#form-edit').trigger("reset");
+				$("#edit_material").modal('hide')
+				alertify.success('تم التعديل بنجاح');
+				getitem();
+			},error:function(e){
+				$data = e.responseJSON;
+				console.log($data)
+				$("#error_material_name_e").text($data.errors.material_name)
+				$("#error_hisba_type_e").text($data.errors.hisba_type)
+				$("#error_quantity_e").text($data.errors.quantity)
+				$("#error_price_e").text($data.errors.price)
+
+			}
+		})
+}
 // دالة تهيئة رسائل الاخطاء كلها 
 function reset_add_form(){
 		$(".error_add").text("")
@@ -321,6 +344,18 @@ function reset_edit_form(){
 			sendMetadata();
 	})
 
+	$("#price_meta").keypress(function(e){
+		if(e.which == 13){
+			reset_add_form();
+			sendMetadata();
+		}
+	})
+	$("#price_e").keypress(function(e){
+		if(e.which == 13){
+			reset_edit_form();
+			update_mate()
+		}
+	})
 	
 	$(document).on("click",".edit_mate",function(){
 		$.ajax({
@@ -342,26 +377,7 @@ function reset_edit_form(){
 	$('#update').click(function(){
 			reset_edit_form();
 			// console.log($('#form-edit').serialize());
-		$.ajax({
-			url:"{{ route('materialupdate') }}",
-			type:"post",
-			data:$('#form-edit').serialize(),
-			success:function(res){
-				// console.log(res);
-				$('#form-edit').trigger("reset");
-				$("#edit_material").modal('hide')
-				alertify.success('تم التعديل بنجاح');
-				getitem();
-			},error:function(e){
-				$data = e.responseJSON;
-				console.log($data)
-				$("#error_material_name_e").text($data.errors.material_name)
-				$("#error_hisba_type_e").text($data.errors.hisba_type)
-				$("#error_quantity_e").text($data.errors.quantity)
-				$("#error_price_e").text($data.errors.price)
-
-			}
-		})
+			update_mate()
 	})
 	
 	$('#refresh').click(function(){
