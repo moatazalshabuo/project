@@ -11,6 +11,8 @@ use App\Http\Controllers\SystemMangControl;
 use App\Http\Controllers\SystemMangController;
 use App\Http\Controllers\userController;
 use App\Http\Controllers\usersController;
+use App\Http\Controllers\clientsController;
+use App\Http\Controllers\customersController;
 use App\Models\Purchasesbill;
 use App\Models\Salesbill;
 use GuzzleHttp\Psr7\Response;
@@ -67,6 +69,7 @@ Route::get('check_purbill/{id}',function($id){
 })->name('check_purbill')->middleware(['auth','Technical']);
 
 Route::resource('users',usersController::class)->middleware(['auth','admin']);
+Route::resource('customers',customersController::class);
 
 Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('invicebill')->middleware(['auth','Technical']);
 Route::get('/invicepur/{id}', [AdminController::class, 'invicepur'])->name('invicepur')->middleware(['auth','Technical']);
