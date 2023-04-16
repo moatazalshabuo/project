@@ -47,6 +47,7 @@
 					</div>
 					<div class="btn-group left-content col-md-7">
 						<button class="btn btn-info ml-2" id="print-bill" >طباعة الفاتورة</button>
+						<button class="btn btn-info ml-2" id="print-work" >طباعة امر عمل</button>
 						<a href="{{ route("salesbill_edit",$data->id) }}" @if($data->status)disabled @endif class="btn btn-info ml-2">تعديل الفاتورة</a>
 						<button class="btn btn-info ml-2" id="close-bill" @if($data->status == 0)disabled @endif>حفظ الفاتورة</button>
 						<a href="{{ route("salesbiil_create") }}" type="button" class="btn btn-danger  ml-2">فاتورة جديدة </a>						
@@ -80,7 +81,7 @@
 										<div class="col-md-4">
 											<label>الصنف</label>
 											<select name="product" class="form-control" id="product">
-												<optin disabled >اختر الصنف</optin>
+												<option disabled >اختر الصنف</option>
 											</select>
 											<div class="text-danger" id="product_error"></div>
 										</div>
@@ -142,6 +143,7 @@
 												<th>الكمية</th>	
 												<th>التخفيض</th>
 												<th>اجمالي سعر</th>
+												<th>الحالة</th>
 												<th>تاريخ المعاملة</th>
 												<th>اخرى</th>
 											</tr>
@@ -205,6 +207,16 @@
 							<div class="form-group">
 								<label>رقم الهاتف</label>
 								<input type="number" name="phone" id="phone" class="form-control">
+								<p id="phone_err" class="text-danger"></p>
+							</div>
+							<div class="form-group">
+								<label>الايميل(اختياري)</label>
+								<input type="email" name="email" id="email" class="form-control">
+								<p id="phone_err" class="text-danger"></p>
+							</div>
+							<div class="form-group">
+								<label>الموقع(اختياري)</label>
+								<input type="text" name="address" id="address" class="form-control">
 								<p id="phone_err" class="text-danger"></p>
 							</div>
 						</form>						
@@ -422,7 +434,7 @@
 	$("#save-client").click(function(){
 		add_client();
 	})
-	$("#phone").keypress(function(e){
+	$("#phone,#address,#email").keypress(function(e){
 		if(e.which == 13){
 			add_client();
 		}
@@ -461,6 +473,21 @@
 				if(res['success']){
 					// location.replace("{{ route('invicebill', $data->id) }}")
 					window.open ("{{ route('invicebill', $data->id) }}",
+						"mywindow","menubar=1,resizable=1,width=1300,height=1000");
+				}else{
+					Swal.fire(res['mass'])
+				}
+			}
+		})
+	})
+	$('#print-work').click(function(){
+		$.ajax({
+			url:"{{route('check_bill',$data->id)}}",
+			type:"get",
+			success:function(res){
+				if(res['success']){
+					// location.replace("{{ route('invicebill', $data->id) }}")
+					window.open ("{{ route('work', $data->id) }}",
 						"mywindow","menubar=1,resizable=1,width=1300,height=1000");
 				}else{
 					Swal.fire(res['mass'])

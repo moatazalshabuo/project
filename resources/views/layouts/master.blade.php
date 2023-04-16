@@ -13,9 +13,12 @@
 		<script src="{{ URL::asset('assets\plugins\sweet-alert\sweetalert.min.js') }}"></script>
 		<link  rel="stylesheet" href="{{URL::asset('assets\plugins\sweet-alert\sweetalert.css')}}">
 		<script src="{{ URL::asset('assets\js\swet.js') }}"></script>
+		<link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
 
 		<style>
-		
+		.select2-container{
+			width: 100% !important;
+		}
 		</style>
 	</head>
 
@@ -35,80 +38,7 @@
 				@yield('content')
 				@include('layouts.sidebar')
 				<!-- Basic modal -->
-		<div class="modal" id="modaldemo15">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content modal-content-demo">
-					<div class="modal-header">
-						<h6 class="modal-title">سداد قيمة الزبون</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
-					</div>
-					<div class="modal-body">
-						
-						<!-- Select2 -->
-						<form id="form-pay">
-							{{-- @csrf --}}
-							<div class="row">
-								<div class="col-md-5">
-									<div class="form-group">
-										<label>رقم الفاتورة </label>
-										<input type="text" name="sales_bill_t" id="sales_bill_t" class="form-control">
-										<input type="hidden" id="bill_no">
-											
-									</div>
-									<p class="text-danger" id=bill_t_err></p>
-								</div>
-								<div class="col-md-2 ">
-									<button type="button" class="mt-4 btn btn-primary" id="get_bill_id">بحث</button>
-								</div>
-								<div class="col-md-5">
-									<h5 class="message">
-
-									</h5>
-								</div>
-							</div>
-							<hr>
-							<div class="form-group">
-								<label>الزبون</label>
-								<input type="text" disabled name="client_name_t" id="client_name_t" class="form-control">
-								{{-- <input type="hidden" name="client_id_t" id="client_id_t"> --}}
-								<p id="phone_err" class="text-danger"></p>
-							</div>
-							<div class="row">
-								<div class="col-md-3">
-									<div class="form-group">
-										<label>قيمة السداد</label>
-										<input type="number" name="price" id="price_t" class="form-control">
-										<p class="text-danger" id=price_t_err></p>
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group">
-										<label>المتبقي</label>
-										<input type="number" disabled id="Residual_t" class="form-control">
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group">
-										<label>الخالص</label>
-										<input type="number" disabled id="sincere_t" class="form-control">
-									</div>
-								</div>
-								<div class="col-md-3">
-									<div class="form-group">
-										<label>الاجمالي</label>
-										<input type="number" disabled id="total_t" class="form-control">
-									</div>
-								</div>
-							</div>
-						</form>						
-						<!-- Select2 -->
-					</div>
-					<div class="modal-footer">
-						<button class="btn ripple btn-primary" id="pay" type="button">حفظ</button>
-						<button class="btn ripple btn-secondary close" data-dismiss="modal" type="button">الغاء</button>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 		<!--  ايصال القبض طريقة جديدة بنحذف الاول -->
 
 		<!-- Button trigger modal-->
@@ -127,27 +57,31 @@
 			</div>
 			<!--Body-->
 			<div class="modal-body">
-
+				<div class="text-danger massege"></div>
 				<div class="row">
-					<div class="col-md-6">
-						<label>اختر الزبون</label>
-						<select class="form-control">
-							<option value="">....</option>
-						</select>
+					<div class="col-md-12">
+						<div class="form-group">
+							<label>اختر الزبون</label>
+							<select class="form-control pay_select" name="client" id="client_select">
+								<option value="">....</option>
+							</select>
+							<p class="text-danger" id=client_pay_err></p>
+						</div>
 					</div>
-					<div class="col-md-6">
+					{{-- <div class="col-md-6">
 					<label> الفاتورة (اختياري)</label>
-					<select class="form-control">
+					<select class="form-control pay_select" name="bills_num" id="bill_num_pay">
 						<option value="">....</option>
 					</select>
-					</div>
+					<p class="text-danger" id=bills_num_pay_err></p>
+					</div> --}}
 				</div>
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>قيمة السداد</label>
-							<input type="number" name="price" id="price_t" class="form-control">
-							<p class="text-danger" id=price_t_err></p>
+							<input type="number" name="price" id="price_pay" class="form-control">
+							<p class="text-danger" id=price_pay_err></p>
 						</div>
 						ملاحظات(اختياري)
 						<textarea rows="6" cols="6" class="form-control" name="descrip" placeholder="ملاحظات ....">
@@ -157,15 +91,15 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>المتبقي</label>
-							<input type="number" disabled id="Residual_t" class="form-control">
+							<input type="number" disabled id="Residual_pay" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>الخالص</label>
-							<input type="number" disabled id="sincere_t" class="form-control">
+							<input type="number" disabled id="sincere_pay" class="form-control">
 						</div>
 						<div class="form-group">
 							<label>الاجمالي</label>
-							<input type="number" disabled id="total_t" class="form-control">
+							<input type="number" disabled id="total_pay" class="form-control">
 						</div>
 					</div>
 				</div>
@@ -173,8 +107,7 @@
 			<!--Footer-->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-primary" data-dismiss="modal">اغلاق</button>
-				<button class="btn btn-primary">حفظ</button>
-				<button class="btn btn-primary">حفظ و طباعة الايصال</button>
+				<button class="btn btn-primary" id="pay">حفظ</button>
 			</div>
 			</div>
 		</div>
@@ -251,7 +184,53 @@
 					</div>
 					<div class="modal-footer">
 						<button class="btn ripple btn-primary" id="pay_custom" type="button">حفظ</button>
-						<button class="btn ripple btn-secondary close" data-dismiss="modal" type="button">الغاء</button>
+						<button type="button" class="btn btn-outline-primary" data-dismiss="modal">اغلاق</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal" id="modeExchange">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content modal-content-demo">
+					<div class="modal-header bg-primary text-withe">
+						<h6 class="modal-title">ايصال صرف</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+					</div>
+					<div class="modal-body">
+						
+						<!-- Select2 -->
+						<form id="form-pay-custom">
+							@csrf
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>بيان الايصال</label>
+										<input type="text" name="descripe_exc" id="descripe_exc" class="form-control">
+										<input type="hidden" id="descripe_exc">
+											
+									</div>
+									<p class="text-danger" id='descripe_exc_err'></p>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<label>القيمة</label>
+										<input type="number" name="price" id="price_exc" class="form-control">
+										{{-- <input type="hidden" رid="price_exc_err"> --}}
+											
+									</div>
+									<p class="text-danger" id='price_exc_err'></p>
+								</div>
+								
+							</div>
+							<hr>
+							
+							
+						</form>						
+						<!-- Select2 -->
+					</div>
+					<div class="modal-footer">
+						<button class="btn ripple btn-primary" id="exchange_send" type="button">حفظ</button>
+						<button type="button" class="btn btn-outline-primary" data-dismiss="modal">اغلاق</button>
 					</div>
 				</div>
 			</div>
@@ -265,20 +244,134 @@
 				<script>
 					
 					$(function(){
+						function reset_form_pay(){
+							$("#sincere_pay").val("")
+							$("#Residual_pay").val("")
+							$("#total_pay").val("")
+							$("#bill_num_pay").html("")
+							$('#price_pay').val("")
+							$(".massege").html("")
+							$("#client_select").val("")
+						}
+						$('#pay_select').select2({
+								dropdownParent: $('#modalCart')
+							});
+						// عرض الزبائن او العملاء في سيليكت للاختيار منهم
+						function client_select(){
+							$.ajax({
+								url:"{{ route('clientSelect') }}",
+								type:"get",
+								success:function(res){
+									$("#client_select").html(res)
+								}
+							})
+						}
+						client_select()
+						function select_client(id,bill=0){
+							$.ajax({
+								url:"{{ route('client_pay','') }}/"+id,
+								data:"bill_id="+bill,
+								type:"get",
+								success:function(res){
+									if(res != ""){
+									data = JSON.parse(res)
+									
+									$("#sincere_pay").val(data['sincere'])
+									$("#Residual_pay").val(data['Residual'])
+									$("#total_pay").val(data['total'])
+									$("#bill_num_pay").html(data['salesbill'])
+								}else{
+									reset_form_pay()
+								}
+								},error:function(res){
+									
+								}
+							})
+						}
 						
-						$("#get_bill_id").click(function(){
-					reset()
-							Pay($("#sales_bill_t").val())
+						function Pay(id){
+							$.ajax({
+								url:"{{ route('get_bill','') }}/"+id,
+								type:"get",
+								success:function(res){
+									data = JSON.parse(res)
+									if(data['error']){
+										$(".message").html(data['error'])
+									}else{
+										$("#sincere_pay").val(data['sincere'])
+										$("#Residual_pay").val(data['Residual'])
+										$("#total_pay").val(data['total'])
+									}
+								}
+							})
+						}
+						$("#client_select").change(function(){
+							select_client($(this).val())
 						})
+						$("#bill_num_pay").change(function(){
+							if($(this).val() != "")
+							Pay($(this).val())
+							else
+							select_client($("#client_select").val())
+						})
+						
+						function pay_send(){
+							reset()
+							var bill_no = $("#bill_num_pay").val()
+							var price = $("#price_pay").val()
+							var client = $("#client_select").val()
+							$.ajax({
+								url:"{{ route('pay_receipt') }}",
+								type:"post",
+								data:"_token={{ csrf_token() }}&price="+price+"&client="+client,
+								success:function(res){
+									// console.log(res)
+									data = JSON.parse(res)
+									if(data['done']){
+										// console.log(data['done'])
+										Swal.fire(data['done'])
+										$("#modalCart").modal("hide");
+										reset_form_pay()
+										$("#pay").removeAttr("disabled")
+									}else if(data['error']){
+										$(".massege").html(data['error'])
+										$("#pay").removeAttr("disabled")
+									}
+								},error:function(res){
+									$("#pay").removeAttr("disabled")
+									data = res.responseJSON
+									$("#price_pay_err").text(data.errors.price)
+									$("#bills_num_pay_err").text(data.errors.bill_id)
+									$("#client_err").text(data.errors.client)
+								}
+							})
+						}
+
+
+						$("#pay").click(function(){
+							$(this).attr("disabled","disabled")
+							pay_send()
+						})
+
+						$("#price_pay").keypress(function(e){
+							if(e.which == 13){
+								pay_send()
+							}
+						})
+
+
+						
 						$("#get_purbill").click(function(){
 							reset()
 							Exchange($("#pur_bill").val())
 						})
+						
 						function Exchange(id){
 							$.ajax({
 								url:"{{ route('get_purbill','') }}/"+id,
 								type:"get",
 								success:function(res){
+									console.log(res)
 									data = JSON.parse(res)
 									if(data['error']){
 										$(".message1").html(data['error'])
@@ -294,28 +387,7 @@
 							})
 						}
 
-						function Pay(id){
-							$.ajax({
-								url:"{{ route('get_bill','') }}/"+id,
-								type:"get",
-								success:function(res){
-									data = JSON.parse(res)
-									if(data['error']){
-										$(".message").html(data['error'])
-									}else{
-										$("#sincere_t").val(data['sincere'])
-										$("#Residual_t").val(data['Residual'])
-										$("#total_t").val(data['total'])
-										$("#client_name_t").val(data['client_name'])
-										// $("#client_id_t").val(data['client_id'])
-										$("#bill_no").val(data['bill_no'])
-									}
-								}
-							})
-						}
-
-						$("#pay_custom").click(function(){
-							// var id_clint = $("#client_id_t").val()
+						function Exchange_pay(){
 							reset()
 							var bill_no = $("#purbill_no_id").val()
 							var price = $("#custom_price_recep").val()
@@ -328,9 +400,10 @@
 									// console.log(res)
 									data = JSON.parse(res)
 									if(data['done']){
-										$(".message1").html(data['done'])
-										$("#price").val("")
-										Exchange(bill_no)
+										$("#modaldemo17").modal("hide")
+										Swal.fire(data['done'])
+										$("#custom_price_recep").val("")
+										$("#purbill_no_id").val().change()
 									}else if(data['error']){
 										$(".message1").html(data['error'])
 									}
@@ -340,6 +413,51 @@
 									$("#custom_name_recep_err").text(data.errors.bill_id)
 								}
 							})
+						}
+						$("#custom_price_recep").keypress(function(e){
+							if(e.which == 13){
+								reset()
+								Exchange_pay()
+							}
+						})
+
+						$("#pay_custom").click(function(){
+							// var id_clint = $("#client_id_t").val()
+							Exchange_pay()
+						})
+
+						function Exchange_exc(){
+							
+							var descripe = $("#descripe_exc").val()
+							var price = $("#price_exc").val()
+							$.ajax({
+								url:"{{ route('Exchange-exc') }}",
+								type:"post",
+								data:"_token={{ csrf_token() }}&descripe="+descripe+"&price="+price,
+								success:function(res){
+									data = JSON.parse(res)
+									if(data['done']){
+										$("#modeExchange").modal("hide");
+										Swal.fire(data['done'])
+										$("#descripe_exc").val("")
+										$("#price_exc").val("")
+									}
+								},error:function(res){
+									data = res.responseJSON
+									$("#descripe_exc_err").text(data.errors.descripe)
+									$("#price_exc_err").text(data.errors.price)
+								}
+							})
+						}
+						$("#exchange_send").click(function(){
+							$("#descripe_exc_err").text("")
+							$("#price_exc_err").text("")
+							Exchange_exc()
+						})
+						$("#price_exc").keypress(function(e){
+							if(e.which == 13){
+								Exchange_exc()
+							}
 						})
 
 						function reset(){
@@ -350,33 +468,7 @@
 							$("#custom_price_error").text("")
 							$("#custom_name_recep_err").text("")
 						}
-						$("#pay").click(function(){
-							// var id_clint = $("#client_id_t").val()
-							reset()
-							var bill_no = $("#bill_no").val()
-							var price = $("#price_t").val()
-							// console.log(bill_no + " : "+price);
-							$.ajax({
-								url:"{{ route('pay_receipt') }}",
-								type:"post",
-								data:"_token={{ csrf_token() }}&bill_id="+bill_no+"&price="+price,
-								success:function(res){
-									// console.log(res)
-									data = JSON.parse(res)
-									if(data['done']){
-										$(".message").html(data['done'])
-										$("#price").val("")
-										Pay(bill_no)
-									}else if(data['error']){
-										$(".message").html(data['error'])
-									}
-								},error:function(res){
-									data = res.responseJSON
-									$("#price_t_err").text(data.errors.price)
-									$("#bill_t_err").text(data.errors.bill_id)
-								}
-							})
-						})
+						
 						$(".close").click(function(){
 							$("#custom_sincere").val("")
 							$("#custom_Residual").val("")
@@ -392,6 +484,7 @@
 							// $("#client_id_t").val(data['client_id'])
 							$("#bill_no").val("")
 						})
+
 					})
 				</script>
 				<script>

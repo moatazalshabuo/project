@@ -29,6 +29,8 @@
 				<!-- /breadcrumb -->
 @endsection
 @section('content')
+@if (Auth::user()->user_type == 1 ||Auth::user()->user_type == 0 ||Auth::user()->user_type == 2)
+
 				<!-- row -->
 				<div class="row row-sm">
 					<div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
@@ -125,22 +127,59 @@
 				<!-- row opened -->
 				<div class="row row-sm">
 					<div class="col-xl-4 col-md-12 col-lg-12">
-						<div class="card">
-							<div class="card-header pb-1">
-								<h3 class="card-title mb-2">فواتير مشتريات مفتوحة</h3>
-								{{-- <p class="tx-12 mb-0 text-muted">A customer is an individual or business that purchases the goods service has evolved to include real-time</p> --}}
+						<div class="card bg-danger text-white">
+							<div class="card-header pb-1 bg-danger text-white">
+								<h3 class="card-title mb-2">فواتير قيد العمل</h3>
+
 							</div>
-							<div class="card-body p-0 customers mt-1">
-								
+							<div class="card-body p-0 customers mt-1" style="height:400px;overflow-y:scroll">
+								<table class="table text-white">
+									<thead class="text-white">
+										<th class="text-white">ت</th>
+										<th class="text-white"> الفاتورة</th>
+										<th class="text-white">العميل</th>
+									</thead>
+									<tbody>
+										@php
+											$i = 0;
+										@endphp
+										@foreach ($bill_process as $item)
+											<tr>
+												<td>{{ $i+=1 }}</td>
+												<td><a class="text-white" href="{{ route('salesbill',$item->id) }}"> فاتورة مبيعات رقم{{ $item->id }} </a></td>
+												<td>{{$item->name}}-{{$item->phone}}</td>
+											</tr>
+										@endforeach
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
 					<div class="col-xl-4 col-md-12 col-lg-6">
 						<div class="card">
 							<div class="card-header pb-1">
-								<h3 class="card-title mb-2">فواتير مبيعات مفتوحة</h3>
-								{{-- <p class="tx-12 mb-0 text-muted">Sales activities are the tactics that salespeople use to achieve their goals and objective</p> --}}
-							</div>
+								<h3 class="card-title mb-2">فواتير مكتملة غير مستلمة</h3>
+								<div class="card-body p-0 customers mt-1" style="height:400px;overflow-y:scroll">
+									<table class="table ">
+										<thead >
+											<th >ت</th>
+											<th > الفاتورة</th>
+											<th >العميل</th>
+										</thead>
+										<tbody>
+											@php
+												$i = 0;
+											@endphp
+											@foreach ($bills_done as $item)
+												<tr>
+													<td>{{ $i+=1 }}</td>
+													<td><a  href="{{ route('salesbill',$item->id) }}"> فاتورة مبيعات رقم{{ $item->id }} </a></td>
+													<td>{{$item->name}}-{{$item->phone}}</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>							</div>
 							<div class="product-timeline card-body pt-2 mt-1">
 								
 							</div>
@@ -159,6 +198,7 @@
 					</div>
 				</div>
 				<!-- row close -->	
+@endif
 			</div>
 		</div>
 		<!-- Container closed -->
@@ -176,7 +216,7 @@
 <script src="{{URL::asset('assets/js/dashboard.sampledata.js')}}"></script>
 <script src="{{URL::asset('assets/js/chart.flot.sampledata.js')}}"></script>
 <!--Internal Apexchart js-->
-<script src="{{URL::asset('assets/js/apexcharts.js')}}"></script>
+{{-- <script src="{{URL::asset('assets/js/apexcharts.js')}}"></script> --}}
 <!-- Internal Map -->
 <script src="{{URL::asset('assets/plugins/jqvmap/jquery.vmap.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>

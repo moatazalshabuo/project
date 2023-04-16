@@ -100,8 +100,14 @@ class SalesItemController extends Controller
             else
             $total['tbody'] .= "<td>".$val->qoun."</td>";
             $total['tbody'] .= "<td>".$val->descont."</td>
-            <td>".$val->total."</td>
-            <td>".$val->created_at."</td>
+            <td>".$val->total."</td>";
+            if($val->status == 0)
+            $total['tbody'] .= "<td>قيد العمل</td>";
+            elseif($val->status == 1)
+            $total['tbody'] .= "<td>مكتمل</td>";
+            else
+            $total['tbody'] .= "<td> مستلم</td>";
+            $total['tbody'] .= "<td>".$val->created_at."</td>
             <td class='d-flex justify-content-end'>
                     <button type=button class='btn btn-info ml-1 btn-icon dele' id='".$val->id."'><i class='mdi mdi-delete'></i></button>
                     <button type=button class='btn btn-danger btn-icon edit' id='".$val->id."'><i class='mdi mdi-transcribe'></i></button>

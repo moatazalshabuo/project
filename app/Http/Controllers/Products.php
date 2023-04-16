@@ -17,7 +17,7 @@ class Products extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['manager']);
+        
     }
     public function index(){
         $products = Product::all();

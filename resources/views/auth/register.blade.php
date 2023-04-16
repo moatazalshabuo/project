@@ -206,11 +206,13 @@ form .user-details .input-box{
           </div>
         </div>
         <div class="input-box">
-          <select name="user_type" class="">
-              <option value="1">مسؤول</option>
-              <option value="2">ادارة</option>
-              <option value="3">مبيعات</option>
-          </select>
+          <select name="user_type" class="form-control">
+            <option value="1">مسؤول</option>
+            <option value="0">2مسؤول</option>
+            <option value="2">ادارة</option>
+            <option value="3">مبيعات</option>
+            <option value="4">فني</option>
+        </select>
       </div>
        
         <button type="submit" class="btn btn-primary button">

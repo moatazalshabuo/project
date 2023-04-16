@@ -24,14 +24,14 @@ use App\Models\rawmaterials;
 
 /*  start product page all staff  */ 
 Route::controller(Products::class)->group(function(){
-    Route::middleware('auth')->group(function(){
-        Route::get('/products',"index")->name("productsManage")->middleware('auth');
-        Route::get("product/delete/{id}","delete")->name("deleteprod");
-        Route::post("product/editprod/","editprod")->name("editprod");
-        Route::post('/product/addprod',"add_pro")->name("add_prod");
-        Route::post("/product/update-prod","update")->name("up_prod");
-        Route::get("/product/activeprod/{id}","active")->name("activeprod");
-        Route::get("/product/unactiveprod/{id}","unactive")->name("unactiveprod");
+    Route::middleware(['auth','manager'])->group(function(){
+        Route::get('/products',"index")->name("productsManage");
+        Route::get("product/delete/{id}","delete")->name("deleteprod")->middleware('admin');
+        Route::post("product/editprod/","editprod")->name("editprod")->middleware('admin');
+        Route::post('/product/addprod',"add_pro")->name("add_prod")->middleware('admin');
+        Route::post("/product/update-prod","update")->name("up_prod")->middleware('admin');
+        Route::get("/product/activeprod/{id}","active")->name("activeprod")->middleware('admin');
+        Route::get("/product/unactiveprod/{id}","unactive")->name("unactiveprod")->middleware('admin');
         Route::get("get_type_product/{id}","get_type_product")->name('get_type_product');
         /* material in page product */
         Route::get("product/get-mati/{id}","getMatiSel")->name("get-mati");
@@ -104,7 +104,7 @@ Route::get("get-item-mate",function(){
             </td></tr>";
             }
         
-})->name("getitem-mate")->middleware('auth');
+})->name("getitem-mate")->middleware(['auth',"manager"]);
 
 /* end */ 
 
@@ -116,7 +116,7 @@ Route::get('/cards',function(){
 /*  start salesbill page all staff  */
 Route::controller(SalesbillController::class)->group(function(){
     Route::prefix("Salesbill")->group(function(){
-        Route::middleware('auth')->group(function(){
+        Route::middleware(['auth','Technical'])->group(function(){
             Route::get("index/{id?}","index")->name("salesbill");
             Route::get('create',"create")->name("salesbiil_create");
             Route::get("edit/{salesbill}","edit")->name("salesbill_edit");
@@ -125,13 +125,15 @@ Route::controller(SalesbillController::class)->group(function(){
             Route::get("change_prod/{id}","select_prod")->name("selectprod");
             Route::get("get_bill/{id?}","get_bill_data")->name("get_bill");
             Route::post('pay_receipt', "pay")->name("pay_receipt");
+            // ايصال القبض
+            Route::get("client_pay/{id?}","client_pay")->name("client_pay");
         });
     });
 });
 
 Route::controller(SalesItemController::class)->group(function(){
     Route::prefix("SalesItem")->group(function(){
-        Route::middleware('auth')->group(function(){
+        Route::middleware(['auth','Technical'])->group(function(){
         Route::post("add","create")->name("add_item");
         Route::get("getTotalItem/{id}","getItemTotal")->name("getItembill");
         Route::get("delete/{id}","destroy")->name("deleteSaleItem");
@@ -156,7 +158,7 @@ Route::controller(ClientController::class)->group(function(){
 
 Route::controller(Reception_reports::class)->group(function(){
     Route::prefix("Reception")->group(function(){
-        Route::middleware('auth')->group(function(){
+        Route::middleware(['auth','Technical'])->group(function(){
             Route::post("salesbill","Salesbill")->name("ReceptionSalesbill");
         });
     });

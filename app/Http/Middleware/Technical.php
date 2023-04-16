@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class manager
+class Technical
 {
     /**
      * Handle an incoming request.
@@ -18,8 +18,8 @@ class manager
     {
         if(Auth::check()){
             // echo Auth::user()->user_type;die();
-            if(Auth::user()->user_type != 2 && Auth::user()->user_type != 1 && Auth::user()->user_type != 0){
-                return redirect()->route('home')->with('massage',"لاتملك صلاحيات الدخول");
+            if(Auth::user()->user_type == 4){
+                return redirect()->route('home')->with('massage',"لاتملك صلاحيات الدخول");;
             }
         }
         return $next($request);

@@ -22,7 +22,7 @@ class ClientController extends Controller
     
     public function __construct()
     {
-        $this->middleware(['manager']);
+        
     }
     public function show_select($id = "")
     {
@@ -42,11 +42,15 @@ class ClientController extends Controller
         $request->validate([
             'name'=>["required",'max:255'],
             "phone"=>["required","unique:clients,phone",'max:30'],
+            "email"=>['max:80'],
+            "address"=>['max:191']
         ],["name.required"=>"يرجى ادخال الاسم","phone.required"=>"يرجى ادخال رقم الهاتف",
         "phone.unique"=>"رقم الهاتف موجود مسبقا"]);
         echo client::create([
             "name"=>$request->name,
-            "phone"=>$request->phone
+            "phone"=>$request->phone,
+            "email"=>$request->email,
+            "address"=>$request->address
         ])->id;
     }
 

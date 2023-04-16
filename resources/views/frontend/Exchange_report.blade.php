@@ -48,11 +48,11 @@
 								</select>
 								<div class="text-danger"></div>
 							</div>
-							التاريخ 
-							<div class="col-md-1">
-								<label>طول المدة</label>
-								<input type="checkbox" name="all_time">
+							<div class="col-md-3">
+								<label>بيان الايصال</label>
+								<input type="text" name="descripe" class="form-control">
 							</div>
+							التاريخ 
 							<div class="col-md-2">
 								من
 								<input class="form-control" type="datetime-local" value="{{ old('from') }}" name="from">
@@ -85,16 +85,14 @@
 				<div class="row row-sm">
 					<div class="col-xl-12">
 						<div class="card">
-							<div class="crad-header p-5">
-								{{-- <input type="text" id="myInput" class="form-control" onkeyup="myFunction()" placeholder="البحث با اسم المنتج"> --}}
-							</div>
+							
 							<div class="card-body" style="overflow-y: scroll;height:500px">
 								<div class="table-responsive">
 									<table class="table text-md-nowrap text-center" id="">
 										<thead>
 											<tr>
 												<th class="wd-15p border-bottom-0">رقم الايصال الصرف</th>
-												<th class="wd-15p border-bottom-0">رقم فاتورة</th>
+												<th class="wd-15p border-bottom-0">نوع</th>
 												<th class="wd-20p border-bottom-0">قيمة الايصال</th>
 												<th class="wd-15p border-bottom-0">المسستخدم</th>
 												<th class="wd-10p border-bottom-0">تاريخ الايصال</th>
@@ -102,11 +100,15 @@
 											</tr>
 										</thead>
 										<tbody class="" id="myTable">
-											@if ( session()->get('data'))
-												@foreach (session()->get('data') as $item)
+											@if ($data)
+												@foreach ($data as $item)
 													<tr>
 														<td>{{ $item->id }}</td>
-														<td><a href="{{ route("Purchasesbill",$item->bill_id) }}"> فاتورة مشتريات رقم{{ $item->bill_id }}</a></td>
+														@if ($item->bill_id)
+														<td><a href="{{ route("Purchasesbill",$item->bill_id) }}"> فاتورة مشتريات رقم{{ $item->bill_id }}</a></td>															
+														@else
+														<td>{{ $item->desc }}</td>
+														@endif
 														<td>{{ $item->price }}</td>
 														<td>{{ $item->name }}</td>
 														<td>{{ $item->created_at }}</td>

@@ -17,14 +17,10 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">اعمال لم تستلم</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0"></span>
+							<h4 class="content-title mb-0 my-auto">اعمال لم تكتمل</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0"></span>
 						</div>
 					</div>
 					<div class="d-flex my-xl-auto right-content">
-						{{-- <div class="pr-1 mb-3 mb-xl-0">
-							<button type="button" class="btn btn-info btn-icon ml-2"><i class="mdi mdi-filter-variant"></i></button>
-						</div>--}}
-						
 						
 					</div>
 				</div>
@@ -35,49 +31,66 @@
 		<div class="col-lg-12 col-md-12">
 			<div class="card">
 				<div class="card-body">
-                    <label>البحث </label>
-					<input type="text" id="myInput" placeholder="البحث .. " class="form-control">
+					<form action="{{route('all-progress-search')}}" method="get" >
+						<div class="row">
+							<div class="form-group col-md-3">
+								<label>البحث </label>
+								<input type="text" name="descrip" placeholder="بيان المنتج" class="form-control">
+							</div>
+							<div class="form-group col-md-3">
+								<label>اسم المنتج </label>
+								<select name="product" class="form-control">
+									<option value="">اختر المنتج</option>
+									@foreach ($product as $item)
+										<option value="{{$item->id}}">{{$item->name}}</option>
+									@endforeach
+								</select>
+							</div>
+							<div class="form-group col-md-3">
+								<label>اسم الزبون </label>
+								<select name="client" class="form-control">
+									<option value="">اختر الزبون</option>
+									@foreach ($client as $item)
+										<option value="{{$item->id}}">{{$item->name}}-{{ $item->phone }}</option>
+									@endforeach
+								</select>
+							</div>
+							<div class="col-md-2">
+							<input type="submit" class="btn btn-outline-primary mt-3" value="بحث">
+							</div>
+							<div class="col-md-2">
+								<a href="{{route('all_progress')}}" class="btn btn-outline-dark">عرض الكل</a>
+							</div>
+						</div>
+					</form>
 				</div>
 
 			</div>
 		</div>
 	</div>
-<!-- row opened -->
-				{{-- @if (Session::has('success'))
-				<div class="alert alert-success">{{ Session::get('success') }}</div>
-				@endif --}}
-				{{-- {!! Helper::cost(6) !!} --}}
 
 				<div class="row row-sm">
 					<div class="col-xl-12">
 						<div class="card">
 						
-							<div class="card-body" style="overflow-y: scroll;height:500px">
-                                <div class="form-group">
-                                    <input id="all" type="checkbox">
-                                    <label>تحديد الكل</label>
-                                    <button type="button" id="send_all" class=" m-1 btn btn-outline-dark">استلام</button>
-									<button type="button" id="send_all_back" class=" m-1 btn btn-outline-dark">تراجع</button>
-                                </div>
+							<div class="card-body">
                             
 								<div class="table-responsive">
 									<table class="table text-md-nowrap text-center" id="">
 										<thead>
 											<tr>
-                                                <th></th>
 												<th class="wd-15p border-bottom-0">الصنف</th>
 												<th class="wd-15p border-bottom-0">بيان الصنف</th>
 												<th class="wd-20p border-bottom-0">رقم الفاتورة</th>
 												<th class="wd-15p border-bottom-0">كمية </th>
 												<th class="wd-15p border-bottom-0">الزبون</th>
 												<th class="wd-10p border-bottom-0">تاريخ المعاملة</th>
-                                                <th class="wd-15p border-bottom-0">التحكم</th>
+                                                <th class="wd-15p border-bottom-0">الحالة</th>
 											</tr>
 										</thead>
 										<tbody class="" id="myTable">
                                             @foreach ($data as $item)
                                             <tr>
-                                                <td><input name="done" type="checkbox" value="{{ $item->id }}" class="disabled"></td>
                                                 <td>{{$item->name}}</td>
                                                 <td>{{ $item->descripe }}</td>
                                                 <td><a href="{{route("salesbill",$item->sales_id) }}">فاتورة رقم {{$item->sales_id}}</a></td>
@@ -88,14 +101,23 @@
                                                 @endif
                                                 <td>{{ $item->cl_name}} - {{ $item->phone }}</td>
                                                 <td>{{ $item->created_at }}</td>
-                                                <td class="d-flex">
-                                                    <a href="{{ route('its_completed',$item->id) }}?back=true" class="btn btn-outline-danger">تراجع</a>
-													<a href="{{ route('its_completed',$item->id) }}" class="btn btn-outline-success">استلام</a>
-                                                </td>
+                                                <td>
+													@if ($item->status == 0)
+														<span class="text-danger">قيد العمل</span>
+													@endif
+													@if ($item->status == 1)
+														<span class="text-primary">مكتمل</span>
+													@endif
+													@if ($item->status == 2)
+														<span class="text-success">تم الاستلام</span>
+														<a class="text-danger" href="{{ route('its_completed',$item->id) }}?backdone=true">تراجع</a>
+													@endif
+												</td>
                                                 </tr>
                                             @endforeach			
 										</tbody>
 									</table>
+									{!! $data->links() !!}
 								</div>
 							</div>
 						</div>
@@ -133,6 +155,7 @@
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
 
 <script>
+	$("select").select2()
 	$(function(){
 		$("#send_all").click(function(){
             arra = []
@@ -141,22 +164,10 @@
                 
             if($('.disabled:checked').length > 0){
                 // console.log(arra.toString())
-                location.replace("{{ route('its_completed','') }}/"+arra)
+                location.replace("{{ route('its_done','') }}/"+arra)
             }
                 // console.log(arra.toString())
         })
-		$("#send_all_back").click(function(){
-            arra = []
-		for(i = 0;i< $('.disabled:checked').length;i++)
-			arra[i]=$('.disabled:checked')[i].value
-                
-            if($('.disabled:checked').length > 0){
-                // console.log(arra.toString())
-                location.replace("{{ route('its_completed','') }}/"+arra+"?back=true")
-            }
-                // console.log(arra.toString())
-        })
-		
 		
 		$("#myInput").on("keyup", function() {
             var value = $(this).val().toLowerCase();
@@ -180,6 +191,7 @@
             $(".disabled").removeAttr("checked")
         })
 	})
+	
 </script>
 @if (session()->get('success'))
 	<script>

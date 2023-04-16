@@ -13,7 +13,7 @@ class RawmaterialsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['manager']);
+      
     }
     public function index()
     {

@@ -29,7 +29,7 @@ Route::get("hmo",function(){
 });
 Route::controller(PurchasesbillConttroller::class)->group(function(){
     Route::prefix("Purchasesbill")->group(function(){
-        Route::middleware('auth')->group(function(){
+        Route::middleware(['auth','manager'])->group(function(){
             Route::get("index/{id?}","index")->name("Purchasesbill");
             Route::get('create',"create")->name("Purchasesbill_create");
             Route::get("edit/{salesbill}","edit")->name("purchasesbill_edit");
@@ -37,13 +37,14 @@ Route::controller(PurchasesbillConttroller::class)->group(function(){
             // Route::get("change_prod/{id}","select_prod")->name("selectprod");
             Route::get("get_bill/{id?}","get_bill_data")->name("get_purbill");
             Route::post('exchnge_receipt', "pay")->name("Exchange_receipt");
+            Route::post('exchnge-exc', "pay1")->name("Exchange-exc");
         });
     });
 });
 
 Route::controller(PurchasesitemsController::class)->group(function(){
     Route::prefix("Purchasesitem")->group(function(){
-        Route::middleware('auth')->group(function(){
+        Route::middleware(['auth','manager'])->group(function(){
             Route::post("add","create")->name("add_puritem");
             Route::get("getTotalItem/{id}","getItemTotal")->name("getItempurbill");
             Route::get("delete/{id}","destroy")->name("deletePurItem");
@@ -53,13 +54,13 @@ Route::controller(PurchasesitemsController::class)->group(function(){
 });
 
 Route::controller(RawmaterialsController::class)->group(function(){
-    Route::middleware('auth')->group(function(){
+    Route::middleware(['auth','manager'])->group(function(){
     Route::get("getmatedata/{id}","getoldprice")->name("getoldprice");
     });
 });
 Route::controller(CustomerController::class)->group(function(){
     Route::prefix("custom")->group(function(){
-        Route::middleware('auth')->group(function(){
+        Route::middleware(['auth','manager'])->group(function(){
             Route::get("showSelect/{id?}","show_select")->name("customSelect");
             Route::post("create","create")->name("createCustom");
         });

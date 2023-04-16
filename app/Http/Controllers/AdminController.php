@@ -6,6 +6,7 @@ use App\Models\Purchasesbill;
 use App\Models\Purchasesitem;
 use App\Models\Salesbill;
 use App\Models\SalesItem;
+use App\Models\system_mang;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -39,6 +40,17 @@ class AdminController extends Controller
             }else{
                 return redirect()->back();
             }
+    }
+    public function work($id){
+        $last_bill = Salesbill::select("users.name","salesbills.*","clients.name as cn","clients.phone")
+        ->join("users","users.id","=","salesbills.created_by")
+        ->join("clients","clients.id","=","salesbills.client")
+        ->where("salesbills.id",$id)->orderby("salesbills.id","DESC")->first();
+        $data = SalesItem::join("products","products.id","=","sales_items.prodid")
+        ->select("products.name","products.price","products.type_Q","sales_items.*")
+        ->where("sales_items.sales_id",$id)->orderBy("id","DESC")->get();
+
+        return view("frontend.invoice.Print_invoices",['bill'=>$last_bill,"data"=>$data,"our"=>system_mang::select()->first()]);
     }
     public function report(){
         return view('frontend.invoice.reports');

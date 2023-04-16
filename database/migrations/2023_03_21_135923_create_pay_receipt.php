@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pay_receipt', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("bill_id")->constrained("salesbills");
+            $table->foreignId("bill_id")->constrained("salesbills")->default(null);
             $table->double("price",15, 8);
             $table->foreignId("created_by")->constrained("users");
             $table->timestamps();

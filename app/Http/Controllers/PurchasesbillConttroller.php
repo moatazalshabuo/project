@@ -18,7 +18,7 @@ class PurchasesbillConttroller extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['manager']);
+       
     }
 
     public function index($id = "")
@@ -80,10 +80,14 @@ class PurchasesbillConttroller extends Controller
     public function edit(Purchasesbill $salesbill)
     {
         //
+        if($salesbill->sincere > 0){
+            return redirect()->back()->with("err","يوجد ايصال صرف للفاتورة يرجى الغاء كل الايصالات الفاتورة لتتمكن من التعديل");
+        }else{
         $salesbill->status = 1;
         $salesbill->update();
         return redirect()->route("Purchasesbill",$salesbill->id);
     }
+}
 
     /**
      * Remove the specified resource from storage.
@@ -191,6 +195,24 @@ class PurchasesbillConttroller extends Controller
         echo json_encode($data);
     }
    
-
+    function pay1(Request $request){
+        $data = array();
+        $request->validate([
+            "descripe"=>"required|max:191|string",
+            "price"=>"required|numeric|max:9999999|min:1"
+        ],[
+            "descripe.required"=>"لايمكن ترك رقم الفاتورة فارغ",
+            "price.required"=>"يرجى ادخال القيمة"
+        ]);        
+            Exchange::create([
+                "desc" => $request->descripe,
+                "price"=>$request->price,
+                "created_by"=>Auth::id(),
+                "type"=>1
+            ]);
+            $data['done'] = "تم تسجيل العملية بنجاح ";
+        
+        echo json_encode($data);
+    }
 
 }

@@ -33,19 +33,22 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware('auth');
-Route::get('/registeruser', [App\Http\Controllers\HomeController::class, 'Register'])->name('registeruser')->middleware('auth');
-Route::get('/deleteuser/{id}', [App\Http\Controllers\HomeController::class, 'deleteuser'])->name('deleteuser')->middleware('auth');
-Route::POST('/storeuser', [App\Http\Controllers\HomeController::class, 'store'])->name('storeuser')->middleware('auth');
-
+Route::get('/registeruser', [App\Http\Controllers\HomeController::class, 'Register'])->name('registeruser')->middleware(['auth','admin']);
+Route::get('/deleteuser/{id}', [App\Http\Controllers\HomeController::class, 'deleteuser'])->name('deleteuser')->middleware(['auth','admin']);
+Route::POST('/storeuser', [App\Http\Controllers\HomeController::class, 'store'])->name('storeuser')->middleware(['auth','admin']);
+Route::get("logout-user",function(){
+Auth::logout();
+return redirect()->route("home");
+})->name("logout_user");
 // Route::resource('purchases',PurchasesController::class);
-Route::resource('mange_system',SystemMangControl::class)->middleware(["auth",'manager']);
+Route::resource('mange_system',SystemMangControl::class)->middleware(["auth",'admin']);
 // Route::get("mange_system",[SystemMangControl::class,'index'])->name("system");
-Route::resource('rawmaterials',RawmaterialsController::class)->middleware('auth');
+Route::resource('rawmaterials',RawmaterialsController::class)->middleware(['auth','manager']);
 
 Route::resource('invoices',InvoicesController::class);
-Route::post('material/update',[RawmaterialsController::class,'update'])->name("materialupdate")->middleware('auth');
-Route::get('material/edit/{id}',[RawmaterialsController::class,'edit'])->name("materialedit")->middleware('auth');
-Route::get('material/delete/{id}',[RawmaterialsController::class,'delete'])->name("materialdelete")->middleware('auth');
+Route::post('material/update',[RawmaterialsController::class,'update'])->name("materialupdate")->middleware(['auth','admin']);
+Route::get('material/edit/{id}',[RawmaterialsController::class,'edit'])->name("materialedit")->middleware(['auth','admin']);
+Route::get('material/delete/{id}',[RawmaterialsController::class,'delete'])->name("materialdelete")->middleware(['auth','admin']);
 
 Route::get('check_bill/{id}',function($id){
     if(Salesbill::find($id)->status == 0){
@@ -61,11 +64,12 @@ Route::get('check_purbill/{id}',function($id){
     }else{
         return response()->json(["mass"=>"يجب اغلاق الفاتورة اولا"], 200);  
     }
-})->name('check_purbill')->middleware('auth');
+})->name('check_purbill')->middleware(['auth','Technical']);
 
-Route::resource('users',usersController::class)->middleware('auth');
+Route::resource('users',usersController::class)->middleware(['auth','admin']);
 
-Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('invicebill')->middleware('auth');
-Route::get('/invicepur/{id}', [AdminController::class, 'invicepur'])->name('invicepur')->middleware('auth');
-Route::get('/invicereport', [AdminController::class, 'report'])->name('invicereport')->middleware('auth');
+Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('invicebill')->middleware(['auth','Technical']);
+Route::get('/invicepur/{id}', [AdminController::class, 'invicepur'])->name('invicepur')->middleware(['auth','Technical']);
+Route::get('/work/{id}', [AdminController::class, 'work'])->name('work')->middleware(['auth','Technical']);
+Route::get('/invicereport', [AdminController::class, 'report'])->name('invicereport')->middleware(['auth','Technical']);
 

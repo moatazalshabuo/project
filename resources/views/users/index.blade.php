@@ -130,10 +130,12 @@
                                             <td>{{ $dates->name }}</td>
                                             <td>{{ $dates->email }}</td>
                                             {{-- <td>{{ $dates->password }}</td> --}}
-                                            <td>@if ($dates->user_type == 1)
+                                            <td>@if ($dates->user_type == 1 || $dates->user_type == 0)
 												ادمن
 												@elseif ($dates->user_type == 3)
 												موظف
+                                                @elseif ($dates->user_type == 4)
+                                                فني
                                                 @else
                                                 ادارة
 											@endif </td>
@@ -146,14 +148,24 @@
                                                     data-password="{{ $dates->password}}"
                                                     data-toggle="modal"
                                                     data-target="#edit_Product">تعديل</button> --}}
-                                                    <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale" 
+                                                    
+                                                        @if ($dates->user_type == 1 && Auth::user()->user_type == 1)
+                                                        <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale" 
 														data-id="{{ $dates->id }}" data-name="{{ $dates->name }}"
 														data-password="{{ $dates->password }}" data-email="{{ $dates->email }}"
                                                          data-user_type="{{ $dates->user_type }}"   data-toggle="modal" href="#exampleModal2"
 														title="تعديل"><i class="las la-pen"></i></a>
-    
-                                                <button class="btn btn-outline-danger delete-user btn-sm "
-                                                    id="{{ $dates->id }}">حذف</button>
+                                                        <button class="btn btn-outline-danger delete-user btn-sm "
+                                                        id="{{ $dates->id }}">حذف</button>
+                                                        @elseif($dates->user_type != 1)
+                                                        <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale" 
+														data-id="{{ $dates->id }}" data-name="{{ $dates->name }}"
+														data-password="{{ $dates->password }}" data-email="{{ $dates->email }}"
+                                                         data-user_type="{{ $dates->user_type }}"   data-toggle="modal" href="#exampleModal2"
+														title="تعديل"><i class="las la-pen"></i></a>
+                                                        <button class="btn btn-outline-danger delete-user btn-sm "
+                                                        id="{{ $dates->id }}">حذف</button>
+                                                        @endif
                                             </td>
                                     </tr>
                         @endforeach
@@ -219,10 +231,13 @@
                     {{-- @foreach ($user as $dates) --}}
 <option value="">اختر الحالة</option>
 
-<option value="1" @if ($dates->user_type  == 1) selected @endif>مسؤول</option>
-<option value="2" @if ($dates->user_type  == 0) selected @endif>مدير</option>
-<option value="3"  @if ($dates->user_type  == 0) selected @endif>موظف</option> 
-                    
+
+ 
+<option @selected($dates->user_type  == 1) value="1">مسؤول</option>
+<option value="0" @selected($dates->user_type  == 0)>2مسؤول</option>
+<option value="2" @selected($dates->user_type  == 2)>ادارة</option>
+<option value="3" @selected($dates->user_type  == 3)>مبيعات</option>
+<option value="4" @selected($dates->user_type  == 4)>فني</option>
                     {{-- @endforeach --}}
                 </select>
                 </div>

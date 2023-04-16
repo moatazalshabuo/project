@@ -15,7 +15,7 @@ class CustomerController extends Controller
     
     public function __construct()
     {
-        $this->middleware(['manager']);
+        
     }
     public function show_select($id = "")
     {
@@ -33,13 +33,18 @@ class CustomerController extends Controller
     public function create(Request $request)
     {
         $request->validate([
-            'name'=>["required",'max:250'],
-            "phone"=>["required","unique:customers,phone"],
-        ],["name.required"=>"يرجى ادخال الاسم","phone.required"=>"يرجى ادخال رقم الهاتف",
+            'name'=>["required",'max:255'],
+            "phone"=>["required","unique:clients,phone",'max:30'],
+            "email"=>['max:80'],
+            "address"=>['max:191']
+        ],
+        ["name.required"=>"يرجى ادخال الاسم","phone.required"=>"يرجى ادخال رقم الهاتف",
         "phone.unique"=>"رقم الهاتف موجود مسبقا"]);
         echo Customer::create([
             "name"=>$request->name,
-            "phone"=>$request->phone
+            "phone"=>$request->phone,
+            "email"=>$request->email,
+            "address"=>$request->address
         ])->id;
     }
 

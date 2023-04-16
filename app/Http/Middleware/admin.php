@@ -17,7 +17,7 @@ class admin
     public function handle(Request $request, Closure $next): Response
     {
         if(Auth::check()){
-            if(Auth::user()->user_type != 1){
+            if(Auth::user()->user_type != 1 && Auth::user()->user_type != 0){
                 return redirect()->route('home')->with('massage',"لاتملك صلاحيات الدخول");
             }
         }

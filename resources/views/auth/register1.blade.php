@@ -79,8 +79,10 @@
                                 <div class="col-md-6">
                                     <select name="user_type" class="form-control">
                                         <option value="1">مسؤول</option>
+                                        <option value="0">2مسؤول</option>
                                         <option value="2">ادارة</option>
                                         <option value="3">مبيعات</option>
+                                        <option value="4">فني</option>
                                     </select>
                                 </div>
                             </div>

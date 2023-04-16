@@ -224,7 +224,17 @@
 							</div>
 							<div class="form-group">
 								<label>رقم الهاتف</label>
-								<input type="number" name="phone" class="form-control">
+								<input type="number" name="phone" id="phone_couts" class="form-control">
+								<p id="phone_err" class="text-danger"></p>
+							</div>
+							<div class="form-group">
+								<label>الايميل(اختياري)</label>
+								<input type="email" name="email" id="email" class="form-control">
+								<p id="phone_err" class="text-danger"></p>
+							</div>
+							<div class="form-group">
+								<label>الموقع(اختياري)</label>
+								<input type="text" name="address" id="address" class="form-control">
 								<p id="phone_err" class="text-danger"></p>
 							</div>
 						</form>						
@@ -417,6 +427,12 @@ $(".m3").hide()
 		$("#totel").val($(this).val()*quan)
 	});
 
+	$("#phone_couts,#address,#email").keypress(function(e){
+		if(e.which == 13){
+			saveClient();
+		}
+	})
+
 	$(document).on('click',".dele",function(){
 		$(this).attr("disabled","disabled")
 		$.ajax({
@@ -474,8 +490,7 @@ $(".m3").hide()
 	client = "{{ $data->custom }}"
 	getClient(client)
 
-	$("#save-client").click(function(){
-		// console.log($("#form-client").serialize())
+	function saveClient(){
 		$.ajax({
 			url:"{{ route('createCustom') }}",
 			type:"post",
@@ -494,8 +509,12 @@ $(".m3").hide()
 				$("#phone_err").html(re.errors.phone)
 			}
 		})
-		
+	}
+	$("#save-client").click(function(){
+		// console.log($("#form-client").serialize())
+		saveClient()
 	})
+	
 
 	$("#close-bill").click(function(){
 		// console.log($('#form-client').serialize())
@@ -591,5 +610,14 @@ $('#print-bill').click(function(){
 	})
 })
 </script>
+@if (session()->get('err'))
+	<script>
+		Swal.fire(
+		'نجاح العملية!',
+		'{{ session()->get('err') }}!',
+		'success'
+		)
+	</script>
+@endif
 @endempty
 @endsection

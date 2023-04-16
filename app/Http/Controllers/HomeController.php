@@ -6,6 +6,7 @@ use App\Models\Exchange;
 use App\Models\pay_receipt;
 use App\Models\Purchasesbill;
 use App\Models\Salesbill;
+use App\Models\SalesItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,7 +20,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        
     }
 
     /**
@@ -34,7 +35,28 @@ class HomeController extends Controller
         $countpay = array(pay_receipt::where('created_at','like','%'.date('Y-m-d').'%')->count(),pay_receipt::select()->count());
         $countexc = array(Exchange::where('created_at','like','%'.date('Y-m-d').'%')->count(),Exchange::select()->count());
       
-        return view('frontend/home',['countsals'=>$countsals,'countpur'=>$countpur,'countpay'=>$countpay,'countexc'=>$countexc]);
+        $sales_bill = Salesbill::select("salesbills.*","clients.name","clients.phone")->where("status",0)->join("clients","clients.id","=","salesbills.client")->get();
+        $sales_bills_process = array();
+        $sales_bills_done = array();
+        foreach($sales_bill as $bill){
+            foreach(SalesItem::where('sales_id',$bill['id'])->get() as $item){
+                if($item['status'] == 0){
+                    array_push($sales_bills_process,$bill);
+                }
+                if($item['status'] == 1){
+                    array_push($sales_bills_done,$bill);
+                }
+            }
+        }
+    //    print_r($sales_bills_done);die();
+
+
+        return view('frontend/home',['countsals'=>$countsals,
+        'countpur'=>$countpur,
+        'countpay'=>$countpay,
+        'countexc'=>$countexc,
+        "bills_done"=>$sales_bills_done,
+        "bill_process"=>$sales_bills_process]);
     }
 
     public function Register(Request $request){

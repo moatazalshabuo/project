@@ -21,12 +21,7 @@ class Reports extends Controller
 {
     public function __construct(Request $request)
     {
-        $this->middleware('auth');
-        // $this->middleware(check_type::class);
-        // echo Auth::user();
-        // print_r(User::find(Auth::id()));die();
-   
-        $this->middleware(['manager']);
+       
     
     }
 
@@ -53,25 +48,54 @@ class Reports extends Controller
             $where['from'] = $request->from;
             $where['to'] = $request->to;
         }
+        $query = pay_receipt::query();
+        $query->select("users.name","clients.name as cl_name","clients.phone","pay_receipt.*")
+        ->leftJoin('salesbills', function ($join) {
+            $join->on('salesbills.id', '=', 'pay_receipt.bill_id');
+        })->leftJoin("clients",function($join){
+            $join->on('clients.id', '=', 'pay_receipt.client_id')
+            ->orOn("salesbills.client","=","clients.id");
+        })->join("users","users.id","=","pay_receipt.created_by");
+
         if(isset($where['client']) && isset($where['from']) && isset($where['to'])){
-            $data = pay_receipt::select("users.name","pay_receipt.*")->join('salesbills',"salesbills.id","=","pay_receipt.bill_id")->join("users","users.id","=","pay_receipt.created_by")->whereBetween('pay_receipt.created_at',[$where['from'],$where['to']])->where("client",$where['client'])->get();
+
+            $query->whereBetween('pay_receipt.created_at',[$where['from'],$where['to']])
+            ->where(["salesbills.client"=>$where['client']]);
+            $query->orWhere(["pay_receipt.client_id"=>$where['client'],]);
+
         }elseif(isset($where['client'])){
-            $data = pay_receipt::select("users.name","pay_receipt.*")->join('salesbills',"salesbills.id","=","pay_receipt.bill_id")->join("users","users.id","=","pay_receipt.created_by")->where("client",$where['client'])->get();
+//"pay_receipt.client_id"=>$where['client'],
+            $query->where(["salesbills.client"=>$where['client']]);
+            $query->orWhere(["pay_receipt.client_id"=>$where['client'],]);
         }elseif(isset($where['from']) && isset($where['from'])){
-            $data = pay_receipt::select("users.name","pay_receipt.*")->join('salesbills',"salesbills.id","=","pay_receipt.bill_id")->join("users","users.id","=","pay_receipt.created_by")->whereBetween('pay_receipt.created_at',[$where['from'],$where['to']])->get();
-        }elseif(isset($request->all_time)){
-            $data = pay_receipt::select("users.name","pay_receipt.*")->join('salesbills',"salesbills.id","=","pay_receipt.bill_id")->join("users","users.id","=","pay_receipt.created_by")->get();
+
+            $query->whereBetween('pay_receipt.created_at',[$where['from'],$where['to']]);
         }
-       
-        return redirect()->route('pay_index')->with('data',$data);
+    //    print_r($query->get());die();
+        return redirect()->route('pay_index')->with('data',$query->get());
     }
 
     public function delete_pay($id){
         $raw = pay_receipt::find($id);
-        $salesbill = Salesbill::find($raw->bill_id);
-        $salesbill->sincere = $salesbill->sincere - $raw->price;
-        $salesbill->Residual = $salesbill->Residual + $raw->price;
-        $salesbill->update();
+        $price = $raw->price;
+            $bills = Salesbill::select("id")->where(["client"=>$raw->client_id,"status"=>'0'])->where("sincere",">","0")->orderBy("id","DESC")->get();
+            foreach($bills as $val){
+                $sal = Salesbill::find($val->id);
+                if($price > 0){
+                if($price <= $sal->sincere){
+                    $sal->Residual = $sal->Residual + $price;
+                    $sal->sincere = $sal->sincere - $price;
+                    $sal->update();
+                    $price = 0;
+                }else{
+                    $price = $price - $sal->sincere;
+                    $sal->Residual = $sal->sincere + $sal->Residual;
+                    $sal->sincere = 0;
+                    $sal->update();
+
+                }
+                }
+            }
         $raw->delete();
         return redirect()->route('pay_index')->with('success',"تم الحذف بنجاح");
     }
@@ -80,11 +104,19 @@ class Reports extends Controller
     {
         # code...
         $client = Customer::all();
-        
-        return view("frontend/Exchange_report",['custom'=>$client]);
+        $data = Exchange::select("users.name","exchange_receipt.*")->leftJoin('purchasesbills',"purchasesbills.id","=","exchange_receipt.bill_id")
+        ->join("users","users.id","=","exchange_receipt.created_by")
+        ->where("exchange_receipt.created_at","like","%".date("Y-m-d")."%")->get();
+       
+        return view("frontend/Exchange_report",["data"=>$data,'custom'=>$client]);
     }
     public function search_exc(Request $request)
     {
+        $client = Customer::all();
+        $query = Exchange::query();
+        $query->select("users.name","exchange_receipt.*")
+        ->leftJoin('purchasesbills',"purchasesbills.id","=","exchange_receipt.bill_id")
+        ->join("users","users.id","=","exchange_receipt.created_by");
         $where = array();
         $data = array();
         # code...
@@ -99,24 +131,30 @@ class Reports extends Controller
             $where['to'] = $request->to;
         }
         if(isset($where['custom']) && isset($where['from']) && isset($where['to'])){
-            $data = Exchange::select("users.name","exchange_receipt.*")->join('purchasesbills',"purchasesbills.id","=","exchange_receipt.bill_id")->join("users","users.id","=","exchange_receipt.created_by")->whereBetween('exchange_receipt.created_at',[$where['from'],$where['to']])->where("custom",$where['custom'])->get();
-        }elseif(isset($where['custom'])){
-            $data = Exchange::select("users.name","exchange_receipt.*")->join('purchasesbills',"purchasesbills.id","=","exchange_receipt.bill_id")->join("users","users.id","=","exchange_receipt.created_by")->where("custom",$where['custom'])->get();
-        }elseif(isset($where['from']) && isset($where['from'])){
-            $data = Exchange::select("users.name","exchange_receipt.*")->join('purchasesbills',"purchasesbills.id","=","exchange_receipt.bill_id")->join("users","users.id","=","exchange_receipt.created_by")->whereBetween('exchange_receipt.created_at',[$where['from'],$where['to']])->get();
-        }elseif(isset($request->all_time)){
-            $data = Exchange::select("users.name","exchange_receipt.*")->join('purchasesbills',"purchasesbills.id","=","exchange_receipt.bill_id")->join("users","users.id","=","exchange_receipt.created_by")->get();
+            $data = $query->whereBetween('exchange_receipt.created_at',[$where['from'],$where['to']])->where("custom",$where['custom']);
         }
-        return redirect()->route('exc_index')->with('data',$data);
+        if(isset($where['custom'])){
+            $data = $query->where("custom",$where['custom']);
+        }
+        if(isset($request->descripe)){
+            $data = $query->where("desc","like","%$request->descripe%");
+        }
+        if(isset($where['from']) && isset($where['from'])){
+            $data = $query->whereBetween('exchange_receipt.created_at',[$where['from'],$where['to']]);
+        }
+        
+        return view("frontend/Exchange_report",["data"=>$data->get(),'custom'=>$client]);
     }
 
     public function delete_exc($id){
         // echo $id;die();
         $raw = Exchange::find($id);
+        if($raw->type==0){
         $salesbill = Purchasesbill::find($raw->bill_id);
         $salesbill->sincere = $salesbill->sincere - $raw->price;
         $salesbill->Residual = $salesbill->Residual + $raw->price;
         $salesbill->update();
+        }
         $raw->delete();
         return redirect()->route('exc_index')->with('success',"تم الحذف بنجاح");
     }
