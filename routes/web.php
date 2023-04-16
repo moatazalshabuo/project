@@ -67,6 +67,7 @@ Route::get('check_purbill/{id}',function($id){
 })->name('check_purbill')->middleware(['auth','Technical']);
 
 Route::resource('users',usersController::class)->middleware(['auth','admin']);
+Route::resource('clients',clientsController::class);
 
 Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('invicebill')->middleware(['auth','Technical']);
 Route::get('/invicepur/{id}', [AdminController::class, 'invicepur'])->name('invicepur')->middleware(['auth','Technical']);
