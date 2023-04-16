@@ -215,6 +215,7 @@ class SalesbillController extends Controller
     
     echo json_encode($data);
     }
+    
 
 // ايصالات القبض
  

@@ -72,4 +72,6 @@ Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('in
 Route::get('/invicepur/{id}', [AdminController::class, 'invicepur'])->name('invicepur')->middleware(['auth','Technical']);
 Route::get('/work/{id}', [AdminController::class, 'work'])->name('work')->middleware(['auth','Technical']);
 Route::get('/invicereport', [AdminController::class, 'report'])->name('invicereport')->middleware(['auth','Technical']);
+Route::get('/pay/{id}', [AdminController::class, 'pay'])->name('invicepay')->middleware(['auth','Technical']);
 
+Route::get('/exc/{id}', [AdminController::class, 'exc'])->name('inviceexc')->middleware(['auth','Technical']);
