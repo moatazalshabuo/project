@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\client;
 use App\Models\Customer;
+use App\Models\Exchange;
+use App\Models\Purchasesbill;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Providers\RouteServiceProvider;
@@ -66,11 +68,14 @@ class customersController extends Controller
     public function destroy(Request $request)
     {
         $Products = Customer::findOrFail($request->pro_id);
-        $Products->delete();
-        session()->flash('delete', 'تم حذف بيانات المورد بنجاح');
-        return back();
-
-        
+        if(empty(Purchasesbill::where('custom',$Products->id))){
+            $Products->delete();
+            session()->flash('delete', 'تم حذف بيانات المورد بنجاح');
+            return back();
+        }else{
+            session()->flash('delete', 'لايمكن حذف اذا كان مسجل في احد الفواتير');
+            return back();
+        }
     }
 
 }

@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Models\Product;
+use App\Models\Purchasesbill;
+use App\Models\Purchasesitem;
+use App\Models\rawmaterials;
+use App\Models\Salesbill;
+use App\Models\SalesItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Providers\RouteServiceProvider;
@@ -57,14 +63,21 @@ class usersController extends Controller
 
     public function destroy(Request $request)
     {
-        // echo "hello";
+        
         $Products = User::findOrFail($request->pro_id);
-        echo($Products);
+        
+        if(empty(Purchasesbill::where('created_by',$Products->id)->get())
+         && empty(Purchasesitem::where('user_id',$Products->id)->get()) 
+         && empty(Salesbill::where('created_by',$Products->id)->get()) 
+         && empty(SalesItem::where('user_id',$Products->id)->get())
+         && empty(rawmaterials::where('created_by',$Products->id)->get())){
          $Products->delete();
          session()->flash('delete', 'تم حذف المستخدم بنجاح');
          return back();
-
-        // dd($request);
+        }else{
+            session()->flash('delete', 'لايمكن حذف المستخدم حاليا سيتسسب ذالك بفقد البيانات');
+         return back();
+        }
     }
 
 

@@ -24,7 +24,7 @@ use App\Models\rawmaterials;
 
 /*  start product page all staff  */ 
 Route::controller(Products::class)->group(function(){
-    Route::middleware(['auth','manager'])->group(function(){
+    Route::middleware(['auth','active','manager'])->group(function(){
         Route::get('/products',"index")->name("productsManage");
         Route::get("product/delete/{id}","delete")->name("deleteprod")->middleware('admin');
         Route::post("product/editprod/","editprod")->name("editprod")->middleware('admin');
@@ -75,7 +75,7 @@ Route::get("get-item",function(){
                 echo "</td>
             </tr>";
         }
-})->name("getitem")->middleware('auth');
+})->name("getitem")->middleware(['auth','active']);
 
 /*  end product page staff  */ 
 
@@ -104,7 +104,7 @@ Route::get("get-item-mate",function(){
             </td></tr>";
             }
         
-})->name("getitem-mate")->middleware(['auth',"manager"]);
+})->name("getitem-mate")->middleware(['auth','active',"manager"]);
 
 /* end */ 
 
@@ -116,7 +116,7 @@ Route::get('/cards',function(){
 /*  start salesbill page all staff  */
 Route::controller(SalesbillController::class)->group(function(){
     Route::prefix("Salesbill")->group(function(){
-        Route::middleware(['auth','Technical'])->group(function(){
+        Route::middleware(['auth','active','Technical'])->group(function(){
             Route::get("index/{id?}","index")->name("salesbill");
             Route::get('create',"create")->name("salesbiil_create");
             Route::get("edit/{salesbill}","edit")->name("salesbill_edit");
@@ -133,7 +133,7 @@ Route::controller(SalesbillController::class)->group(function(){
 
 Route::controller(SalesItemController::class)->group(function(){
     Route::prefix("SalesItem")->group(function(){
-        Route::middleware(['auth','Technical'])->group(function(){
+        Route::middleware(['auth','active','Technical'])->group(function(){
         Route::post("add","create")->name("add_item");
         Route::get("getTotalItem/{id}","getItemTotal")->name("getItembill");
         Route::get("delete/{id}","destroy")->name("deleteSaleItem");
@@ -148,7 +148,7 @@ Route::controller(SalesItemController::class)->group(function(){
 /*  start client page all staff  */
 Route::controller(ClientController::class)->group(function(){
     Route::prefix("client")->group(function(){
-        Route::middleware('auth')->group(function(){
+        Route::middleware(['auth','active'])->group(function(){
             Route::get("showSelect/{id?}","show_select")->name("clientSelect");
             Route::post("create","create")->name("createClient");
         });
@@ -158,7 +158,7 @@ Route::controller(ClientController::class)->group(function(){
 
 Route::controller(Reception_reports::class)->group(function(){
     Route::prefix("Reception")->group(function(){
-        Route::middleware(['auth','Technical'])->group(function(){
+        Route::middleware(['auth','active','Technical'])->group(function(){
             Route::post("salesbill","Salesbill")->name("ReceptionSalesbill");
         });
     });

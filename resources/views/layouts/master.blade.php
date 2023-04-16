@@ -331,6 +331,8 @@
 										// console.log(data['done'])
 										Swal.fire(data['done'])
 										$("#modalCart").modal("hide");
+										window.open ("{{ route('invicepay', '') }}/"+data['id'],
+										"mywindow","menubar=1,resizable=1,width=1300,height=1000");
 										reset_form_pay()
 										$("#pay").removeAttr("disabled")
 									}else if(data['error']){
@@ -402,13 +404,18 @@
 									if(data['done']){
 										$("#modaldemo17").modal("hide")
 										Swal.fire(data['done'])
+										window.open ("{{ route('inviceexc', '') }}/"+data['id'],
+										"mywindow","menubar=1,resizable=1,width=1300,height=1000");
 										$("#custom_price_recep").val("")
 										$("#purbill_no_id").val().change()
+										$("#pay_custom").removeAttr("disabled")
 									}else if(data['error']){
 										$(".message1").html(data['error'])
+										$("#pay_custom").removeAttr("disabled")
 									}
 								},error:function(res){
 									data = res.responseJSON
+									$("#pay_custom").removeAttr("disabled")
 									$("#custom_price_error").text(data.errors.price)
 									$("#custom_name_recep_err").text(data.errors.bill_id)
 								}
@@ -423,6 +430,7 @@
 
 						$("#pay_custom").click(function(){
 							// var id_clint = $("#client_id_t").val()
+							$(this).attr("disabled","disabled")
 							Exchange_pay()
 						})
 
@@ -439,17 +447,22 @@
 									if(data['done']){
 										$("#modeExchange").modal("hide");
 										Swal.fire(data['done'])
+										window.open ("{{ route('inviceexc', '') }}/"+data['id'],
+										"mywindow","menubar=1,resizable=1,width=1300,height=1000");
 										$("#descripe_exc").val("")
 										$("#price_exc").val("")
+										$("#exchange_send").removeAttr("disabled")
 									}
 								},error:function(res){
 									data = res.responseJSON
+									$("#exchange_send").removeAttr("disabled")
 									$("#descripe_exc_err").text(data.errors.descripe)
 									$("#price_exc_err").text(data.errors.price)
 								}
 							})
 						}
 						$("#exchange_send").click(function(){
+							$(this).attr("disabled","disabled")
 							$("#descripe_exc_err").text("")
 							$("#price_exc_err").text("")
 							Exchange_exc()

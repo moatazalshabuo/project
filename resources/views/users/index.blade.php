@@ -158,13 +158,19 @@
                                                         <button class="btn btn-outline-danger delete-user btn-sm "
                                                         id="{{ $dates->id }}">حذف</button>
                                                         @elseif($dates->user_type != 1)
+
                                                         <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale" 
 														data-id="{{ $dates->id }}" data-name="{{ $dates->name }}"
 														data-password="{{ $dates->password }}" data-email="{{ $dates->email }}"
                                                          data-user_type="{{ $dates->user_type }}"   data-toggle="modal" href="#exampleModal2"
 														title="تعديل"><i class="las la-pen"></i></a>
+
                                                         <button class="btn btn-outline-danger delete-user btn-sm "
                                                         id="{{ $dates->id }}">حذف</button>
+
+                                                        <a href="{{ route('sataususer',$dates->id) }}" class="btn btn-sm @if($dates->status) btn-danger @else btn-success @endif">
+                                                            @if($dates->status) حظر @else فك الحظر @endif
+                                                        </a>
                                                         @endif
                                             </td>
                                     </tr>

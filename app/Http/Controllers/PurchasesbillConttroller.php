@@ -182,12 +182,12 @@ class PurchasesbillConttroller extends Controller
             $salesbill->Residual = $Residual - $request->price;
             $salesbill->sincere = $salesbill->sincere + $request->price;
             $salesbill->update();
-            Exchange::create([
+            $data['id']= Exchange::create([
                 "bill_id" => $request->bill_id,
                 "price"=>$request->price,
                 "created_by"=>Auth::id(),
                 "type"=>0
-            ]);
+            ])->id;
             $data['done'] = "تم تسجيل العملية بنجاح ";
         }else{
             $data['error'] = "القمية المدخلة اكبر من القيمة المتبقي";
@@ -204,12 +204,12 @@ class PurchasesbillConttroller extends Controller
             "descripe.required"=>"لايمكن ترك رقم الفاتورة فارغ",
             "price.required"=>"يرجى ادخال القيمة"
         ]);        
-            Exchange::create([
+            $data['id']= Exchange::create([
                 "desc" => $request->descripe,
                 "price"=>$request->price,
                 "created_by"=>Auth::id(),
                 "type"=>1
-            ]);
+            ])->id;
             $data['done'] = "تم تسجيل العملية بنجاح ";
         
         echo json_encode($data);

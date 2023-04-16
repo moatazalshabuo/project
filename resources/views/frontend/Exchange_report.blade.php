@@ -113,9 +113,10 @@
 														<td>{{ $item->name }}</td>
 														<td>{{ $item->created_at }}</td>
 														<td>
-														@if(Auth::user()->user_type == 1)
+														@if(Auth::user()->user_type == 1 || Auth::user()->user_type == 0)
 															<button class="btn btn-danger dele" id="{{ $item->id }}"><i class='mdi mdi-transcribe'></i></button>
 														@endif
+														<button class="btn btn-primary print" id="{{$item->id}}"><i class="fa fa-print"></i></button>
 														</td>
 													</tr>
 												@endforeach
@@ -175,7 +176,10 @@
 					}
 				})
 		})
-		
+		$(".print").click(function(){
+			window.open ("{{ route('inviceexc', '') }}/"+$(this).attr('id'),
+			"mywindow","menubar=1,resizable=1,width=1300,height=1000");
+		})
 		
 	})
 </script>

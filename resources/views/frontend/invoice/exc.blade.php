@@ -42,10 +42,12 @@ th,td{
         <div class="main">
             <div class="header">
               <div class="header-rigth">
-                <img src="ttachments/{{ $our->logo_photo}}" >
-                <p> {{ $sys->logo_name }}</p>
-                <p>{{ $sys->phone }}</p>
-                <p>{{ $sys->email }}</p>
+                @empty(! $our)
+                  <img src="/Attachments/{{ $our->logo_photo}}" >
+                  <p> {{ $our->logo_name }}</p>
+                  <p>{{ $our->phone }}</p>
+                  <p>{{ $our->email }}</p>
+                @endempty
               </div>
               <div>
                 <h2>ايصال صرف قيمة </h2>

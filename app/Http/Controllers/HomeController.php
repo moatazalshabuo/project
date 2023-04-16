@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Exchange;
 use App\Models\pay_receipt;
 use App\Models\Purchasesbill;
+use App\Models\Purchasesitem;
+use App\Models\rawmaterials;
 use App\Models\Salesbill;
 use App\Models\SalesItem;
 use App\Models\User;
@@ -99,8 +101,26 @@ class HomeController extends Controller
     }
     public function deleteuser($id)
     {
-        $user = User::find($id);
-        $user->delete();
+        $Products = User::find($id);
+        if(empty(Purchasesbill::where('created_by',$Products->id)->get())
+         && empty(Purchasesitem::where('user_id',$Products->id)->get()) 
+         && empty(Salesbill::where('created_by',$Products->id)->get()) 
+         && empty(SalesItem::where('user_id',$Products->id)->get())
+         && empty(rawmaterials::where('created_by',$Products->id)->get())){
+        $Products->delete();
         return redirect()->route('users.index')->with('delete','تم الحذف بنجاح');
+         }else{
+            return redirect()->route('users.index')->with('delete','لايمكن حذف المستخدم حاليا سيتسسب ذالك بفقد البيانات');
+         }
+    }
+    public function statususer($id){
+        $user = User::find($id);
+        if($user->status){
+            $user->status = 0;
+        }else{
+            $user->status = 1;
+        }
+        $user->update();
+        return redirect()->route('users.index')->with('delete','تم التعديل بنجاح');
     }
 }

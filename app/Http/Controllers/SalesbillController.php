@@ -203,11 +203,11 @@ class SalesbillController extends Controller
                 }
                 }
             }
-            pay_receipt::create([
+            $data['id'] = pay_receipt::create([
                 "client_id" => $request->client,
                 "price"=>$request->price,
                 "created_by"=>Auth::id()
-            ]);
+            ])->id;
             $data['done'] = "تم تسجيل العملية بنجاح ";
         }else{
             $data['error'] = "القمية المدخلة اكبر من القيمة المتبقي";   
