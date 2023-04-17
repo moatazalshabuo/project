@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sales_items', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->foreignId("prodid")->constrained("products");
             $table->foreignId('sales_id')->constrained("salesbills")->onDelete('cascade');

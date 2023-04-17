@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('working_hand', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->string("name");
             $table->double("price",15, 2);

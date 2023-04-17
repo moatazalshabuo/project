@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('purchases_items', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             // $table->foreignId("rawid")->constrained("rawmaterials");
             $table->foreignId('purchases_id')->constrained("purchasesbills")->onDelete('cascade');

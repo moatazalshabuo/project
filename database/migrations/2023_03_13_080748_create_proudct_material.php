@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('proudct_material', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->foreignId("rawid")->constrained("rawmaterials")->onDelete('cascade');
             $table->foreignId("proid")->constrained("products")->onDelete('cascade');
             $table->double("quan",15, 8);
             $table->timestamps();
-            $table->engine = 'InnoDB';
+            // $table->engine = 'InnoDB';
         });
     }
 

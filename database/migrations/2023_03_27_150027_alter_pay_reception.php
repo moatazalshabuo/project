@@ -13,6 +13,7 @@ return new class extends Migration
     {
         //
         Schema::create('exchange_receipt', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->integer("bill_id")->nullable();
             $table->string('desc')->nullable();

@@ -173,6 +173,7 @@ class SalesbillController extends Controller
     // ========== دالة تسجيل عميلة قبض باقي قيمة الفاتورة =====================
 
     function pay(Request $request){
+        $data = array();
         $request->validate([
             "client"=>"required",
             "price"=>"required|numeric|min:1|max:999999"
@@ -180,7 +181,7 @@ class SalesbillController extends Controller
             "client.required"=>"يجب اختيار زبون",
             "price.required"=>"يرجى ادخال القيمة"
         ]);
-       $data = array();
+       
         $totls = Salesbill::select(DB::raw("SUM(Residual) as Residualsum"))
         ->where("client",$request->client)->get();
         if(isset($totls[0]) && $totls[0]->Residualsum >= $request->price){
