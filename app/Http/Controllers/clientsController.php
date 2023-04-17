@@ -22,7 +22,7 @@ class clientsController extends Controller
     {
         $user = client::all();
 
-        return view('clients.index', compact('user'));
+        return view('clientss.index', compact('user'));
     }
     public function store(Request $request)
     {
@@ -32,17 +32,23 @@ class clientsController extends Controller
             [
                 'name' => 'required',
                 'phone' => 'required',
+                'email' => 'required',
+                'adress' => 'required',
 
             ],
             [
                 'name.required' => 'يرجى ادخال اسم الزبون',
                 'phone.required' => 'يرجى ادخال رقم هاتف الزبون',
+                'email.required' => 'يرجى ادخال رقم البريد الالكتروني للزبون',
+                'adress.required' => 'يرجى ادخال عنوان الزبون',
 
             ]
         );
         client::create([
             'name' => $request->name,
             'phone' => $request->phone,
+            'email' => $request->email,
+            'adress' => $request->adress,
         ]);
         session()->flash('Add', 'تم اضافة الزبون بنجاح');
         return redirect('/clients');
@@ -55,6 +61,8 @@ class clientsController extends Controller
         $data_update->update([
             'name' => $request->name,
             'phone' => $request->phone,
+            'email' => $request->email,
+            'adress' => $request->adress,
 
 
         ]);
