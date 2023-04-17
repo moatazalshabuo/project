@@ -62,7 +62,7 @@ Route::get("get-item",function(){
             echo "</td>
                 <td>".floatval(Helper::cost($item->id))."</td>
                 <td>".floatval($item->price)."</td><td>";
-                if(Auth::user()->user_type==1)
+                if(Auth::user()->user_type==1 || Auth::user()->user_type==0)
                 if($item->status == 1){
                     echo " <button class='btn btn-danger ml-1 unactive-prod' id='$item->id' >ايقاف</button>";
                 }else{
@@ -98,7 +98,7 @@ Route::get("get-item-mate",function(){
             <td>". floatval($dates->price) ."</td>
             <td>$dates->created_by </td>";
             echo "<td class='d-flex'>";
-                if(Auth::user()->user_type==1)
+                if(Auth::user()->user_type==1 || Auth::user()->user_type==0)
                 echo "<a class='btn btn-danger ml-1 btn-icon' href='".route('materialdelete',$dates->id)."' ><i class='mdi mdi-delete'></i></a>";
                echo "<button  data-target='#edit_material' data-toggle='modal' class='btn btn-info btn-icon edit_mate' id='$dates->id'><i class='mdi mdi-transcribe'></i></button>
             </td></tr>";

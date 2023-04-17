@@ -19,7 +19,7 @@ class SalesbillController extends Controller
      */
     public function index($id = "")
     {
-        if(Auth::user()->user_type !=1){
+        if(Auth::user()->user_type !=1 && Auth::user()->user_type !=0){
 
             $wher = (!empty($id) && !empty(Salesbill::find($id)) )?["created_by"=>Auth::id(),"salesbills.id"=>$id]:["created_by"=>Auth::id()];
             $pages = Salesbill::where("created_by",Auth::id())->get();

@@ -27,7 +27,7 @@
 						<div class="pr-1 mb-3 mb-xl-0">
 							<button type="button" id="refrech" class="btn btn-danger btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
 						</div> 
-						@if (Auth::user()->user_type == 1)
+						@if (Auth::user()->user_type == 1 || Auth::user()->user_type==0)
 						<div class="pr-1 mb-3 mb-xl-0">
 							<button type="button"  data-target="#select2modal" data-toggle="modal" class="btn btn-primary ml-2"><i class="mdi mdi-plus"></i> اضافة صنف</button>
 						</div>

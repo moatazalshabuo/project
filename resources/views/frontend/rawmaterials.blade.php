@@ -33,7 +33,7 @@
 		<div class="pr-1 mb-3 mb-xl-0">
 			<button type="button" id="refresh" class="btn btn-danger btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
 		</div> 
-		@if (Auth::user()->user_type == 1)
+		@if (Auth::user()->user_type == 1 || Auth::user()->user_type==0)
 		<div class="pr-1 mb-3 mb-xl-0">
 			<button type="button"  data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo1" class="btn btn-primary ml-2"><i class="mdi mdi-plus"></i> اضافة مادة </button>
 		</div>
