@@ -192,7 +192,27 @@
 								{{-- <p class="tx-12 mb-0 text-muted">Sales activities are the tactics that salespeople use to achieve their goals and objective</p> --}}
 							</div>
 							<div class="product-timeline card-body pt-2 mt-1">
-								
+								<div class="card-body p-0 customers mt-1" style="height:400px;overflow-y:scroll">
+									<table class="table ">
+										<thead >
+											<th >ت</th>
+											<th > المادة</th>
+											<th >الكمية</th>
+										</thead>
+										<tbody>
+											@php
+												$i = 0;
+											@endphp
+											@foreach ($raw as $item)
+												<tr>
+													<td>{{ $i+=1 }}</td>
+													<td>{{ $item->material_name }}</td>
+													<td>{{ floatval($item->quantity)}}</td>
+												</tr>
+											@endforeach
+										</tbody>
+									</table>
+								</div>	
 							</div>
 						</div>
 					</div>

@@ -315,9 +315,9 @@
 				// console.log(res);
 				$("#name").val((res[0].name))
 				$("#id").val((res[0].id))
-				$("#price").val((res[0].price))
+				$("#price").val(parseFloat(res[0].price))
 				$("#type_Q").val((res[0].type_Q)).change()
-				$("#cost").val(res.cost)
+				$("#cost").val(parseFloat(res.cost))
 			}
 		})
 	}
@@ -561,7 +561,7 @@ $(document).on("click",".edit_product",function(){
 				data = JSON.parse(res)
 				proid = data['proid']
 				$("#work_name").val(data['name'])
-				$("#work_price").val(data['price'])
+				$("#work_price").val(parseFloat(data['price']))
 				getWork(proid)
 				dataproed(proid)
 			},error:function(e){

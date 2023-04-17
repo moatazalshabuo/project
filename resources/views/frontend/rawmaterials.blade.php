@@ -367,8 +367,8 @@ function reset_edit_form(){
 				$("#material_id").val((res['id']))
 				$("#material_name_e").val((res['material_name']))
 				$("#hisba_type_e").val((res['hisba_type'])).change()
-				$("#quantity_e").val((res['quantity']))
-				$("#price_e").val((res['price']))
+				$("#quantity_e").val(parseFloat(res['quantity']))
+				$("#price_e").val(parseFloat(res['price']))
 			}
 		})
 	})

@@ -92,13 +92,13 @@
 														</td>
 														<td>{{ $item['type'] }}</td>
 														<td>
-															{{ $item['price'] }}
+															{{ floatval($item['price']) }}
 														</td>
 														<td>@if ($item['type_n'] == '2')
-															{{ $item['sincere']}}
+															{{ floatval($item['sincere'])}}
 														@endif</td>
 														<td>@if ($item['type_n'] == '2')
-															{{ $item['Residual']}}
+															{{ floatval($item['Residual'])}}
 														@endif</td>
 														<td>{{ $item['created_at'] }}</td>
 														<td>{{ $item['username'] }}</td>

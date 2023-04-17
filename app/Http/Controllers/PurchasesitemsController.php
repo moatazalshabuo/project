@@ -99,9 +99,9 @@ class PurchasesitemsController extends Controller
             $total['tbody'] .= "<tr >
             <td>".$val->id."</td>
             <td>".$val->material_name."</td>
-            <td>".$val->qoun."</td>
-            <td>".$val->descont."</td>
-            <td>".$val->total."</td>
+            <td>".floatval($val->qoun)."</td>
+            <td>".floatval($val->descont)."</td>
+            <td>".floatval($val->total)."</td>
             <td>".$val->created_at."</td>
             <td class='d-flex justify-content-end'>
                     <button class='btn btn-info ml-1 btn-icon dele' id='".$val->id."'><i class='mdi mdi-delete'></i></button>

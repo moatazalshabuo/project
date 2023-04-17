@@ -95,6 +95,8 @@
                                         <th class="border-bottom-0">ر.ت</th>
                                         <th class="border-bottom-0">اسم المورد</th>
                                         <th class="border-bottom-0">رقم الهاتف</th>
+                                        <th class="border-bottom-0">البريد الالكتروني</th>
+                                        <th class="border-bottom-0">كلمة المرور</th>
 
                                     </tr>
 
@@ -119,11 +121,13 @@
                                             <td>{{ $i }}</td>
                                             <td>{{ $dates->name }}</td>
                                             <td>{{ $dates->phone }}</td>
+                                            <td>{{ $dates->email }}</td>
+                                            <td>{{ $dates->address }}</td>
                                             <td>
 
                                                 <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale"
                                                     data-id="{{ $dates->id }}" data-name="{{ $dates->name }}"
-                                                    data-phone="{{ $dates->phone }}" data-toggle="modal"
+                                                    data-phone="{{ $dates->phone }}" data-address="{{ $dates->address }}" data-email="{{ $dates->email }}" data-toggle="modal"
                                                     href="#exampleModal2" title="تعديل"><i class="las la-pen"></i></a>
 
                                                 <button class="btn btn-outline-danger btn-sm "
@@ -179,7 +183,16 @@
                             <input type="number" name="phone" class="form-control">
                             <p id="phone_err" class="text-danger"></p>
                         </div>
-
+                        <div class="form-group">
+                            <label>الايميل(اختياري)</label>
+                            <input type="email" name="email" id="email" class="form-control">
+                            <p id="phone_err" class="text-danger"></p>
+                        </div>
+                        <div class="form-group">
+                            <label>الموقع(اختياري)</label>
+                            <input type="text" name="address" id="address" class="form-control">
+                            <p id="phone_err" class="text-danger"></p>
+                        </div>
                         <!-- Select2 -->
                         <div class="modal-footer">
                             <button class="btn ripple btn-primary" type="submit">حفظ</button>
@@ -215,6 +228,16 @@
                         <div class="form-group">
                             <label for="message-text" class="col-form-label">رقم الهاتف:</label>
                             <input type="phone" class="form-control" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label>الايميل(اختياري)</label>
+                            <input type="email" name="email" id="email" class="form-control">
+                            <p id="phone_err" class="text-danger"></p>
+                        </div>
+                        <div class="form-group">
+                            <label>الموقع(اختياري)</label>
+                            <input type="text" name="address" id="address" class="form-control">
+                            <p id="phone_err" class="text-danger"></p>
                         </div>
                 </div>
 
@@ -291,14 +314,14 @@
             var id = button.data('id')
             var section_name = button.data('name')
             var description = button.data('phone')
-            // var password = button.data('password')
-            // var user_type = button.data('user_type')
+            var email = button.data('email')
+            var address = button.data('address')
             var modal = $(this)
             modal.find('.modal-body #id').val(id);
             modal.find('.modal-body #name').val(section_name);
             modal.find('.modal-body #phone').val(description);
-            // modal.find('.modal-body #password').val(password);
-            // modal.find('.modal-body #user_type').val(user_type);
+            modal.find('.modal-body #address').val(address);
+            modal.find('.modal-body #email').val(email);
 
         })
     </script>

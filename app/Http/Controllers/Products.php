@@ -90,7 +90,7 @@ class Products extends Controller
         foreach($mymaterial as $val){
             array_push($ar,$val->rawid);
             $type = ($val->hisba_type == 1)?"متر":"قطعة";
-            $data["myMate"] .= "<li class='list-group-item'>".$val->material_name." / كمية الاستهلاك  : (".$val->quan.") $type <button id='".$val->id."' class='btn btn-danger dele-mate-p float-left'><i class='mdi mdi-delete'></i></button></li>";
+            $data["myMate"] .= "<li class='list-group-item'>".$val->material_name." / كمية الاستهلاك  : (".floatval($val->quan).") $type <button id='".$val->id."' class='btn btn-danger dele-mate-p float-left'><i class='mdi mdi-delete'></i></button></li>";
         }
         $material = rawmaterials::select()->whereNotIn('id',$ar)->get();
         foreach($material as $val){
@@ -106,7 +106,7 @@ class Products extends Controller
         foreach($mymaterial as $val){
             // array_push($ar,$val->rawid);
             // $type = ($val->hisba_type == 1)?"متر":"قطعة";
-            $data["myMate"] .= "<li class='list-group-item'>".$val->name." / السعر ".$val->price." <button id='".$val->id."' class='btn btn-info edit-work-p float-left'><i class='mdi mdi-transcribe'></i></button> <button id='".$val->id."' class='btn btn-danger dele-work-p float-left'><i class='mdi mdi-delete'></i></button></li>";
+            $data["myMate"] .= "<li class='list-group-item'>".$val->name." / السعر ".floatval($val->price)." <button id='".$val->id."' class='btn btn-info edit-work-p float-left'><i class='mdi mdi-transcribe'></i></button> <button id='".$val->id."' class='btn btn-danger dele-work-p float-left'><i class='mdi mdi-delete'></i></button></li>";
         }
         echo json_encode($data);
     }

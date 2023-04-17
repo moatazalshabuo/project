@@ -117,9 +117,9 @@
 													<tr>
 														<td><a href="{{ route('salesbill',$item->id) }}"> فاتورة مبيعات رقم{{ $item->id }} </a></td>														<td> 56</td>
 														{{-- <td><a href="{{ route("Purchasesbill",$item->bill_id) }}"> فاتورة مشتريات رقم{{ $item->bill_id }}</a></td> --}}
-														<td>{{ $item->total }}</td>
-														<td>{{ $item->sincere }}</td>
-														<td>{{ $item->Residual }}</td>
+														<td>{{ floatval($item->total) }}</td>
+														<td>{{ floatval($item->sincere) }}</td>
+														<td>{{ floatval($item->Residual) }}</td>
 														<td>{{ $item->name }}</td>
 														<td>@if($item->status == 1)<p class="btn btn-outline-success">الفاتورة مفتوحة</p> @else <p class="btn btn-outline-danger">الفاتورة مغلقة</p> @endif</td>
 														<td>{{ $item->created_at }}</td>

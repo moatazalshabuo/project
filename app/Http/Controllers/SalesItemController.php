@@ -98,9 +98,9 @@ class SalesItemController extends Controller
             if($val->type_Q == 3)
             $total['tbody'] .= "<td>".$val->length." * ".$val->width."</td>";
             else
-            $total['tbody'] .= "<td>".$val->qoun."</td>";
-            $total['tbody'] .= "<td>".$val->descont."</td>
-            <td>".$val->total."</td>";
+            $total['tbody'] .= "<td>".floatval($val->qoun)."</td>";
+            $total['tbody'] .= "<td>".floatval($val->descont)."</td>
+            <td>".floatval($val->total)."</td>";
             if($val->status == 0)
             $total['tbody'] .= "<td>قيد العمل</td>";
             elseif($val->status == 1)

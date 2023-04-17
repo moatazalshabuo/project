@@ -168,7 +168,7 @@
     <script src="{{ asset('frontend/js/pickadate/picker.date.js') }}"></script>
    
     <script src="{{ asset('frontend/js/custom.js') }}"></script> --}}
-{{-- @endsection --}} --}}
+{{-- @endsection --}}
 
 
 @extends('layouts.master')

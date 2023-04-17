@@ -109,7 +109,7 @@
 														@else
 														<td>{{ $item->desc }}</td>
 														@endif
-														<td>{{ $item->price }}</td>
+														<td>{{ floatval($item->price) }}</td>
 														<td>{{ $item->name }}</td>
 														<td>{{ $item->created_at }}</td>
 														<td>

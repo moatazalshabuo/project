@@ -233,12 +233,12 @@
 
 @section('js')
 <!--Internal  Datepicker js -->
-<script src="{{URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js')}}"></script>
+{{-- <script src="{{URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js')}}"></script> --}}
 <!-- Internal Select2 js-->
 <script src="{{URL::asset('assets/plugins/select2/js/select2.min.js')}}"></script>	
 <!--- Internal Accordion Js -->
-<script src="{{URL::asset('assets/plugins/accordion/accordion.min.js')}}"></script>
-<script src="{{URL::asset('assets/js/accordion.js')}}"></script>
+{{-- <script src="{{URL::asset('assets/plugins/accordion/accordion.min.js')}}"></script> --}}
+{{-- <script src="{{URL::asset('assets/js/accordion.js')}}"></script> --}}
 <script>
 	$(function(){
 
@@ -314,7 +314,7 @@
 			success:function(res){
 				$data = JSON.parse(res)
 				
-				$("#price").val($data['price'])
+				$("#price").val(parseFloat($data['price']))
 			}
 		})
 		$.ajax({
@@ -338,7 +338,7 @@
 	})
 	function totel_product(){
 		var quan = $("#quant").val() || $("#length").val()*$("#width").val() 
-		$("#totel").val($("#price").val()*quan)
+		$("#totel").val(parseFloat($("#price").val()*quan))
 	}
 	$("#quant,#length,#width").keyup(function(){
 		totel_product()
@@ -357,9 +357,9 @@
 			type:"get",
 			success:function(e){
 				$data = JSON.parse(e)
-				$("#total").val($data['total'])
-				$("#sincere").val($data['sincere'])
-				$("#Residual").val($data['Residual'])
+				$("#total").val(parseFloat($data['total']))
+				$("#sincere").val(parseFloat($data['sincere']))
+				$("#Residual").val(parseFloat($data['Residual']))
 				$("tbody").html($data['tbody'])
 			},error:function(e){
 				console.log(e)
@@ -389,10 +389,10 @@
 			success:function(r){
 				data = JSON.parse(r)
 				if(data['type'] == 1){
-					$("#price").val(data['price'])
-				$("#descount").val(data['descont'])
-				$("#totel").val(data['total'])
-				$("#quant").val(data['qoun'])
+					$("#price").val(parseFloat(data['price']))
+				$("#descount").val(parseFloat(data['descont']))
+				$("#totel").val(parseFloat(data['total']))
+				$("#quant").val(parseFloat(data['qoun']))
 				getProduct(data['product'])
 				get_totel()
 

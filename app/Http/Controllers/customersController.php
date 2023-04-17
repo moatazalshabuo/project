@@ -35,6 +35,8 @@ class customersController extends Controller
             [
                 'name' => 'required',
                 'phone' => 'required',
+                "email"=>['max:80'],
+                "address"=>['max:191']
 
             ],
             [
@@ -46,6 +48,8 @@ class customersController extends Controller
         customer::create([
             'name' => $request->name,
             'phone' => $request->phone,
+            "email"=>$request->email,
+            "address"=>$request->address
         ]);
         session()->flash('Add', 'تم اضافة بيانات المورد بنجاح');
         return redirect('/customers');
@@ -58,7 +62,8 @@ class customersController extends Controller
         $data_update->update([
             'name' => $request->name,
             'phone' => $request->phone,
-
+            "email"=>$request->email,
+            "address"=>$request->address
 
         ]);
         session()->flash('edit', 'تم تعديل بيانات المورد بنجاج');
@@ -68,12 +73,17 @@ class customersController extends Controller
     public function destroy(Request $request)
     {
         $Products = Customer::findOrFail($request->pro_id);
-        if(empty(Purchasesbill::where('custom',$Products->id))){
+        // echo $Products->id;
+        $id = Purchasesbill::select()->where('custom',$Products->id)->count();
+        
+        if($id != 0){
+            
+            session()->flash('delete', 'لايمكن حذف اذا كان مسجل في احد الفواتير');
+            return back();
+            
+        }else{
             $Products->delete();
             session()->flash('delete', 'تم حذف بيانات المورد بنجاح');
-            return back();
-        }else{
-            session()->flash('delete', 'لايمكن حذف اذا كان مسجل في احد الفواتير');
             return back();
         }
     }

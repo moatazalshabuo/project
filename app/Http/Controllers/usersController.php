@@ -66,11 +66,11 @@ class usersController extends Controller
         
         $Products = User::findOrFail($request->pro_id);
         
-        if(empty(Purchasesbill::where('created_by',$Products->id)->get())
-         && empty(Purchasesitem::where('user_id',$Products->id)->get()) 
-         && empty(Salesbill::where('created_by',$Products->id)->get()) 
-         && empty(SalesItem::where('user_id',$Products->id)->get())
-         && empty(rawmaterials::where('created_by',$Products->id)->get())){
+        if(!isset(Purchasesbill::where('created_by',$Products->id)->get()->id)
+         && !isset(Purchasesitem::where('user_id',$Products->id)->get()->id) 
+         && !isset(Salesbill::where('created_by',$Products->id)->get()->id) 
+         && !isset(SalesItem::where('user_id',$Products->id)->get()->id)
+         && !isset(rawmaterials::where('created_by',$Products->id)->get()->id)){
          $Products->delete();
          session()->flash('delete', 'تم حذف المستخدم بنجاح');
          return back();

@@ -82,9 +82,9 @@
                                                 <td>{{ $item->descripe }}</td>
                                                 <td><a href="{{route("salesbill",$item->sales_id) }}">فاتورة رقم {{$item->sales_id}}</a></td>
                                                 @if ($item->type_Q == 3)
-                                                    <td>{{ $item->length }} * {{ $item->width }}</td> 
+                                                    <td>{{ floatval($item->length) }} * {{ floatval($item->width) }}</td> 
                                                 @else
-                                                    <td>{{ $item->qoun }}</td>
+                                                    <td>{{ floatval($item->qoun) }}</td>
                                                 @endif
                                                 <td>{{ $item->cl_name}} - {{ $item->phone }}</td>
                                                 <td>{{ $item->created_at }}</td>

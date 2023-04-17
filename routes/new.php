@@ -60,8 +60,8 @@ Route::get("get-item",function(){
                echo "قطعة";
             }
             echo "</td>
-                <td>".Helper::cost($item->id)."</td>
-                <td>$item->price</td><td>";
+                <td>".floatval(Helper::cost($item->id))."</td>
+                <td>".floatval($item->price)."</td><td>";
                 if(Auth::user()->user_type==1)
                 if($item->status == 1){
                     echo " <button class='btn btn-danger ml-1 unactive-prod' id='$item->id' >ايقاف</button>";
@@ -94,8 +94,8 @@ Route::get("get-item-mate",function(){
             }elseif ($dates->hisba_type == 3)
             {  echo "بمقاس المتر المربع";
            }
-            echo "</td><td> $dates->quantity </td>
-            <td> $dates->price </td>
+            echo "</td><td>" .floatval($dates->quantity)." </td>
+            <td>". floatval($dates->price) ."</td>
             <td>$dates->created_by </td>";
             echo "<td class='d-flex'>";
                 if(Auth::user()->user_type==1)

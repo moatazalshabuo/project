@@ -112,7 +112,7 @@
 															<span>حساب عميل {{$item->cl_name}}-{{$item->phone}}</span>	
 															@endif
 														</td>
-														<td>{{ $item->price }}</td>
+														<td>{{ floatval($item->price) }}</td>
 														<td>{{ $item->name }}</td>
 														<td>{{ $item->created_at }}</td>
 														<td>

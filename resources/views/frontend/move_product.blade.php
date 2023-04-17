@@ -106,9 +106,9 @@
 														<td>{{ $item->prodid }}</td>
 														<td>{{ $item->name }}</td>
 														<td><a href="{{ route('salesbill',$item->sales_id) }}"> فاتورة مبيعات رقم{{ $item->sales_id }} </a></td>
-														<td>{{ $item->qoun }}</td>
-														<td>{{ $item->total }}</td>
-														<td>{{ $item->descont }}</td>
+														<td>{{ floatval($item->qoun) }}</td>
+														<td>{{ floatval($item->total) }}</td>
+														<td>{{ floatval($item->descont) }}</td>
 														<td>{{ $item->created_at }}</td>
 														<td>{{ $item->username }}</td>
 														{{-- <td><button class="btn btn-danger dele" id="{{ $item->id }}"><i class='mdi mdi-transcribe'></i></button></td> --}}

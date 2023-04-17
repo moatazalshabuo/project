@@ -112,7 +112,7 @@
 														<a href="{{ route('Purchasesbill',$item['id_bill']) }}"> فاتورة مشتريات رقم{{ $item['id_bill'] }} </a>
 														@endif
 													</td>
-														<td>{{ $item['qoa']}}</td>
+														<td>{{ floatval($item['qoa']) }}</td>
 														<td>{{ $item['created_at'] }}</td>
 														<td>{{ $item['username'] }}</td>
 														{{-- <td><button class="btn btn-danger dele" id="{{ $item->id }}"><i class='mdi mdi-transcribe'></i></button></td> --}}

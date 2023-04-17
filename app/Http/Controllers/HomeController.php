@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\client;
+use App\Models\Customer;
 use App\Models\Exchange;
 use App\Models\pay_receipt;
 use App\Models\Purchasesbill;
@@ -11,6 +13,7 @@ use App\Models\Salesbill;
 use App\Models\SalesItem;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
@@ -52,13 +55,13 @@ class HomeController extends Controller
         }
     //    print_r($sales_bills_done);die();
 
-
+        $raw = rawmaterials::select()->where("quantity","<",15)->get();
         return view('frontend/home',['countsals'=>$countsals,
         'countpur'=>$countpur,
         'countpay'=>$countpay,
         'countexc'=>$countexc,
         "bills_done"=>$sales_bills_done,
-        "bill_process"=>$sales_bills_process]);
+        "bill_process"=>$sales_bills_process,'raw'=>$raw]);
     }
 
     public function Register(Request $request){
@@ -102,11 +105,9 @@ class HomeController extends Controller
     public function deleteuser($id)
     {
         $Products = User::find($id);
-        if(empty(Purchasesbill::where('created_by',$Products->id)->get())
-         && empty(Purchasesitem::where('user_id',$Products->id)->get()) 
-         && empty(Salesbill::where('created_by',$Products->id)->get()) 
-         && empty(SalesItem::where('user_id',$Products->id)->get())
-         && empty(rawmaterials::where('created_by',$Products->id)->get())){
+        $c =Purchasesbill::where('created_by',$Products->id)->count() + Purchasesitem::where('user_id',$Products->id)->count() + Salesbill::where('created_by',$Products->id)->count() + SalesItem::where('user_id',$Products->id)->count() + rawmaterials::where('created_by',$Products->id)->count();
+        // echo $c;die();
+        if($c == 0){
         $Products->delete();
         return redirect()->route('users.index')->with('delete','تم الحذف بنجاح');
          }else{
@@ -122,5 +123,19 @@ class HomeController extends Controller
         }
         $user->update();
         return redirect()->route('users.index')->with('delete','تم التعديل بنجاح');
+    }
+    public function account(Request $request){
+        if(isset($request->account)){
+            if($request->account == 1){
+                $data  = client::select('clients.name',"clients.phone",DB::raw("SUM(salesbills.sincere) as sincere"),DB::raw("SUM(salesbills.Residual) as Residual"))->
+                join("salesbills","salesbills.client","clients.id")->groupBy("clients.id")->get();
+            }else{
+                $data  = Customer::select('customers.name',"customers.phone",DB::raw("SUM(purchasesbills.sincere) as sincere"),DB::raw("SUM(purchasesbills.Residual) as Residual"))->
+                join("purchasesbills","purchasesbills.custom","customers.id")->groupBy("customers.id")->get();
+            }
+        }else{
+            $data = array();
+        }
+        return view('frontend.accunt',['data'=>$data]);
     }
 }

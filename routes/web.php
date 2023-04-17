@@ -39,6 +39,8 @@ Route::get('/registeruser', [App\Http\Controllers\HomeController::class, 'Regist
 Route::get('/deleteuser/{id}', [App\Http\Controllers\HomeController::class, 'deleteuser'])->name('deleteuser')->middleware(['auth','active','admin']);
 Route::get('/statususer/{id}', [App\Http\Controllers\HomeController::class, 'statususer'])->name('sataususer')->middleware(['auth','active','admin']);
 Route::POST('/storeuser', [App\Http\Controllers\HomeController::class, 'store'])->name('storeuser')->middleware(['auth','active','admin']);
+Route::get('/account', [App\Http\Controllers\HomeController::class, 'account'])->name('account')->middleware(['auth','active','admin']);
+
 Route::get("logout-user",function(){
 Auth::logout();
 return redirect()->route("login");
@@ -71,7 +73,7 @@ Route::get('check_purbill/{id}',function($id){
 
 Route::resource('users',usersController::class)->middleware(['auth','active','manager']);
 Route::resource('customers',customersController::class)->middleware(['auth','active','manager']);
-
+Route::resource('clinets',clientsController::class)->middleware(['auth','active','manager']);
 Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('invicebill')->middleware(['auth','active','Technical']);
 Route::get('/invicepur/{id}', [AdminController::class, 'invicepur'])->name('invicepur')->middleware(['auth','active','Technical']);
 Route::get('/work/{id}', [AdminController::class, 'work'])->name('work')->middleware(['auth','active','Technical']);

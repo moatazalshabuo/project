@@ -328,12 +328,12 @@
 			type:"get",
 			success:function(e){
 				$data = JSON.parse(e)
-				$("#total").val($data['total'])
-				$("#sincere").val($data['sincere'])
-				$("#Residual").val($data['Residual'])
+				$("#total").val(Math.ceil($data['total']))
+				$("#sincere").val(parseFloat($data['sincere']))
+				$("#Residual").val(parseFloat($data['Residual']))
 				$("tbody").html($data['tbody'])
 			},error:function(e){
-				console.log(e)
+				// console.log(e)
 			}
 		})
 	}
@@ -424,7 +424,7 @@ $(".m3").hide()
 //========================================
 			$("#price").keyup(function(){
 				var quan = $("#quant").val() || $("#length").val()*$("#width").val() 
-		$("#totel").val($(this).val()*quan)
+		$("#totel").val(Math.ceil($(this).val()*quan))
 	});
 
 	$("#phone_couts,#address,#email").keypress(function(e){
@@ -457,9 +457,9 @@ $(".m3").hide()
 			success:function(r){
 				data = JSON.parse(r)
 				if(data['type'] == 1){
-					$("#price").val(data['price'])
-				$("#totel").val(data['total'])
-				$("#quant").val(data['qoun'])
+					$("#price").val(parseFloat(data['price']))
+				$("#totel").val(parseFloat(data['total']))
+				$("#quant").val(parseFloat(data['qoun']))
 				$("#mate").val(data['mate']).change()
 				get_totel()
 
@@ -481,7 +481,7 @@ $(".m3").hide()
 			// console.log(res)
 			$("#custom").html(res)
 			},error:function(re){
-				console.log(re.responseJSON)
+				// console.log(re.responseJSON)
 			}
 		})
 		

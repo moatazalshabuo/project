@@ -276,9 +276,9 @@
 									if(res != ""){
 									data = JSON.parse(res)
 									
-									$("#sincere_pay").val(data['sincere'])
-									$("#Residual_pay").val(data['Residual'])
-									$("#total_pay").val(data['total'])
+									$("#sincere_pay").val(parseFloat(data['sincere']))
+									$("#Residual_pay").val(parseFloat(data['Residual']))
+									$("#total_pay").val(parseFloat(data['total']))
 									$("#bill_num_pay").html(data['salesbill'])
 								}else{
 									reset_form_pay()
@@ -298,9 +298,9 @@
 									if(data['error']){
 										$(".message").html(data['error'])
 									}else{
-										$("#sincere_pay").val(data['sincere'])
-										$("#Residual_pay").val(data['Residual'])
-										$("#total_pay").val(data['total'])
+										$("#sincere_pay").val(parseFloat(data['sincere']))
+										$("#Residual_pay").val(parseFloat(data['Residual']))
+										$("#total_pay").val(parseFloat(data['total']))
 									}
 								}
 							})
@@ -378,9 +378,9 @@
 									if(data['error']){
 										$(".message1").html(data['error'])
 									}else{
-										$("#custom_sincere").val(data['sincere'])
-										$("#custom_Residual").val(data['Residual'])
-										$("#custom_total").val(data['tolal'])
+										$("#custom_sincere").val(parseFloat(data['sincere']))
+										$("#custom_Residual").val(parseFloat(data['Residual']))
+										$("#custom_total").val(parseFloat(data['tolal']))
 										$("#custom_name_recep").val(data['custom_name'])
 										// $("#client_id_t").val(data['client_id'])
 										$("#purbill_no_id").val(data['bill_no'])
