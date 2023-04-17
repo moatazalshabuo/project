@@ -62,7 +62,7 @@
 					<div class="col-md-12">
 						<div class="form-group">
 							<label>اختر الزبون</label>
-							<select class="form-control pay_select" name="client" id="client_select">
+							<select class="form-control pay_select" name="client" id="client_select_pay">
 								<option value="">....</option>
 							</select>
 							<p class="text-danger" id=client_pay_err></p>
@@ -242,7 +242,7 @@
 				
 				
 				<script>
-					$("select").select2()
+					$(".sel").select2()
 					$(function(){
 						function reset_form_pay(){
 							$("#sincere_pay").val("")
@@ -251,9 +251,10 @@
 							$("#bill_num_pay").html("")
 							$('#price_pay').val("")
 							$(".massege").html("")
-							$("#client_select").val("")
+							$("#client_select_pay").val("")
 						}
-						$('#pay_select').select2({
+						
+						$('#client_select_pay').select2({
 								dropdownParent: $('#modalCart')
 							});
 						// عرض الزبائن او العملاء في سيليكت للاختيار منهم
@@ -262,7 +263,8 @@
 								url:"{{ route('clientSelect') }}",
 								type:"get",
 								success:function(res){
-									$("#client_select").html(res)
+									
+									$("#client_select_pay").html(res)
 								}
 							})
 						}
@@ -305,21 +307,21 @@
 								}
 							})
 						}
-						$("#client_select").change(function(){
+						$("#client_select_pay").change(function(){
 							select_client($(this).val())
 						})
 						$("#bill_num_pay").change(function(){
 							if($(this).val() != "")
 							Pay($(this).val())
 							else
-							select_client($("#client_select").val())
+							select_client($("#client_select_pay").val())
 						})
 						
 						function pay_send(){
 							reset()
 							var bill_no = $("#bill_num_pay").val()
 							var price = $("#price_pay").val()
-							var client = $("#client_select").val()
+							var client = $("#client_select_pay").val()
 							$.ajax({
 								url:"{{ route('pay_receipt') }}",
 								type:"post",
