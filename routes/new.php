@@ -67,13 +67,13 @@ Route::get("get-item",function(){
                 <td>".floatval($item->price)."</td><td>";
                 if(Auth::user()->user_type==1 || Auth::user()->user_type==0)
                 if($item->status == 1){
-                    echo " <button class='btn btn-danger ml-1 unactive-prod' id='$item->id' >ايقاف</button>";
+                    echo " <button class='btn btn-danger ml-1 unactive-prod' id='$item->id' ><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'>ايقاف</span></button>";
                 }else{
-                    echo " <button class='btn btn-success ml-1 active-prod' id='$item->id' >تفعيل</button>";
+                    echo " <button class='btn btn-success ml-1 active-prod' id='$item->id' ><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'>تفعيل</span></button>";
                 }
                 echo "</td><td class='d-flex justify-content-center'>";
                 if(Auth::user()->user_type==1 || Auth::user()->user_type==0)   
-                echo "<button class='btn btn-danger ml-1 btn-icon dele' id='$item->id' ><i class='mdi mdi-delete'></i></button>
+                echo "<button class='btn btn-danger ml-1 btn-icon dele' id='$item->id' ><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'> <i class='mdi mdi-delete'></i></span></button>
                     <button  data-target='#modaldemo6' data-toggle='modal' class='btn btn-info btn-icon edit_product' id='$item->id'><i class='mdi mdi-transcribe'></i></button>";
                 echo "</td>
             </tr>";

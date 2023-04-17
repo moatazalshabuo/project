@@ -114,7 +114,8 @@
 										</div>
 										<div class="col-md-1">
 											<br>
-											<button class="btn btn-primary" id="addItem" type="button">حفظ</button>
+											<button class="btn btn-primary" id="addItem" type="button">
+												<span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">حفظ</span></button>
 										</div>
 										<div class="text-warning war"></div>
 									</div>
@@ -223,7 +224,7 @@
 						<!-- Select2 -->
 					</div>
 					<div class="modal-footer">
-						<button class="btn ripple btn-primary" id="save-client" type="button">حفظ</button>
+						<button class="btn ripple btn-primary" id="save-client" type="button"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">حفظ</span></button>
 						<button class="btn ripple btn-secondary" data-dismiss="modal" type="button">الغاء</button>
 					</div>
 				</div>
@@ -263,13 +264,16 @@
 	}
 	function add_item_sale(){
 		rest();
+		$("#addItem .sp").show()
+		$("#addItem .text").hide()
 		// console.log($("#input-item").serialize());
 		$.ajax({
 			url:"{{ route('add_item') }}",
 			type:"POST",
 			data:$("#input-item").serialize()+"&price="+$("#price").val()+"&id={{ $data->id }}",
 			success:function(r){
-				
+				$("#addItem .sp").hide()
+				$("#addItem .text").show()
 				get_totel()
 				if(r == 1){
 				alertify.success('تم الاضافة بنجاح');
@@ -277,9 +281,13 @@
 			}else{
 					Swal.fire(r)
 				}
+				
 			},error:function(ers){
 				r = ers.responseJSON;
 				// console.log(r.errors.quant)
+				$("#addItem .sp").hide()
+				$("#addItem .text").show()
+				// $("#addItem span").removeClass('spinner-border')
 				$("#q_error").text(r.errors.quant || r.errors.length + " " +r.errors.width)
 				$("#product_error").text(r.errors.product)
 			}
@@ -368,25 +376,41 @@
 	}
 	get_totel()
 	$(document).on('click',".dele",function(){
+		$(this).attr("disabled","disabled")
+		$(this).children('.sp').show()
+		$(this).children(".text").hide()
 		$.ajax({
 			url:"{{ route('deleteSaleItem','') }}/"+$(this).attr('id'),
 			type:"get",
 			success:function(r){
+				$(this).removeAttr("disabled")
+				$(this).children('.sp').hide()
+				$(this).children(".text").show()
 				get_totel()
 				if(r == 1){
 				alertify.success('تم الحذف بنجاح');
 				}else{
 				Swal.fire(r)}
 			},error:function(r){
+				$(this).removeAttr("disabled")
+				$(this).children('.sp').hide()
+				$(this).children(".text").show()
 				console.log(r.responseJSON)
 			}
 		})
 	})
 	$(document).on('click',".edit",function(){
+		$(this).children('.sp').show()
+		$(this).children(".text").hide()
+		$(this).attr("disabled","disabled")
+
 		$.ajax({
 			url:"{{ route('editSaleItem','') }}/"+$(this).attr('id'),
 			type:"get",
 			success:function(r){
+				$(this).removeAttr("disabled")
+				$(this).children('.sp').hide()
+				$(this).children(".text").show()
 				data = JSON.parse(r)
 				if(data['type'] == 1){
 					$("#price").val(parseFloat(data['price']))
@@ -400,7 +424,10 @@
 					Swal.fire(data['massege'])
 				}
 			},error:function(r){
-				console.log(r.responseJSON)
+				$(this).removeAttr("disabled")
+				$(this).children('.sp').hide()
+				$(this).children(".text").show()
+				// console.log(r.responseJSON)
 			}
 		})
 	})
@@ -413,17 +440,23 @@
 	}
 // ==========================================
 	function add_client(){
+		$("#save-client").children('.sp').show()
+		$("#save-client").children(".text").hide()
 		$.ajax({
 			url:"{{ route('createClient') }}",
 			type:"post",
 			data:$("#form-client-add").serialize(),
 			success:function(e){
+				$("#save-client").children('.sp').hide()
+				$("#save-client").children(".text").show()
 				getClient(e)
 				$("#select2modal").modal("hide")
 				$("#form-client-add").trigger("reset")
 				alertify.success('تم الاضافة بنجاح');
 				rest()
 			},error:function(e){
+				$("#save-client").children('.sp').hide()
+				$("#save-client").children(".text").show()
 				re = e.responseJSON
 				console.log(re)
 				$("#name_err").html(re.errors.name)

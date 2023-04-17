@@ -90,7 +90,7 @@ class Products extends Controller
         foreach($mymaterial as $val){
             array_push($ar,$val->rawid);
             $type = ($val->hisba_type == 1)?"متر":"قطعة";
-            $data["myMate"] .= "<li class='list-group-item'>".$val->material_name." / كمية الاستهلاك  : (".floatval($val->quan).") $type <button id='".$val->id."' class='btn btn-danger dele-mate-p float-left'><i class='mdi mdi-delete'></i></button></li>";
+            $data["myMate"] .= "<li class='list-group-item'>".$val->material_name." / كمية الاستهلاك  : (".floatval($val->quan).") $type <button id='".$val->id."' class='btn btn-primary btn-sm dele-mate-p float-left'><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'><i class='mdi mdi-transcribe'></i></span></button> <button id='".$val->id."' class='btn btn-danger btn-sm dele-mate-p float-left'><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'><i class='mdi mdi-delete'></i></span></button></li>";
         }
         $material = rawmaterials::select()->whereNotIn('id',$ar)->get();
         foreach($material as $val){
@@ -106,7 +106,7 @@ class Products extends Controller
         foreach($mymaterial as $val){
             // array_push($ar,$val->rawid);
             // $type = ($val->hisba_type == 1)?"متر":"قطعة";
-            $data["myMate"] .= "<li class='list-group-item'>".$val->name." / السعر ".floatval($val->price)." <button id='".$val->id."' class='btn btn-info edit-work-p float-left'><i class='mdi mdi-transcribe'></i></button> <button id='".$val->id."' class='btn btn-danger dele-work-p float-left'><i class='mdi mdi-delete'></i></button></li>";
+            $data["myMate"] .= "<li class='list-group-item'>".$val->name." / السعر ".floatval($val->price)." <button id='".$val->id."' class='btn btn-info btn-sm edit-work-p float-left'><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'><i class='mdi mdi-transcribe'></i></span></button> <button id='".$val->id."' class='btn btn-danger btn-sm dele-work-p float-left'><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'><i class='mdi mdi-delete'></i></span></button></li>";
         }
         echo json_encode($data);
     }

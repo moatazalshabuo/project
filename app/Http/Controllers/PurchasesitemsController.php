@@ -104,8 +104,8 @@ class PurchasesitemsController extends Controller
             <td>".floatval($val->total)."</td>
             <td>".$val->created_at."</td>
             <td class='d-flex justify-content-end'>
-                    <button class='btn btn-info ml-1 btn-icon dele' id='".$val->id."'><i class='mdi mdi-delete'></i></button>
-                    <button class='btn btn-danger btn-icon edit-item' id='".$val->id."'><i class='mdi mdi-transcribe'></i></button>
+                    <button class='btn btn-info ml-1 btn-icon dele' id='".$val->id."'><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'><i class='mdi mdi-delete'></i></span></button>
+                    <button class='btn btn-danger btn-icon edit-item' id='".$val->id."'><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'><i class='mdi mdi-transcribe'></i></button>
                 </td>
             </tr>";
         }

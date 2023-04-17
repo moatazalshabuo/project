@@ -174,7 +174,7 @@
                             <div class="text text-danger error_add" id="error_price"></div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary" id="add-mate">تأكيد</button>
+                            <button type="button" class="btn btn-outline-primary" id="add-mate"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">تأكيد</span></button>
                             <button type="button" class="btn btn-outline-danger close_add"
                                 data-dismiss="modal">إغلاق</button>
 
@@ -228,7 +228,7 @@
                             <div class="text text-danger error_edit" id="error_price_e"></div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary" id="update">تأكيد</button>
+                            <button type="button" class="btn btn-outline-primary" id="update"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">تأكيد</span></button>
                             <button type="button" class="btn btn-outline-danger close_edit"
                                 data-dismiss="modal">إغلاق</button>
                         </div>
@@ -278,18 +278,24 @@
             }
             // دالة ارسال بايانات المادة الخام والتاكد منها
             function sendMetadata() {
+                $("#add-mate .sp").show()
+                $("#add-mate .text").hide()
                 $.ajax({
                     url: "{{ route('rawmaterials.store') }}",
                     type: "post",
                     data: $('#form-add').serialize(),
                     success: function(res) {
                         // console.log(res);
+                        $("#add-mate .sp").hide()
+                        $("#add-mate .text").show()
                         $('#form-add').trigger("reset");
                         $("#modaldemo1").modal('hide')
                         alertify.success('تم الاضافة بنجاح');
                         getitem();
                     },
                     error: function(e) {
+                        $("#add-mate .sp").hide()
+                        $("#add-mate .text").show()
                         $data = e.responseJSON;
                         $("#error_material_name").text($data.errors.material_name)
                         $("#error_hisba_type").text($data.errors.hisba_type)
@@ -301,12 +307,16 @@
             }
 
             function update_mate() {
+                $("#update .sp").show()
+                $("#update .text").hide()
                 $.ajax({
                     url: "{{ route('materialupdate') }}",
                     type: "post",
                     data: $('#form-edit').serialize(),
                     success: function(res) {
                         // console.log(res);
+                        $("#update .sp").hide()
+                        $("#update .text").show()
                         $('#form-edit').trigger("reset");
                         $("#edit_material").modal('hide')
                         alertify.success('تم التعديل بنجاح');
@@ -314,7 +324,9 @@
                     },
                     error: function(e) {
                         $data = e.responseJSON;
-                        console.log($data)
+                        // console.log($data)
+                        $("#update .sp").hide()
+                        $("#update .text").show()
                         $("#error_material_name_e").text($data.errors.material_name)
                         $("#error_hisba_type_e").text($data.errors.hisba_type)
                         $("#error_quantity_e").text($data.errors.quantity)

@@ -123,7 +123,10 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn ripple btn-outline-primary" id="add_product" type="button">حفظ</button>
+                    <button class="btn ripple btn-outline-primary" id="add_product" type="button">
+                        <span class="spinner-border spinner-border-sm sp" style="display: none"></span>
+                        <span  class="text">حفظ </span>
+                    </button>
                     <button class="btn ripple btn-outline-secondary" data-dismiss="modal" type="button">اغلاق</button>
                 </div>
             </div>
@@ -173,7 +176,7 @@
                                         </p>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="button" class="btn btn-success" id="add-mate" value="اضافة">
+                                        <button type="button" class="btn btn-success" id="add-mate"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">اضافة</span></button>
                                     </div>
                                 </div>
                             </form>
@@ -206,7 +209,9 @@
                                         </p>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="button" class="btn btn-success" id="add-work" value="اضافة">
+                                        <button type="button" class="btn btn-success" id="add-work" >
+                                            <span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">اضافة</span>
+                                        </button>
                                     </div>
                                 </div>
                             </form>
@@ -264,7 +269,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <input type="button" id="update" class="btn btn-primary " value="تعديل">
+                                    <button type="button" id="update" class="btn btn-primary "><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">حفظ التعديل</span></button>
                                 </form>
                             </div>
                         </div>
@@ -371,11 +376,15 @@
 
 
             function add_meta() {
+                $("#add-mate").children('.sp').show()
+                $("#add-mate").children(".text").hide()
                 $.ajax({
                     url: "{{ route('add-mate') }}",
                     type: "post",
                     data: $("#prod").serialize(),
                     success: function(res) {
+                        $("#add-mate").children('.sp').hide()
+                        $("#add-mate").children(".text").show()
                         proid = $('.proid').val()
                         alertify.success('تم اضافة بنجاح');
                         getMatiSel(proid)
@@ -387,6 +396,8 @@
                         if (data.errors.proid != undefined) {
                             $("#modaldemo6").modal('hide')
                         }
+                        $("#add-mate").children('.sp').hide()
+                        $("#add-mate").children(".text").show()
                         $(".error_name_add").text(data.errors.s_name)
                         $(".error_quan_add").text(data.errors.quan || data.errors.length + " " + data
                             .errors.width)
@@ -397,11 +408,15 @@
 
             // ===============================
             function add_work() {
+                $("#add-work").children('.sp').show()
+                $("#add-work").children(".text").hide()
                 $.ajax({
                     url: "{{ route('add-work') }}",
                     type: "post",
                     data: $("#work-form").serialize(),
                     success: function(res) {
+                        $("#add-work").children('.sp').hide()
+                        $("#add-work").children(".text").show()
                         proid = $('.proid').val()
                         // console.log(res)
                         alertify.success('تم اضافة بنجاح');
@@ -411,6 +426,8 @@
 
                     },
                     error: function(e) {
+                        $("#add-work").children('.sp').hide()
+                        $("#add-work").children(".text").show()
                         data = e.responseJSON
                         $(".error_work_name").text(data.errors.work_name)
                         $(".error_price_work").text(data.errors.price_work)
@@ -420,11 +437,15 @@
             // ====================================
 
             function update_product() {
+                $("#update").children('.sp').show()
+                $("#update").children(".text").hide()
                 $.ajax({
                     url: "{{ route('up_prod') }}",
                     type: "post",
                     data: $("#form-edit").serialize(),
                     success: function(e) {
+                        $("#update").children('.sp').hide()
+                        $("#update").children(".text").show()
                         // $('#form-edit').trigger("reset");
                         // $("#edit").modal('hide')
                         alertify.success('تم التعديل بنجاح');
@@ -433,6 +454,8 @@
                     error: function(e) {
                         data = e.responseJSON
                         // console.log(data);
+                        $("#update").children('.sp').hide()
+                        $("#update").children(".text").show()
                         $(".error_name_e").html(data.errors.name)
                         $(".error_type_e").html(data.errors.type_Q)
                         $(".error_price_e").html(data.errors.price)
@@ -466,11 +489,15 @@
             //========================================
             getitem()
             $('#add_product').click(function() {
+                $(this).children('.sp').show()
+                $(this).children(".text").hide()
                 $.ajax({
                     url: "{{ route('add_prod') }}",
                     type: "post",
                     data: $('#form-add').serialize(),
                     success: function(res) {
+                        $(this).children('.sp').hide()
+                $(this).children(".text").show()
                         $('#form-add').trigger("reset");
                         $("#select2modal").modal('hide')
                         getMatiSel(res)
@@ -482,6 +509,8 @@
                     },
                     error: function(e) {
                         $data = e.responseJSON;
+                        $(this).children('.sp').hide()
+                    $(this).children(".text").show()
                         $(".error_name").append($data.errors.name)
                         $(".error_type").append($data.errors.type_Q)
                     }
@@ -540,11 +569,15 @@
             })
 
             $(document).on("click", ".dele-work-p", function() {
+                $(this).children('.sp').show()
+                $(this).children(".text").hide()
                 $(this).attr("disabled", "disabled")
                 $.ajax({
                     url: "{{ route('del-work', '') }}/" + $(this).attr('id'),
                     type: "get",
                     success: function(res) {
+                        $(this).children('.sp').hide()
+                        $(this).children(".text").show()
                         proid = res
                         alertify.success('تم الحذف بنجاح');
                         dataproed(proid)
@@ -552,17 +585,23 @@
 
                     },
                     error: function(e) {
+                        $(this).children('.sp').hide()
+                        $(this).children(".text").show()
                         data = e.responseJSON
 
                     }
                 })
             })
             $(document).on("click", ".dele-mate-p", function() {
+                $(this).children('.sp').show()
+                $(this).children(".text").hide()
                 $(this).attr("disabled", "disabled")
                 $.ajax({
                     url: "{{ route('del-mate', '') }}/" + $(this).attr('id'),
                     type: "get",
                     success: function(res) {
+                        $(this).children('.sp').hide()
+                        $(this).children(".text").show()
                         proid = res
                         alertify.success('تم الحذف بنجاح');
                         getMatiSel(proid)
@@ -570,6 +609,8 @@
 
                     },
                     error: function(e) {
+                        $(this).children('.sp').hide()
+                        $(this).children(".text").show()
                         data = e.responseJSON
 
                     }
@@ -577,11 +618,15 @@
             })
 
             $(document).on("click", ".edit-work-p", function() {
+                $(this).children('.sp').show()
+                $(this).children(".text").hide()
                 $(this).attr("disabled", "disabled")
                 $.ajax({
                     url: "{{ route('edit-work', '') }}/" + $(this).attr('id'),
                     type: "get",
                     success: function(res) {
+                        $(this).children('.sp').hide()
+                        $(this).children(".text").show()
                         data = JSON.parse(res)
                         proid = data['proid']
                         $("#work_name").val(data['name'])
@@ -589,7 +634,10 @@
                         getWork(proid)
                         dataproed(proid)
                     },
-                    error: function(e) {}
+                    error: function(e) {
+                        $(this).children('.sp').hide()
+                        $(this).children(".text").show()
+                    }
                 })
             })
             $(document).on("click", '.dele', function() {
@@ -619,19 +667,27 @@
 
             })
             $(document).on("click", ".active-prod", function() {
+                $(this).children('.sp').show()
+                $(this).children(".text").hide()
                 $.ajax({
                     url: "{{ route('activeprod', '') }}/" + $(this).attr('id'),
                     type: "get",
                     success: function(res) {
+                        $(this).children('.sp').hide()
+                        $(this).children(".text").show()
                         getitem();
                     }
                 })
             })
             $(document).on("click", ".unactive-prod", function() {
+                $(this).children('.sp').show()
+                $(this).children(".text").hide()
                 $.ajax({
                     url: "{{ route('unactiveprod', '') }}/" + $(this).attr('id'),
                     type: "get",
                     success: function(res) {
+                        $(this).children('.sp').hide()
+                        $(this).children(".text").show()
                         getitem();
                     }
                 })

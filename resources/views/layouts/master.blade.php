@@ -107,7 +107,7 @@
 			<!--Footer-->
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-primary" data-dismiss="modal">اغلاق</button>
-				<button class="btn btn-primary" id="pay">حفظ</button>
+				<button class="btn btn-primary" id="pay"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">حفظ</span></button>
 			</div>
 			</div>
 		</div>
@@ -137,7 +137,9 @@
 									<p class="text-danger" id='bill_custom_err'></p>
 								</div>
 								<div class="col-md-2 ">
-									<button type="button" class="mt-4 btn btn-primary" id="get_purbill">بحث</button>
+									<button type="button" class="mt-4 btn btn-primary" id="get_purbill">
+										<span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">بحث</span>
+									</button>
 								</div>
 								<div class="col-md-5">
 									<h5 class="message1">
@@ -183,7 +185,7 @@
 						<!-- Select2 -->
 					</div>
 					<div class="modal-footer">
-						<button class="btn ripple btn-primary" id="pay_custom" type="button">حفظ</button>
+						<button class="btn ripple btn-primary" id="pay_custom" type="button"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">حفظ</span></button>
 						<button type="button" class="btn btn-outline-primary" data-dismiss="modal">اغلاق</button>
 					</div>
 				</div>
@@ -229,7 +231,7 @@
 						<!-- Select2 -->
 					</div>
 					<div class="modal-footer">
-						<button class="btn ripple btn-primary" id="exchange_send" type="button">حفظ</button>
+						<button class="btn ripple btn-primary" id="exchange_send" type="button"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">حفظ</span></button>
 						<button type="button" class="btn btn-outline-primary" data-dismiss="modal">اغلاق</button>
 					</div>
 				</div>
@@ -318,6 +320,8 @@
 						})
 						
 						function pay_send(){
+							$("#pay .sp").show()
+							$("#pay .text").hide()
 							reset()
 							var bill_no = $("#bill_num_pay").val()
 							var price = $("#price_pay").val()
@@ -328,6 +332,8 @@
 								data:"_token={{ csrf_token() }}&price="+price+"&client="+client,
 								success:function(res){
 									// console.log(res)
+									$("#pay .sp").hide()
+									$("#pay .text").show()
 									data = JSON.parse(res)
 									if(data['done']){
 										// console.log(data['done'])
@@ -342,6 +348,8 @@
 										$("#pay").removeAttr("disabled")
 									}
 								},error:function(res){
+									$("#pay .sp").hide()
+									$("#pay .text").show()
 									$("#pay").removeAttr("disabled")
 									data = res.responseJSON
 									$("#price_pay_err").text(data.errors.price)
@@ -369,12 +377,21 @@
 							reset()
 							Exchange($("#pur_bill").val())
 						})
-						
+						$("#pur_bill").keypress(function(e){
+							if(e.which == 13){
+								reset()
+								Exchange($(this).val())
+							}
+						})
 						function Exchange(id){
+							$("#get_purbill .sp").show()
+							$("#get_purbill .text").hide()
 							$.ajax({
 								url:"{{ route('get_purbill','') }}/"+id,
 								type:"get",
 								success:function(res){
+									$("#get_purbill .sp").hide()
+									$("#get_purbill .text").show()
 									console.log(res)
 									data = JSON.parse(res)
 									if(data['error']){
@@ -392,6 +409,8 @@
 						}
 
 						function Exchange_pay(){
+							$("#pay_custom .sp").show()
+							$("#pay_custom .text").hide()
 							reset()
 							var bill_no = $("#purbill_no_id").val()
 							var price = $("#custom_price_recep").val()
@@ -402,6 +421,8 @@
 								data:"_token={{ csrf_token() }}&bill_id="+bill_no+"&price="+price,
 								success:function(res){
 									// console.log(res)
+									$("#pay_custom .sp").hide()
+									$("#pay_custom .text").show()
 									data = JSON.parse(res)
 									if(data['done']){
 										$("#modaldemo17").modal("hide")
@@ -416,6 +437,8 @@
 										$("#pay_custom").removeAttr("disabled")
 									}
 								},error:function(res){
+									$("#pay_custom .sp").hide()
+									$("#pay_custom .text").show()
 									data = res.responseJSON
 									$("#pay_custom").removeAttr("disabled")
 									$("#custom_price_error").text(data.errors.price)

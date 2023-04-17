@@ -137,7 +137,7 @@
 										</div>
 										<div class="col-md-1">
 											<br>
-											<button class="btn btn-primary" id="addItem" type="button">حفظ</button>
+											<button class="btn btn-primary" id="addItem" type="button"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">حفظ</span></button>
 										</div>
 										<div class="text-warning war"></div>
 									</div>
@@ -241,7 +241,7 @@
 						<!-- Select2 -->
 					</div>
 					<div class="modal-footer">
-						<button class="btn ripple btn-primary" id="save-client" type="button">حفظ</button>
+						<button class="btn ripple btn-primary" id="save-client" type="button"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">حفظ</span></button>
 						<button class="btn ripple btn-secondary" data-dismiss="modal" type="button">الغاء</button>
 					</div>
 				</div>
@@ -290,7 +290,7 @@
 						<div class="text text-danger error_add" id="error_price_mate"></div>						
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-outline-primary" id="add-mate">تأكيد</button>
+						<button type="button" class="btn btn-outline-primary" id="add-mate"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">تاكيد</span></button>
 						<button type="button" class="btn btn-outline-danger close_add" data-dismiss="modal">إغلاق</button>
 
 					</div>
@@ -382,12 +382,16 @@ $("#mate").change(function(){
 		}
 // ======================================
 		function add_item(){
+			$("#addItem .sp").show()
+			$("#addItem .text").hide()
 			reset();
 			$.ajax({
 			url:"{{ route('add_puritem') }}",
 			type:"POST",
 			data:$("#input-item").serialize()+"&id={{ $data->id }}",
 			success:function(r){
+				$("#addItem .sp").hide()
+				$("#addItem .text").show()
 				if(r == 1){
 				get_totel()
 				alertify.success('تم الاضافة بنجاح');
@@ -396,6 +400,8 @@ $("#mate").change(function(){
 					Swal.fire(r)
 				}
 			},error:function(ers){
+				$("#addItem .sp").hide()
+				$("#addItem .text").show()
 				r = ers.responseJSON;
 				// console.log(r.errors.quant)
 				$("#q_error").text(r.errors.quant || r.errors.length + " "+ r.errors.width)
@@ -434,27 +440,40 @@ $(".m3").hide()
 	})
 
 	$(document).on('click',".dele",function(){
+		$(this).children('.sp').show()
+		$(this).children(".text").hide()
 		$(this).attr("disabled","disabled")
 		$.ajax({
 			url:"{{ route('deletePurItem','') }}/"+$(this).attr('id'),
 			type:"get",
 			success:function(r){
+				$(this).children('.sp').hide()
+				$(this).children(".text").show()
 				get_totel()
 				if(r == 1){
 				alertify.success('تم الاضافة بنجاح');
 				}else{
 				Swal.fire(r)}
 			},error:function(r){
+				$(this).children('.sp').hide()
+				$(this).children(".text").show()
 				console.log(r.responseJSON)
+				$(this).children('.sp').hide()
+				$(this).children(".text").show()
 			}
 		})
 	})
 	$(document).on('click',".edit-item",function(){
+		$(this).children('.sp').show()
+		$(this).children(".text").hide()
 		$(this).attr("disabled","disabled")
 		$.ajax({
 			url:"{{ route('editPurItem','') }}/"+$(this).attr('id'),
 			type:"get",
 			success:function(r){
+				$(this).children('.sp').hide()
+				$(this).children(".text").show()
+				$(this).removeAttr("disabled")
 				data = JSON.parse(r)
 				if(data['type'] == 1){
 					$("#price").val(parseFloat(data['price']))
@@ -462,12 +481,13 @@ $(".m3").hide()
 				$("#quant").val(parseFloat(data['qoun']))
 				$("#mate").val(data['mate']).change()
 				get_totel()
-
 				}else{
 					Swal.fire(data['massege'])
 				}
-				
 			},error:function(r){
+				$(this).removeAttr("disabled")
+				$(this).children('.sp').hide()
+				$(this).children(".text").show()
 				console.log(r.responseJSON)
 			}
 		})
@@ -491,11 +511,15 @@ $(".m3").hide()
 	getClient(client)
 
 	function saveClient(){
+		$("#save-client").children('.sp').show()
+		$("#save-client").children(".text").hide()
 		$.ajax({
 			url:"{{ route('createCustom') }}",
 			type:"post",
 			data:$("#form-client-add").serialize(),
 			success:function(e){
+				$("#save-client").children('.sp').hide()
+				$("#save-client").children(".text").show()
 				getClient(e)
 				$("#select2modal").modal("hide")
 				$("#form-client-add").trigger("reset")
@@ -504,7 +528,8 @@ $(".m3").hide()
 				reset()
 			},error:function(e){
 				re = e.responseJSON
-				console.log(re)
+				$("#save-client").children('.sp').hide()
+				$("#save-client").children(".text").show()
 				$("#name_err").html(re.errors.name)
 				$("#phone_err").html(re.errors.phone)
 			}
@@ -519,12 +544,14 @@ $(".m3").hide()
 	$("#close-bill").click(function(){
 		// console.log($('#form-client').serialize())
 		// console.log("_token={{ csrf_token() }}"+$('#form-client').serialize()+"&sincere="+$("#sincere").val()+"&id={{ $data->id }}")
-		console.log($("#custom").val())
+		// console.log($("#custom").val())
+		$(this).attr("disabled","disabled")
 		$.ajax({
 			url:"{{ route('purchasesbill_save') }}",
 			type:"post",
 			data:"_token={{ csrf_token() }}&client="+$("#custom").val()+"&id={{ $data->id }}",
 			success:function(re){
+				$(this).removeAttr("disabled")
 				res = JSON.parse(re)
 				if(res['id']){
 					location.replace("{{ route('Purchasesbill','') }}/"+res['id'])
@@ -533,6 +560,7 @@ $(".m3").hide()
 				}
 				// console.log(res)
 			},error:function(res){
+				$(this).removeAttr("disabled")
 				error = res.responseJSON
 				// console.log(error)
 				alertify.error('يوجد خطاء اثناء الحفظ');
@@ -561,18 +589,24 @@ function reset_add_form(){
 	}
 
 function sendMetadata(){
+	$("#add-mate").children('.sp').show()
+	$("#add-mate").children(".text").hide()
 $.ajax({
 	url:"{{ route('rawmaterials.store') }}",
 	type:"post",
 	data:$('#form-add').serialize(),
 	success:function(res){
 		// console.log(res);
+		$("#add-mate").children('.sp').hide()
+		$("#add-mate").children(".text").show()
 		$('#form-add').trigger("reset");
 		$("#modaldemo1").modal('hide')
 		alertify.success('تم الاضافة بنجاح');
 		getitem();
 	},error:function(e){
 		$data = e.responseJSON;
+		$("#add-mate").children('.sp').hide()
+		$("#add-mate").children(".text").show()
 		$("#error_material_name").text($data.errors.material_name)
 		$("#error_hisba_type").text($data.errors.hisba_type)
 		$("#error_quantity").text($data.errors.quantity || $data.errors.length + " " + $data.errors.width)
