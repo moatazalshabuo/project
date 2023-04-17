@@ -6,6 +6,7 @@ use App\Models\client;
 use App\Models\material_product;
 use App\Models\Salesbill;
 use App\Models\Product;
+use App\Models\WorkHand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
@@ -117,6 +118,10 @@ class SalesbillController extends Controller
     public function product_select($id = ""){
         $proud_mate = material_product::select("proid")->get();
         $data = array();
+        foreach($proud_mate as $val){
+            array_push($data,$val->proid);
+        }
+        $proud_mate = WorkHand::select("proid")->get();
         foreach($proud_mate as $val){
             array_push($data,$val->proid);
         }
