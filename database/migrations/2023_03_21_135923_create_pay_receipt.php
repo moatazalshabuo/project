@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pay_receipt', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
             $table->foreignId("bill_id")->nullable()->constrained("salesbills");
             $table->double("price",15, 8);
