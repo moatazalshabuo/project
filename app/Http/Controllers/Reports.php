@@ -297,12 +297,12 @@ class Reports extends Controller
         //    $i=0;
         $prus = Purchasesitem::query();
         $prus->select(
-            "rawmaterials.material_name",
-            "rawmaterials.id as rawm",
+            DB::raw("min(rawmaterials.material_name) as material_name"),
+            DB::raw("min(rawmaterials.id) as rawm"),
             DB::raw("sum(purchases_items.`qoun`) as qaunt"),
-            "purchases_items.created_at",
-            "purchases_items.purchases_id",
-            "users.name as username"
+            DB::raw("min(purchases_items.created_at) as created_at"),
+            DB::raw("purchases_items.purchases_id"),
+            DB::raw("min(users.name) as username")
         )
             ->join("users", "users.id", "=", "purchases_items.user_id")
             ->join("rawmaterials", "rawmaterials.id", "=", "purchases_items.rawmati")
@@ -310,7 +310,12 @@ class Reports extends Controller
 
         $prus1 = SalesItem::query();
 
-        $prus1->select('sales_items.sales_id', DB::raw("(sales_items.qoun * proudct_material.quan) as qaunt"), "sales_items.created_at", "users.name", "rawmaterials.material_name", "rawmaterials.id as rawm")
+        $prus1->select(DB::raw("min(sales_items.sales_id) as sales_id"),
+        DB::raw("(sales_items.qoun * proudct_material.quan) as qaunt"),
+        DB::raw("min(sales_items.created_at) as created_at"),
+        DB::raw("min(users.name) as name"),
+        DB::raw("min(rawmaterials.material_name) as material_name"),
+        DB::raw("min(rawmaterials.id) as rawm"))
             ->join('proudct_material', "proudct_material.proid", "=", "sales_items.prodid")
             ->join("rawmaterials", "rawmaterials.id", "=", "proudct_material.rawid")
             ->join("users", "users.id", "=", "sales_items.user_id")
@@ -323,7 +328,7 @@ class Reports extends Controller
             $prus1->whereBetween('sales_items.created_at', [$date]);
         }
         if ($prus->count() > 0 || $prus1->count() > 0) {
-            foreach ($prus->groupBy(["purchases_items.purchases_id", 'rawmaterials.material_name'])->get() as $val) {
+            foreach ($prus->groupBy(["purchases_items.purchases_id"])->get() as $val) {
                 array_push(
                     $data1,
                     [
