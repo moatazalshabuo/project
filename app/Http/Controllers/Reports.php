@@ -311,7 +311,7 @@ class Reports extends Controller
         $prus1 = SalesItem::query();
 
         $prus1->select(DB::raw("min(sales_items.sales_id) as sales_id"),
-        DB::raw("(sales_items.qoun * proudct_material.quan) as qaunt"),
+        DB::raw("sum(sales_items.qoun * proudct_material.quan) as qaunt"),
         DB::raw("min(sales_items.created_at) as created_at"),
         DB::raw("min(users.name) as name"),
         DB::raw("min(rawmaterials.material_name) as material_name"),
