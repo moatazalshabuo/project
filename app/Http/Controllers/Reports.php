@@ -322,37 +322,38 @@ class Reports extends Controller
 
             $prus1->whereBetween('sales_items.created_at', [$date]);
         }
-
-        foreach ($prus->groupBy("purchases_items.purchases_id")->get() as $val) {
-            array_push(
-                $data1,
-                [
-                    'id_bill' => $val->purchases_id,
-                    'name' => $val->material_name,
-                    'rawid' => $val->rawm,
-                    "qoa" => $val->qaunt,
-                    'created_at' => $val->created_at,
-                    "username" => $val->username,
-                    "type" => 1
-                ]
-            );
+        if ($prus->count() > 0 || $prus1->count() > 0) {
+            foreach ($prus->groupBy(["purchases_items.purchases_id", 'rawmaterials.material_name'])->get() as $val) {
+                array_push(
+                    $data1,
+                    [
+                        'id_bill' => $val->purchases_id,
+                        'name' => $val->material_name,
+                        'rawid' => $val->rawm,
+                        "qoa" => $val->qaunt,
+                        'created_at' => $val->created_at,
+                        "username" => $val->username,
+                        "type" => 1
+                    ]
+                );
+            }
+            foreach ($prus1->groupBy(["sales_items.sales_id", "rawmaterials.material_name"])->get() as $val) {
+                array_push(
+                    $data1,
+                    [
+                        'id_bill' => $val->sales_id,
+                        'name' => $val->material_name,
+                        'rawid' => $raw,
+                        "qoa" => $val->qaunt,
+                        'created_at' => $val->created_at,
+                        "username" => $val->name,
+                        "type" => 2
+                    ]
+                );
+            }
+            $data = collect($data1)->sortBy('created_at')->reverse()->toArray();
+            //    print_r($data);die();
         }
-        foreach ($prus1->groupBy("sales_items.sales_id")->get() as $val) {
-            array_push(
-                $data1,
-                [
-                    'id_bill' => $val->sales_id,
-                    'name' => $val->material_name,
-                    'rawid' => $raw,
-                    "qoa" => $val->qaunt,
-                    'created_at' => $val->created_at,
-                    "username" => $val->name,
-                    "type" => 2
-                ]
-            );
-        }
-        $data = collect($data1)->sortBy('created_at')->reverse()->toArray();
-        //    print_r($data);die();
         return redirect()->route('moveraw_index')->with('data', $data);
     }
 }
