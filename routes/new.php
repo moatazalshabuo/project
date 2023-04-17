@@ -85,9 +85,10 @@ Route::get("get-item",function(){
 /*  Start get data item material form page rawmaterial */
 Route::get("get-item-mate",function(){
     $product = rawmaterials::select()->orderBy('id','DESC')->get();
+    $i = 0;
     foreach ($product as $dates){
             echo "<tr>         
-            <td>$dates->id</td>
+            <td>$i</td>
             <td>$dates->material_name</td>
             <td>";
             if($dates->hisba_type == 1)
@@ -104,7 +105,7 @@ Route::get("get-item-mate",function(){
                 if(Auth::user()->user_type==1 || Auth::user()->user_type==0)
                 echo "<a class='btn btn-danger ml-1 btn-icon' href='".route('materialdelete',$dates->id)."' ><i class='mdi mdi-delete'></i></a>";
                echo "<button  data-target='#edit_material' data-toggle='modal' class='btn btn-info btn-icon edit_mate' id='$dates->id'><i class='mdi mdi-transcribe'></i></button>
-            </td></tr>";
+            </td></tr>";$i+=1;
             }
         
 })->name("getitem-mate")->middleware(['auth','active',"manager"]);
