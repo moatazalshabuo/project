@@ -175,7 +175,7 @@ class SalesbillController extends Controller
     function pay(Request $request){
         $request->validate([
             "client"=>"required",
-            "price"=>"required|numeric|min:1|max:999999|regex:/^(([0-9]*)(\.([0-9]+))?)$/"
+            "price"=>"required|numeric|min:1|max:999999"
         ],[
             "client.required"=>"يجب اختيار زبون",
             "price.required"=>"يرجى ادخال القيمة"
@@ -183,7 +183,7 @@ class SalesbillController extends Controller
        
         $totls = Salesbill::select(DB::raw("SUM(Residual) as Residualsum"))
         ->where("client",$request->client)->get();
-        if(!empty($totls) && $totls[0]->Residualsum >= $request->price){
+        if(isset($totls[0]) && $totls[0]->Residualsum >= $request->price){
             $price = $request->price;
             $bills = Salesbill::select("id")->where(["client"=>$request->client,"status"=>'0'])->where("Residual",">","0")->orderBy("id","DESC")->get();
             foreach($bills as $val){
