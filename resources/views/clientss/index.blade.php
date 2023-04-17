@@ -172,7 +172,7 @@
                 <div class="modal-body">
                     <h6>ادخل البيانات</h6>
                     <!-- Select2 -->
-                    <form action="{{ route('clients.store') }}" method="POST">
+                    <form action="{{ route('client.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
                             <label>الاسم</label>
@@ -219,7 +219,7 @@
            </div>
            <div class="modal-body">
 
-               <form action="{{ url('clients/update') }}" method="post" autocomplete="off">
+               <form action="{{ url('client/update') }}" method="post" autocomplete="off">
                    {{method_field('patch')}}
                    @csrf
                    <div class="form-group">
@@ -265,7 +265,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="clients/destroy" method="post">
+            <form action="{{url('client/destroy')}}" method="post">
                 {{ method_field('delete') }}
                 {{ csrf_field() }}
                 <div class="modal-body">

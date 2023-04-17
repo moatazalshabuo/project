@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\client;
+use App\Models\Salesbill;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Providers\RouteServiceProvider;
@@ -32,16 +33,13 @@ class clientsController extends Controller
             [
                 'name' => 'required',
                 'phone' => 'required',
-                'email' => 'required',
-                'adress' => 'required',
+                
 
             ],
             [
                 'name.required' => 'يرجى ادخال اسم الزبون',
                 'phone.required' => 'يرجى ادخال رقم هاتف الزبون',
-                'email.required' => 'يرجى ادخال رقم البريد الالكتروني للزبون',
-                'adress.required' => 'يرجى ادخال عنوان الزبون',
-
+               
             ]
         );
         client::create([
@@ -51,7 +49,7 @@ class clientsController extends Controller
             'adress' => $request->adress,
         ]);
         session()->flash('Add', 'تم اضافة الزبون بنجاح');
-        return redirect('/clients');
+        return redirect('/client');
     }
 
     public function update(Request $request)
@@ -67,15 +65,21 @@ class clientsController extends Controller
 
         ]);
         session()->flash('edit', 'تم تعديل بيانات الزبون بنجاج');
-        return redirect('/clients');
+        return redirect('/client');
     }
 
     public function destroy(Request $request)
     {
         $Products = client::findOrFail($request->pro_id);
+        $sla = Salesbill::where("client",$Products->id)->count();
+        if($sla == 0){
         $Products->delete();
         session()->flash('delete', 'تم حذف بيانات الزبون بنجاح');
         return back();
+    }else{
+        session()->flash('delete', 'لم يتم الحذف توجد فواتير مسجله باسم الزبون');
+        return back();
+    }
 
         
     }

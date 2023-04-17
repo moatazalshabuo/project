@@ -33,7 +33,7 @@ class SalesItemController extends Controller
             $message = ["product.required"=>"يجب ادخال صنف",
             "product.numeric"=>"يجب ادخال صنف"];
             if(isset($request->quant)){
-                if(!empty(Product::find($request->product)) &&  Product::find($request->product)->type_Q == 2){
+                if(isset(Product::find($request->product)->id) &&  Product::find($request->product)->type_Q == 2){
                     $rules['quant'] = "required|integer|min:1|max:9999999";    
                 }else{
                     $rules['quant'] = "required|numeric|min:1|max:9999999";
