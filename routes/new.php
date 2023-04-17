@@ -69,7 +69,7 @@ Route::get("get-item",function(){
                     echo " <button class='btn btn-success ml-1 active-prod' id='$item->id' >تفعيل</button>";
                 }
                 echo "</td><td class='d-flex justify-content-center'>";
-                if(Auth::user()->user_type==1)   
+                if(Auth::user()->user_type==1 || Auth::user()->user_type==0)   
                 echo "<button class='btn btn-danger ml-1 btn-icon dele' id='$item->id' ><i class='mdi mdi-delete'></i></button>
                     <button  data-target='#modaldemo6' data-toggle='modal' class='btn btn-info btn-icon edit_product' id='$item->id'><i class='mdi mdi-transcribe'></i></button>";
                 echo "</td>
