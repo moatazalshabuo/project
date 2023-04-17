@@ -45,7 +45,7 @@
 							<h4 class="content-title mb-0 my-auto">فاتورة المبيعات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">{{ $data->name }}/{{ $data->created_at }}</span>
 						</div>
 					</div>
-					<div class="btn-group left-content col-md-7">
+					<div class="btn-group left-content col-md-7" style="overflow-x:scroll">
 						<button class="btn btn-info ml-2" id="print-bill" >طباعة الفاتورة</button>
 						<button class="btn btn-info ml-2" id="print-work" >طباعة امر عمل</button>
 						<a href="{{ route("salesbill_edit",$data->id) }}" @if($data->status)disabled @endif class="btn btn-info ml-2">تعديل الفاتورة</a>

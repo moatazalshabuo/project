@@ -28,9 +28,16 @@ class Reports extends Controller
     public function pay_index()
     {
         # code...
-
+        $query = pay_receipt::query();
+        $query->select("users.name", "clients.name as cl_name", "clients.phone", "pay_receipt.*")
+            ->leftJoin('salesbills', function ($join) {
+                $join->on('salesbills.id', '=', 'pay_receipt.bill_id');
+            })->leftJoin("clients", function ($join) {
+                $join->on('clients.id', '=', 'pay_receipt.client_id')
+                    ->orOn("salesbills.client", "=", "clients.id");
+            })->join("users", "users.id", "=", "pay_receipt.created_by")->where("pay_receipt.created_at", "like", "%" . date("Y-m-d") . "%");
         $client = client::all();
-        return view("frontend/pay_report", ['client' => $client]);
+        return view("frontend/pay_report", ['client' => $client,'data'=>$query->get()]);
     }
     public function search_pay(Request $request)
     {
@@ -70,7 +77,9 @@ class Reports extends Controller
             $query->whereBetween('pay_receipt.created_at', [$where['from'], $where['to']]);
         }
         //    print_r($query->get());die();
-        return redirect()->route('pay_index')->with('data', $query->get());
+        // return redirect()->route('pay_index')->with('data', $query->get());
+        $client = client::all();
+        return view("frontend/pay_report", ['client' => $client,'data'=> $query->get()]);
     }
 
     public function delete_pay($id)

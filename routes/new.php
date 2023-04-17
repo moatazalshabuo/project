@@ -56,6 +56,9 @@ Route::get("get-item",function(){
             <td>";
             if($item->type_Q == 1){
               echo  "متر";}
+              elseif($item->type_Q == 3){
+                echo "متر مربع";
+              }
             else{
                echo "قطعة";
             }

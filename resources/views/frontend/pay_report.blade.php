@@ -100,8 +100,8 @@
 											</tr>
 										</thead>
 										<tbody class="" id="myTable">
-											@if ( session()->get('data'))
-												@foreach (session()->get('data') as $item)
+											@if ($data)
+												@foreach ($data as $item)
 													<tr>
 														<td>{{ $item->id }}</td>
 														<td>

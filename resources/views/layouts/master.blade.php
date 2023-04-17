@@ -242,7 +242,7 @@
 				
 				
 				<script>
-					
+					$("select").select2()
 					$(function(){
 						function reset_form_pay(){
 							$("#sincere_pay").val("")

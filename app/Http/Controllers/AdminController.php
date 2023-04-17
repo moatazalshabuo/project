@@ -25,7 +25,7 @@ class AdminController extends Controller
 
             $last_bill = Salesbill::select("users.name","salesbills.*","clients.name as cn","clients.phone")->join("users","users.id","=","salesbills.created_by")->join("clients","clients.id","=","salesbills.client")->where("salesbills.id",$id)->orderby("salesbills.id","DESC")->first();
             $data = SalesItem::join("products","products.id","=","sales_items.prodid")->select("products.name","products.price","sales_items.*")->where("sales_items.sales_id",$id)->orderBy("id","DESC")->get();
-            if(isset($data->id) && isset($last_bill->id)){
+            if($data->count() > 0 && $last_bill->count() > 0){
                 return view("frontend.invoice.invoice_bill1",['bill'=>$last_bill,"item"=>$data,"our"=>system_mang::select()->first()]);
             }else{
                 return redirect()->back();
@@ -70,7 +70,7 @@ class AdminController extends Controller
 
             $last_bill = Purchasesbill::select("users.name","purchasesbills.*","customers.name as cn","customers.phone")->join("users","users.id","=","purchasesbills.created_by")->join("customers","customers.id","=","purchasesbills.custom")->where("purchasesbills.id",$id)->orderby("purchasesbills.id","DESC")->first();
             $data = Purchasesitem::join("rawmaterials","rawmaterials.id","=","purchases_items.rawmati")->select("rawmaterials.material_name","rawmaterials.price","purchases_items.*")->where("purchases_items.purchases_id",$id)->orderBy("id","DESC")->get();
-            if(isset($data->id) && isset($last_bill->id)){
+            if($data->count() > 0 && $last_bill->count() > 0){
                 return view("frontend.invoice.invoice_pur",['bill'=>$last_bill,"item"=>$data,"our"=>system_mang::select()->first()]);
             }else{
                 return redirect()->back();

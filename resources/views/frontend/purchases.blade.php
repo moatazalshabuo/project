@@ -62,10 +62,10 @@
 						</div>
 					</div>
 					<div class="col-md-8">
-						<div class="btn-group">
-							@if (Auth::user()->user_type == 1)
+						<div class="btn-group" style="overflow-x:scroll">
+							{{-- @if (Auth::user()->user_type == ) --}}
 								<button type="button"  data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo1" class="btn btn-primary m-1"><i class="mdi mdi-plus"></i> اضافة مادة </button>
-							@endif
+							{{-- @endif --}}
 							<a href="{{ route("purchasesbill_edit",$data->id) }}" @if($data->status)disabled @endif class="btn btn-info m-1">تعديل فاتورة</a>
 							<button id="print-bill" class="btn btn-info m-1">طباعة فاتورة</button>
 							<button class="btn btn-info m-1" id="close-bill" @if($data->status == 0)disabled @endif>حفظ الفاتورة</button>
