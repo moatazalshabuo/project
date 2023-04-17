@@ -49,7 +49,7 @@ class clientsController extends Controller
             'adress' => $request->adress,
         ]);
         session()->flash('Add', 'تم اضافة الزبون بنجاح');
-        return redirect('/client');
+        return redirect('/clients');
     }
 
     public function update(Request $request)
@@ -65,7 +65,7 @@ class clientsController extends Controller
 
         ]);
         session()->flash('edit', 'تم تعديل بيانات الزبون بنجاج');
-        return redirect('/client');
+        return redirect('/clients');
     }
 
     public function destroy(Request $request)

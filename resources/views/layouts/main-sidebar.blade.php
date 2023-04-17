@@ -151,7 +151,7 @@
 						<ul class="slide-menu">
 							<li><a class="slide-item"  href="{{ route('clint_index') }}" >حساب زبون</a></li> 
 							@if(Auth::user()->user_type != 3)
-							<li><a class="slide-item" href="{{ url('/client' . $page='') }}">قائمة الزباين</a></li>
+							<li><a class="slide-item" href="{{ url('/clients' . $page='') }}">قائمة الزباين</a></li>
 							@endif
 						</ul>
 					</li>

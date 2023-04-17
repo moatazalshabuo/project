@@ -73,7 +73,7 @@ Route::get('check_purbill/{id}',function($id){
 
 Route::resource('users',usersController::class)->middleware(['auth','active','manager']);
 Route::resource('customers',customersController::class)->middleware(['auth','active','manager']);
-Route::resource('client',clientsController::class)->middleware(['auth','active','manager']);
+Route::resource('clients',clientsController::class)->middleware(['auth','active','manager']);
 Route::get('/invicebill/{id}', [AdminController::class, 'invicebill'])->name('invicebill')->middleware(['auth','active','Technical']);
 Route::get('/invicepur/{id}', [AdminController::class, 'invicepur'])->name('invicepur')->middleware(['auth','active','Technical']);
 Route::get('/work/{id}', [AdminController::class, 'work'])->name('work')->middleware(['auth','active','Technical']);
