@@ -180,7 +180,7 @@ class SalesbillController extends Controller
             "client.required"=>"يجب اختيار زبون",
             "price.required"=>"يرجى ادخال القيمة"
         ]);
-       
+       $data = array();
         $totls = Salesbill::select(DB::raw("SUM(Residual) as Residualsum"))
         ->where("client",$request->client)->get();
         if(isset($totls[0]) && $totls[0]->Residualsum >= $request->price){
