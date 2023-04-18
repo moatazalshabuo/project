@@ -73,6 +73,9 @@ class Helper
         }
 
     }
+    public static function logo(){
+        return DB::table('system_mangs')->select('logo_photo')->get()[0]->logo_photo;
+        }
 }
 
 ?>

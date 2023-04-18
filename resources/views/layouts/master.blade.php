@@ -240,9 +240,8 @@
 				{{-- @include('layouts.models') --}}
             	@include('layouts.footer')
 				<script src="{{URL::asset('assets/js/alertify.min.js')}}"></script>
+				<script src="{{URL::asset('assets/plugins/jquery/jquery.min.js')}}"></script>				
 				@include('layouts.footer-scripts')	
-				
-				
 				<script>
 					$(".sel").select2()
 					$(function(){

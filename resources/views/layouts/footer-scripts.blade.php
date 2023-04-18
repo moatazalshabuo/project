@@ -3,6 +3,7 @@
 <!-- JQuery min js -->
 <script src="{{URL::asset('assets/plugins/jquery/jquery.min.js')}}"></script>
 <!-- Bootstrap Bundle js -->
+@yield('js')
 <script src="{{URL::asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- Ionicons js -->
 <script src="{{URL::asset('assets/plugins/ionicons/ionicons.js')}}"></script>
@@ -28,7 +29,7 @@
 
 <script src="{{URL::asset('assets/js/eva-icons.min.js')}}"></script>
 <script src="{{ URL::asset('assets\plugins\sweet-alert\sweetalert.min.js') }}"></script>
-@yield('js')
+
 <!-- Sticky js -->
 <script src="{{URL::asset('assets/js/sticky.js')}}"></script>
 <!-- custom js -->
