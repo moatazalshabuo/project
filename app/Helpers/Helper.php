@@ -6,6 +6,7 @@ use App\Models\Purchasesbill;
 use App\Models\rawmaterials;
 use App\Models\Salesbill;
 use App\Models\SalesItem;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class Helper
@@ -74,7 +75,11 @@ class Helper
 
     }
     public static function logo(){
-        return DB::table('system_mangs')->select('logo_photo')->get()[0]->logo_photo;
+        try{
+            return DB::table('system_mangs')->select('logo_photo')->get()[0]->logo_photo;
+        }catch(Exception $e){
+            return "";
+        }
         }
 }
 
