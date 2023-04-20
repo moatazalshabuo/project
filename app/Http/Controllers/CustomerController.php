@@ -34,11 +34,11 @@ class CustomerController extends Controller
     {
         $request->validate([
             'name'=>["required",'max:255'],
-            "phone"=>["required","unique:clients,phone",'max:30'],
+            "phone"=>["unique:clients,phone",'max:30'],
             "email"=>['max:80'],
             "address"=>['max:191']
         ],
-        ["name.required"=>"يرجى ادخال الاسم","phone.required"=>"يرجى ادخال رقم الهاتف",
+        ["name.required"=>"يرجى ادخال الاسم",
         "phone.unique"=>"رقم الهاتف موجود مسبقا"]);
         echo Customer::create([
             "name"=>$request->name,

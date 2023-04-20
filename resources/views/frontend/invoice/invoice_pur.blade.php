@@ -347,10 +347,10 @@ table tfoot tr:last-child td {
 				<tr>
 					<td class="no" style="font-size: 10px">{{ $i }}</td>
 					<td class="desc"><h3>{{ $ite->material_name }}</h3></td>
-					<td class="unit">{{ $ite->qoun }}</td>
-					<td class="qty">${{ $ite->price }}</td>
-					<td class="qty">${{ $ite->descont }}</td>
-					<td class="total">${{ $ite->total }}</td>
+					<td class="unit">{{ floatval($ite->qoun) }}</td>
+					<td class="qty">${{ floatval($ite->price) }}</td>
+					<td class="qty">${{ floatval($ite->descont) }}</td>
+					<td class="total">${{ floatval($ite->total) }}</td>
 				</tr>
 				@php
 					$i += 1;
@@ -362,28 +362,26 @@ table tfoot tr:last-child td {
           <tr>
             <td colspan="4"></td>
             <td colspan="1">الاجمالي</td>
-            <td>${{$bill->tolal}}</td>
+            <td>${{ floatval($bill->tolal) }}</td>
           </tr>
           <tr>
             <td colspan="4"></td>
             <td colspan="1">الخالص</td>
-            <td>${{ $bill->sincere }}</td>
+            <td>${{ floatval($bill->sincere) }}</td>
           </tr>
           <tr>
             <td colspan="4"></td>
             <td colspan="1">المتبقي</td>
-            <td>${{ $bill->Residual }}</td>
+            <td>${{ floatval($bill->Residual) }}</td>
           </tr>
         </tfoot>
       </table>
       <div id="thanks">شكرا لك!</div>
       <div id="notices">
         <div>ملاحظة:</div>
-        <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
       </div>
     </main>
     <footer>
-      Invoice was created on a computer and is valid without the signature and seal.
     </footer>
   </body>
 </html>

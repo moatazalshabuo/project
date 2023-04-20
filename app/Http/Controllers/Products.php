@@ -68,7 +68,7 @@ class Products extends Controller
     }
     public function update(Request $request){
         $rouls = ['name'=>"required|max:255|unique:products,name,".
-        $request->id,"price"=>"required|numeric|min:1|max:9999999",
+        $request->id,"price"=>"required|numeric|min:0.0001|max:9999999",
         "type_Q"=>"required"];
         $massage = ['name.required'=>"اسم الصنف لايمكن ان يكون فارغ",
         "price.required"=>"السعر لايمكن ان يكون فارغ",
@@ -113,7 +113,7 @@ class Products extends Controller
 
     public function addWork(Request $request){
         $rouls = ['work_name'=>"required|max:255",
-        "price_work"=>"required|numeric|min:1|max:9999999","proid"=>"required"];
+        "price_work"=>"required|numeric|min:0.0001|max:9999999","proid"=>"required"];
         $massage = ["work_name.required"=>"يجب ادخال اسم الخدمة","price_work.required"=>"يجب تحديد سعر الخدمة"];
         $request->validate($rouls,$massage);
         WorkHand::create([
@@ -128,10 +128,10 @@ class Products extends Controller
         "proid"=>"required"];
         $massage = ["s_name.required"=>"يجب اختيار مادة"];
         if(isset($request->quan)){
-            $rouls['quan'] = "required|numeric|min:1|max:9999999";
+            $rouls['quan'] = "required|numeric|min:0.0001|max:9999999";
         }else{
-            $rouls['length'] = 'required|numeric|min:1|max:9999999';
-            $rouls['width'] = 'required|numeric|min:1|max:9999999';
+            $rouls['length'] = 'required|numeric|min:0.0001|max:9999999';
+            $rouls['width'] = 'required|numeric|min:0.0001|max:9999999';
         }
         $quantity = isset($request->quan)?$request->quan:$request->length * $request->width;
         $request->validate($rouls,$massage);

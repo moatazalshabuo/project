@@ -34,18 +34,18 @@ class SalesItemController extends Controller
             "product.numeric"=>"يجب ادخال صنف"];
             if(isset($request->quant)){
                 if(isset(Product::find($request->product)->id) &&  Product::find($request->product)->type_Q == 2){
-                    $rules['quant'] = "required|integer|min:1|max:9999999";    
+                    $rules['quant'] = "required|integer|min:0.0001|max:9999999";    
                 }else{
-                    $rules['quant'] = "required|numeric|min:1|max:9999999";
+                    $rules['quant'] = "required|numeric|min:0.0001|max:9999999";
                 }
             }else{
-                $rules['length'] = 'required|numeric|min:1|max:9999999';
-                $rules['width'] = 'required|numeric|min:1|max:9999999';
+                $rules['length'] = 'required|numeric|min:0.0001|max:9999999';
+                $rules['width'] = 'required|numeric|min:0.0001|max:9999999';
+                // $quan = isset($re)
             }
             $request->validate($rules,$message);
-
-            $quantity = isset($request->quant)?$request->quant:$request->length * $request->width;
-
+            $quan = isset($request->quant1)?$request->quant1:1;
+            $quantity = isset($request->quant)?$request->quant:(($request->length * $request->width)*$quan);
             $product = Product::find($request->product);
             if($product->price > 0){
             $error = Helper::check_materil($request->product,$quantity);
@@ -62,6 +62,7 @@ class SalesItemController extends Controller
                 "total"=>ceil($quantity*$price),
                 "length"=>$request->length,
                 "width"=>$request->width,
+                "count"=>$quan,
                 "user_id"=>Auth::id()])->id;
                 Helper::Collect_bill($salesbill->id);
                 Helper::minus_from_mate($id);
@@ -124,7 +125,7 @@ class SalesItemController extends Controller
     {
         //
 
-        $salesItem = SalesItem::find($id);
+        $salesItem = SalesItem::select('sales_items.*',"products.type_Q")->join('products',"products.id","=","sales_items.prodid")->where("sales_items.id",$id)->get()->first();
         $salesbill = Salesbill::find($salesItem->sales_id);
         if($salesbill->status == 1){
         $data = array(
@@ -133,7 +134,11 @@ class SalesItemController extends Controller
             "price" => ($salesItem->total + $salesItem->descont)/$salesItem->qoun,
             "qoun"=>$salesItem->qoun,
             "total"=>$salesItem->total+$salesItem->descont,
-            "descont"=>$salesItem->descont
+            "descont"=>$salesItem->descont,
+            "length"=>$salesItem->length,
+            "width"=>$salesItem->width,
+            "count"=>$salesItem->count,
+            'type_q'=>$salesItem->type_Q
         );
         $de = Helper::add_from_mate($salesItem->id);
         

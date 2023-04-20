@@ -465,27 +465,27 @@
 
             // ===================================
             $(".m3").hide()
-            $("#s-name").change(function() {
-                if ($(this).val() != "") {
-                    $.ajax({
-                        'url': "{{ route('get_type', '') }}/" + $(this).val(),
-                        'type': "get",
-                        success: function(res) {
-                            if (res == 3) {
-                                $(".m3").removeAttr('disabled');
-                                $('.m3').show()
-                                $(".m2").attr('disabled', 'disabled');
-                                $('.m2').hide()
-                            } else {
-                                $(".m2").removeAttr('disabled');
-                                $('.m2').show()
-                                $(".m3").attr('disabled', 'disabled');
-                                $('.m3').hide()
-                            }
-                        }
-                    })
-                }
-            })
+            // $("#s-name").change(function() {
+            //     if ($(this).val() != "") {
+            //         $.ajax({
+            //             'url': "{{ route('get_type', '') }}/" + $(this).val(),
+            //             'type': "get",
+            //             success: function(res) {
+            //                 if (res == 3) {
+            //                     $(".m3").removeAttr('disabled');
+            //                     $('.m3').show()
+            //                     $(".m2").attr('disabled', 'disabled');
+            //                     $('.m2').hide()
+            //                 } else {
+            //                     $(".m2").removeAttr('disabled');
+            //                     $('.m2').show()
+            //                     $(".m3").attr('disabled', 'disabled');
+            //                     $('.m3').hide()
+            //                 }
+            //             }
+            //         })
+            //     }
+            // })
             //========================================
             getitem()
             $('#add_product').click(function() {

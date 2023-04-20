@@ -82,10 +82,10 @@ th,td{
               <thead>
                 <tr>
                   <th>مبلغا وقدره</th>
-                  <td>{{ $bill->price }}</td>
+                  <td>{{ floatval($bill->price) }}</td>
                   @if ($bill->type == 0)
                   <th>المتبقي له</th>
-                  <td>{{ $total->Residualsum }}</td>
+                  <td>{{ floatval($total->Residualsum) }}</td>
                   @endif
                 </tr>
               </thead>

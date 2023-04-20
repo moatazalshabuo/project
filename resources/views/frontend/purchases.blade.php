@@ -268,7 +268,6 @@
 						<select name="hisba_type" id="hisba_type"  class="form-control">
                         <option value="">حدد نوع الكمية</option>
                         <option value="1">بالمتر</option>
-						<option value="3"> بالمتر المربع</option>
                         <option value="2">بالطرف</option>
                     </select>
 						</div>
@@ -352,23 +351,23 @@ $("#mate").change(function(){
 			$("#old_quant").val(data['quantity'])
 		}
 	})
-	$.ajax({
-	'url':"{{route('get_type','')}}/"+$(this).val(),
-	'type':"get",
-	success:function(res){
-	if(res == 3){
-			$("#input-item .m3").removeAttr('disabled');
-			$('#input-item .m3').show()
-			$("#input-item .m2").attr('disabled','disabled');
-			$('#input-item .m2').hide()
-		}else{
-			$("#input-item .m2").removeAttr('disabled');
-			$('#input-item .m2').show()
-			$("#input-item .m3").attr('disabled','disabled');
-			$('#input-item .m3').hide()
-		}
-	}
-})
+// 	$.ajax({
+// 	'url':"{{route('get_type','')}}/"+$(this).val(),
+// 	'type':"get",
+// 	success:function(res){
+// 	if(res == 3){
+// 			$("#input-item .m3").removeAttr('disabled');
+// 			$('#input-item .m3').show()
+// 			$("#input-item .m2").attr('disabled','disabled');
+// 			$('#input-item .m2').hide()
+// 		}else{
+// 			$("#input-item .m2").removeAttr('disabled');
+// 			$('#input-item .m2').show()
+// 			$("#input-item .m3").attr('disabled','disabled');
+// 			$('#input-item .m3').hide()
+// 		}
+// 	}
+// })
 }
 })
 //==================================
@@ -571,19 +570,19 @@ $(".m3").hide()
 	})
 // ====================================
 
-$("#hisba_type").change(function(){
-	if($(this).val() == 3){
-		$("#form-add .m3").removeAttr('disabled');
-		$('#form-add .m3').show()
-		$("#form-add .m2").attr('disabled','disabled');
-		$('#form-add .m2').hide()
-	}else{
-		$("#form-add .m2").removeAttr('disabled');
-		$('#form-add .m2').show()
-		$("#form-add .m3").attr('disabled','disabled');
-		$('#form-add .m3').hide()
-	}
-})
+// $("#hisba_type").change(function(){
+// 	if($(this).val() == 3){
+// 		$("#form-add .m3").removeAttr('disabled');
+// 		$('#form-add .m3').show()
+// 		$("#form-add .m2").attr('disabled','disabled');
+// 		$('#form-add .m2').hide()
+// 	}else{
+// 		$("#form-add .m2").removeAttr('disabled');
+// 		$('#form-add .m2').show()
+// 		$("#form-add .m3").attr('disabled','disabled');
+// 		$('#form-add .m3').hide()
+// 	}
+// })
 function reset_add_form(){
 		$(".error_add").text("")
 	}

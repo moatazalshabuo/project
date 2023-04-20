@@ -74,9 +74,9 @@ th,td{
               <thead>
                 <tr>
                   <th>مبلغا وقدره</th>
-                  <td>{{ $bill->price }}</td>
+                  <td>{{ floatval($bill->price) }}</td>
                   <th>المتبقي عليه</th>
-                  <td>{{ $total->Residualsum }}</td>
+                  <td>{{ floatval($total->Residualsum) }}</td>
                 </tr>
               </thead>
             </table>

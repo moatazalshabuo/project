@@ -150,7 +150,6 @@
                                 <select name="hisba_type" id="hisba_type" class="form-control">
                                     <option value="">حدد نوع الكمية</option>
                                     <option value="1">بالمتر</option>
-                                    <option value="3"> بالمتر المربع</option>
                                     <option value="2">بالطرف</option>
                                 </select>
                             </div>
@@ -209,7 +208,7 @@
                                 <select name="hisba_type" id="hisba_type_e" class="form-control">
                                     <option value="">حدد نوع الكمية</option>
                                     <option value="1">بالمتر</option>
-                                    <option value="3">بالمتر المكعب</option>
+                                    {{-- <option value="3">بالمتر المكعب</option> --}}
                                     <option value="2">بالطرف</option>
                                     <input type="hidden" name="id" id="material_id">
                                 </select>
@@ -351,19 +350,19 @@
                 reset_edit_form();
                 $('#form-edit').trigger("reset");
             })
-            $("#hisba_type").change(function() {
-                if ($(this).val() == 3) {
-                    $(".m3").removeAttr('disabled');
-                    $('.m3').show()
-                    $(".m2").attr('disabled', 'disabled');
-                    $('.m2').hide()
-                } else {
-                    $(".m2").removeAttr('disabled');
-                    $('.m2').show()
-                    $(".m3").attr('disabled', 'disabled');
-                    $('.m3').hide()
-                }
-            })
+            // $("#hisba_type").change(function() {
+            //     if ($(this).val() == 3) {
+            //         $(".m3").removeAttr('disabled');
+            //         $('.m3').show()
+            //         $(".m2").attr('disabled', 'disabled');
+            //         $('.m2').hide()
+            //     } else {
+            //         $(".m2").removeAttr('disabled');
+            //         $('.m2').show()
+            //         $(".m3").attr('disabled', 'disabled');
+            //         $('.m3').hide()
+            //     }
+            // })
 
             getitem()
             $('#add-mate').click(function() {
