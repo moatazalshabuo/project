@@ -31,15 +31,16 @@ class PurchasesitemsController extends Controller
         // print($salesbill->id);die();
         if($salesbill->status == 1):
             $rules = ["material"=>"required|numeric",
-            "price"=>"required|numeric|min:1|max:9999999"];
+            "price"=>"required|numeric|min:0.00001|max:9999999",
+            'quant' => "required|numeric|min:0.0001|max:9999999"
+        ];
             $message = ["product.required"=>"يجب ادخال الصنف",
             "price.required"=>"يجب ادخال السعر"];
-            if(isset($request->quant)){
-                $rules['quant'] = "required|numeric|min:1|max:9999999";
-            }else{
-                $rules['length'] = 'required|numeric|min:1|max:9999999';
-                $rules['width'] = 'required|numeric|min:1|max:9999999';
-            }
+            // if(isset($request->quant)){
+            // }else{
+            //     $rules['length'] = 'required|numeric|min:1|max:9999999';
+            //     $rules['width'] = 'required|numeric|min:1|max:9999999';
+            // }
             $request->validate($rules,$message);
 
             $quantity = isset($request->quant)?$request->quant:$request->length * $request->width;
