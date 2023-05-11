@@ -38,6 +38,20 @@
                 <div class="card-body">
                     <form action="{{ route('search_exc') }}" method="POST">
                         @csrf
+                        <div class="form-check">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                ايصالات العملاء
+                              </label>
+                            <input class="form-check-input" type="radio" name="type_ex" value="0" id="type_ex1" checked>
+                            
+                          </div>
+                          <div class="form-check">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                ايصالات اخرى
+                               </label>
+                            <input class="form-check-input" type="radio" name="type_ex" value="1" id="type_ex2">
+                            
+                          </div>
                         <div class="row">
                             <div class="col-md-4">
                                 <label>العميل</label>

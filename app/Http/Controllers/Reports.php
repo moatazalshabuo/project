@@ -125,7 +125,7 @@ class Reports extends Controller
             ->leftJoin('purchasesbills', "purchasesbills.id", "=", "exchange_receipt.bill_id")
             ->join("users", "users.id", "=", "exchange_receipt.created_by");
         $where = array();
-        $data = array();
+        
         # code...
         if (isset($request->custom)) {
             $where['custom'] = $request->custom;
@@ -150,6 +150,7 @@ class Reports extends Controller
             $data = $query->whereBetween('exchange_receipt.created_at', [$where['from'], $where['to']]);
         }
 
+        $data = $query->where("type",$request->type_ex);
         return view("frontend/Exchange_report", ["data" => $data->get(), 'custom' => $client]);
     }
 
