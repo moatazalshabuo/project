@@ -6,6 +6,7 @@ use App\Models\Purchasesbill;
 use App\Models\rawmaterials;
 use App\Models\Salesbill;
 use App\Models\SalesItem;
+use App\Models\Treasury;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -23,7 +24,7 @@ class Helper
         $work = DB::table('working_hand')->select(DB::raw("SUM(price) as sum"))->where(['proid'=>$id])->get();
         $sum1 = empty($work[0]->sum)?0:$work[0]->sum;
         $sum2 = empty($mymaterial[0]->sum)?0:$mymaterial[0]->sum;
-        return ($sum1 + $sum2); 
+        return ($sum1 + $sum2);
     }
     public static function Collect_bill($id){
         $salesbill = Salesbill::find($id);
@@ -36,14 +37,14 @@ class Helper
         $salesbill = Purchasesbill::find($id);
         $mymaterial = DB::table('purchases_items')->select(DB::raw("SUM(total) as totalsum"))
         ->where(['purchases_id'=> $salesbill->id])->get();
-       
+
             $salesbill->tolal = isset($mymaterial[0]->totalsum)?$mymaterial[0]->totalsum:0;
         $salesbill->update();
     }
     public static function check_materil($id,$total){
         $mymaterial = DB::table("proudct_material")->join("rawmaterials","rawmaterials.id","=","proudct_material.rawid")
         ->select(["rawmaterials.*","proudct_material.quan"])->where(["proudct_material.proid"=>$id])->get();
-        $error = ""; 
+        $error = "";
         foreach($mymaterial as $item):
             $error .= ($item->quantity < ($item->quan * $total))?" كمية العنصر <strong>(". $item->material_name .")</strong> لاتكفي للمنتج المطلوب  <br>":"";
         endforeach;
@@ -53,7 +54,7 @@ class Helper
         $salesItem = SalesItem::find($id);
         $mate = DB::table('proudct_material')->select(DB::raw("($salesItem->qoun * proudct_material.quan) as coun"),"proudct_material.*")
         ->where(['proudct_material.proid'=> $salesItem->prodid])->get();
-        
+
         foreach($mate as $val){
             $raw = rawmaterials::find($val->rawid);
             $raw->quantity = ($raw->quantity - $val->coun);
@@ -75,12 +76,21 @@ class Helper
 
     }
     public static function logo(){
-        try{
-            return DB::table('system_mangs')->select('logo_photo')->get()[0]->logo_photo;
-        }catch(Exception $e){
-            return "";
+            try{
+                return DB::table('system_mangs')->select('logo_photo')->get()[0]->logo_photo;
+            }catch(Exception $e){
+                return "";
+            }
         }
-        }
-}
 
-?>
+    public static function check_ammount($val)
+    {
+        $treasury = Treasury::find(1);
+        if(isset($treasury->amount))
+        {
+            return $treasury->amount > $val?true:false;
+        }else{
+            return false;
+        }
+    }
+}

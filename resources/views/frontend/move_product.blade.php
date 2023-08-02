@@ -40,7 +40,7 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-4">
-                                <label>الزبون</label>
+                                <label>المنتجات</label>
                                 <select name="product" class="form-control sel">
                                     <option value="">اختر الصنف</option>
                                     @foreach ($product as $item)

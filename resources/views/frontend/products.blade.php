@@ -29,12 +29,13 @@
                 <button type="button" id="refrech" class="btn btn-danger btn-icon ml-2"><i
                         class="mdi mdi-refresh"></i></button>
             </div>
-            @if (Auth::user()->user_type == 1 || Auth::user()->user_type == 0)
+            @can('اضافة منتج')
                 <div class="pr-1 mb-3 mb-xl-0">
                     <button type="button" data-target="#select2modal" data-toggle="modal" class="btn btn-primary ml-2"><i
                             class="mdi mdi-plus"></i> اضافة صنف</button>
                 </div>
-            @endif
+            @endcan
+
         </div>
     </div>
     <!-- breadcrumb -->
@@ -125,7 +126,7 @@
                 <div class="modal-footer">
                     <button class="btn ripple btn-outline-primary" id="add_product" type="button">
                         <span class="spinner-border spinner-border-sm sp" style="display: none"></span>
-                        <span  class="text">حفظ </span>
+                        <span class="text">حفظ </span>
                     </button>
                     <button class="btn ripple btn-outline-secondary" data-dismiss="modal" type="button">اغلاق</button>
                 </div>
@@ -176,7 +177,9 @@
                                         </p>
                                     </div>
                                     <div class="col-md-3">
-                                        <button type="button" class="btn btn-success" id="add-mate"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">اضافة</span></button>
+                                        <button type="button" class="btn btn-success" id="add-mate"><span
+                                                class="spinner-border spinner-border-sm sp"
+                                                style="display: none"></span><span class="text">اضافة</span></button>
                                     </div>
                                 </div>
                             </form>
@@ -209,8 +212,9 @@
                                         </p>
                                     </div>
                                     <div class="col-md-3">
-                                        <button type="button" class="btn btn-success" id="add-work" >
-                                            <span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">اضافة</span>
+                                        <button type="button" class="btn btn-success" id="add-work">
+                                            <span class="spinner-border spinner-border-sm sp"
+                                                style="display: none"></span><span class="text">اضافة</span>
                                         </button>
                                     </div>
                                 </div>
@@ -269,7 +273,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" id="update" class="btn btn-primary "><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">حفظ التعديل</span></button>
+                                    <button type="button" id="update" class="btn btn-primary "><span
+                                            class="spinner-border spinner-border-sm sp" style="display: none"></span><span
+                                            class="text">حفظ التعديل</span></button>
                                 </form>
                             </div>
                         </div>
@@ -307,7 +313,7 @@
     <script>
         $(function() {
 
-            // function product 
+            // function product
             function resetMateError() {
                 $(".mateError").text("")
             }
@@ -343,7 +349,7 @@
                     }
                 })
             }
-            // show material to select 
+            // show material to select
             function getMatiSel(id) {
                 $.ajax({
                     url: "{{ route('get-mati', '') }}/" + id,
@@ -497,7 +503,7 @@
                     data: $('#form-add').serialize(),
                     success: function(res) {
                         $(this).children('.sp').hide()
-                $(this).children(".text").show()
+                        $(this).children(".text").show()
                         $('#form-add').trigger("reset");
                         $("#select2modal").modal('hide')
                         getMatiSel(res)
@@ -510,14 +516,14 @@
                     error: function(e) {
                         $data = e.responseJSON;
                         $(this).children('.sp').hide()
-                    $(this).children(".text").show()
+                        $(this).children(".text").show()
                         $(".error_name").append($data.errors.name)
                         $(".error_type").append($data.errors.type_Q)
                     }
                 })
             })
 
-            //============================================== 
+            //==============================================
 
             $(document).on("click", ".edit_product", function() {
                 id = $(this).attr('id');

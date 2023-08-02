@@ -109,12 +109,12 @@
                                             <td>{{ $item['created_at'] }}</td>
                                             <td>{{ $item['username'] }}</td>
                                             <td>
-                                                @if (Auth::user()->user_type == 1)
+                                                @can('حذف ايصال')
                                                     @if ($item['type_n'] == '1')
                                                         <button class="btn btn-danger dele" id="{{ $item['id_bill'] }}"><i
                                                                 class='mdi mdi-delete'></i></button>
                                                     @endif
-                                                @endif
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach

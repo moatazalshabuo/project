@@ -15,6 +15,8 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->string("name");
+            $table->string("email",50)->nullable();
+            $table->string("address",100)->nullable();
             $table->bigInteger("phone")->unique();
             $table->timestamps();
         });

@@ -128,6 +128,12 @@
                                     {{-- <input class="form-control" @if ($data->status == 0)disabled @endif placeholder="العرض" type="text"> --}}
                                 </div>
                                 <div class="col-md-2 col-6">
+                                    <label>التخفيض من المتر/قطعة</label>
+                                    <input class="form-control" placeholder="التخفيض" value="0" type="number"
+                                        id="descount1" name="desont1" @if ($data->status == 0) disabled @endif>
+
+                                </div>
+                                <div class="col-md-2 col-6">
                                     <label>التخفيض</label>
                                     <input class="form-control" placeholder="التخفيض" value="0" type="number"
                                         id="descount" name="descont" @if ($data->status == 0) disabled @endif>
@@ -200,7 +206,7 @@
                         </div>
                         <div class="col-lg-12 col-md-12 col-4">
                             <div class="form-group p-1 ">
-                                الخالص : <input type="number" @if ($data->status == 0) disabled @endif
+                                الخالص : <input type="number"  disabled
                                     class="form-control" id="sincere">
                             </div>
 
@@ -215,8 +221,6 @@
                 </div>
             </div>
         </div>
-
-
         <!-- row closed -->
         </div>
         </div>
@@ -266,13 +270,7 @@
     @endsection
 
     @section('js')
-        <!--Internal  Datepicker js -->
-        {{-- <script src="{{URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js')}}"></script> --}}
-        <!-- Internal Select2 js-->
         <script src="{{ URL::asset('assets/plugins/select2/js/select2.min.js') }}"></script>
-        <!--- Internal Accordion Js -->
-        {{-- <script src="{{URL::asset('assets/plugins/accordion/accordion.min.js')}}"></script> --}}
-        {{-- <script src="{{URL::asset('assets/js/accordion.js')}}"></script> --}}
         <script>
             $(function() {
 
@@ -388,9 +386,9 @@
 
                 function totel_product() {
                     var quan = $("#quant").val() || $("#length").val() * $("#width").val() * $("#quant1").val()
-                    $("#totel").val(($("#price").val() * quan).toFixed())
+                    $("#totel").val(($("#price").val() * quan - $("#descount").val()).toFixed())
                 }
-                $("#quant,#length,#width,#quant1").keyup(function() {
+                $("#quant,#length,#width,#quant1,#descount").keyup(function() {
                     totel_product()
                 })
                 $("#addItem").click(function() {
@@ -399,6 +397,20 @@
                 $("#input-item .m2,#input-item .m3,#descount , #descripe").keyup(function(e) {
                     if (e.which == 13) {
                         add_item_sale()
+                    }
+                })
+                $("#descount1").keyup(function() {
+                    console.log($(this).val() != 0)
+                    if ($(this).val() != 0 && $(this).val() != undefined) {
+                        var quan = $("#quant").val() || $("#length").val() * $("#width").val() * $("#quant1")
+                            .val()
+                        var totel1 = quan * $("#price").val()
+                        var totel2 = quan * $("#descount1").val()
+                        $("#descount").val(parseFloat(totel1 - totel2))
+                        totel_product()
+                    }else{
+                        $("#descount").val(0)
+                        totel_product()
                     }
                 })
 
@@ -461,6 +473,7 @@
                             if (data['type'] == 1) {
                                 $("#price").val(parseFloat(data['price']))
                                 $("#descount").val(parseFloat(data['descont']))
+                                $("#descount1").val(parseFloat(data['descont1']))
                                 $("#totel").val(parseFloat(data['total']))
                                 $("#quant").val(parseFloat(data['qoun']))
                                 if (data['type_q'] == 3) {

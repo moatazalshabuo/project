@@ -35,12 +35,12 @@
                 <button type="button" id="refresh" class="btn btn-danger btn-icon ml-2"><i
                         class="mdi mdi-refresh"></i></button>
             </div>
-            @if (Auth::user()->user_type == 1 || Auth::user()->user_type == 0)
+            @can("اضافة مادة خام")
                 <div class="pr-1 mb-3 mb-xl-0">
                     <button type="button" data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo1"
                         class="btn btn-primary ml-2"><i class="mdi mdi-plus"></i> اضافة مادة </button>
                 </div>
-            @endif
+            @endcan
         </div>
     </div>
 @endsection
@@ -262,7 +262,7 @@
     <script>
         $(function() {
 
-            // الدوال اولا تم تاتي العمليات 
+            // الدوال اولا تم تاتي العمليات
             // دالة احضار عناصر المواد الخام وعرضها في الصفحة
             $(".m3").hide()
 
@@ -334,11 +334,11 @@
                     }
                 })
             }
-            // دالة تهيئة رسائل الاخطاء كلها 
+            // دالة تهيئة رسائل الاخطاء كلها
             function reset_add_form() {
                 $(".error_add").text("")
             }
-            // دالة تهيئة رسائل الاخطاء كلها 
+            // دالة تهيئة رسائل الاخطاء كلها
             function reset_edit_form() {
                 $(".error_edit").text("")
             }

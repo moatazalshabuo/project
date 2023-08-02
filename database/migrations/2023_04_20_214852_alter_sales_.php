@@ -14,6 +14,7 @@ return new class extends Migration
         //
         Schema::table("clients",function(Blueprint $table){
             $table->bigInteger("phone")->nullable()->change();
+            $table->string('address',50)->nullable();
         });
         Schema::table("customers",function(Blueprint $table){
             $table->bigInteger("phone")->nullable()->change();

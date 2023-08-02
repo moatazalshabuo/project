@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string("name");
             $table->bigInteger("phone")->unique();
             $table->string("email")->nullable();
-            $table->string("address")->nullable();
-            $table->bigInteger("phone_2")->nullable();
             $table->timestamps();
         });
     }

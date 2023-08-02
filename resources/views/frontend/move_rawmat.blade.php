@@ -113,7 +113,8 @@
                                                     <a href="{{ route('salesbill', $item['id_bill']) }}"> فاتورة مبيعات
                                                         رقم{{ $item['id_bill'] }} </a>
                                                 @elseif($item['type'] == 1)
-                                                    <a href="{{ route('Purchasesbill', $item['id_bill']) }}"> فاتورة مشتريات
+                                                    <a href="{{ route('Purchasesbill', $item['id_bill']) }}"> فاتورة
+                                                        مشتريات
                                                         رقم{{ $item['id_bill'] }} </a>
                                                 @endif
                                             </td>

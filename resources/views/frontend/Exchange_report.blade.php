@@ -41,17 +41,18 @@
                         <div class="form-check">
                             <label class="form-check-label" for="flexRadioDefault1">
                                 ايصالات العملاء
-                              </label>
-                            <input class="form-check-input" type="radio" name="type_ex" value="0" id="type_ex1" checked>
-                            
-                          </div>
-                          <div class="form-check">
+                            </label>
+                            <input class="form-check-input" type="radio" name="type_ex" value="0" id="type_ex1"
+                                checked>
+
+                        </div>
+                        <div class="form-check">
                             <label class="form-check-label" for="flexRadioDefault2">
                                 ايصالات اخرى
-                               </label>
+                            </label>
                             <input class="form-check-input" type="radio" name="type_ex" value="1" id="type_ex2">
-                            
-                          </div>
+
+                        </div>
                         <div class="row">
                             <div class="col-md-4">
                                 <label>العميل</label>
@@ -131,10 +132,10 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>
-                                                @if (Auth::user()->user_type == 1 || Auth::user()->user_type == 0)
-                                                    <button class="btn btn-danger dele" id="{{ $item->id }}"><i
-                                                            class='mdi mdi-transcribe'></i></button>
-                                                @endif
+                                                @can("حذف ايصال")
+                                                <button class="btn btn-danger dele" id="{{ $item->id }}"><i
+                                                        class='mdi mdi-transcribe'></i></button>
+                                                @endcan
                                                 <button class="btn btn-primary print" id="{{ $item->id }}"><i
                                                         class="fa fa-print"></i></button>
                                             </td>

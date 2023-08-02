@@ -37,7 +37,7 @@ class Reports extends Controller
                     ->orOn("salesbills.client", "=", "clients.id");
             })->join("users", "users.id", "=", "pay_receipt.created_by")->where("pay_receipt.created_at", "like", "%" . date("Y-m-d") . "%");
         $client = client::all();
-        return view("frontend/pay_report", ['client' => $client,'data'=>$query->get()]);
+        return view("frontend/pay_report", ['client' => $client, 'data' => $query->get()]);
     }
     public function search_pay(Request $request)
     {
@@ -79,7 +79,7 @@ class Reports extends Controller
         //    print_r($query->get());die();
         // return redirect()->route('pay_index')->with('data', $query->get());
         $client = client::all();
-        return view("frontend/pay_report", ['client' => $client,'data'=> $query->get()]);
+        return view("frontend/pay_report", ['client' => $client, 'data' => $query->get()]);
     }
 
     public function delete_pay($id)
@@ -125,7 +125,7 @@ class Reports extends Controller
             ->leftJoin('purchasesbills', "purchasesbills.id", "=", "exchange_receipt.bill_id")
             ->join("users", "users.id", "=", "exchange_receipt.created_by");
         $where = array();
-        
+
         # code...
         if (isset($request->custom)) {
             $where['custom'] = $request->custom;
@@ -150,7 +150,7 @@ class Reports extends Controller
             $data = $query->whereBetween('exchange_receipt.created_at', [$where['from'], $where['to']]);
         }
 
-        $data = $query->where("type",$request->type_ex);
+        $data = $query->where("type", $request->type_ex);
         return view("frontend/Exchange_report", ["data" => $data->get(), 'custom' => $client]);
     }
 
@@ -320,12 +320,14 @@ class Reports extends Controller
 
         $prus1 = SalesItem::query();
 
-        $prus1->select(DB::raw("min(sales_items.sales_id) as sales_id"),
-        DB::raw("sum(sales_items.qoun * proudct_material.quan) as qaunt"),
-        DB::raw("min(sales_items.created_at) as created_at"),
-        DB::raw("min(users.name) as name"),
-        DB::raw("min(rawmaterials.material_name) as material_name"),
-        DB::raw("min(rawmaterials.id) as rawm"))
+        $prus1->select(
+            DB::raw("min(sales_items.sales_id) as sales_id"),
+            DB::raw("sum(sales_items.qoun * proudct_material.quan) as qaunt"),
+            DB::raw("min(sales_items.created_at) as created_at"),
+            DB::raw("min(users.name) as name"),
+            DB::raw("min(rawmaterials.material_name) as material_name"),
+            DB::raw("min(rawmaterials.id) as rawm")
+        )
             ->join('proudct_material', "proudct_material.proid", "=", "sales_items.prodid")
             ->join("rawmaterials", "rawmaterials.id", "=", "proudct_material.rawid")
             ->join("users", "users.id", "=", "sales_items.user_id")

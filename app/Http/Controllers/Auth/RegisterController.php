@@ -64,7 +64,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            "user_type" =>["required"]
+            "permission" => ['required']
         ]);
     }
 
@@ -77,12 +77,14 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         // return redirect(view('test.404'));
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            "user_type"=>$data['user_type']
         ]);
+        foreach ($data['permission'] as $val) {
+            $user->givePermissionTo($val);
+        }
         // return redirect()->route('users.index')->with('massage',"تم الاضافة بنجاح");
     }
 

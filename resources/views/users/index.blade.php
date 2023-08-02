@@ -1,5 +1,4 @@
 @extends('layouts.master')
-
 @section('css')
     <!-- Internal Data table css -->
     <link href="{{ URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
@@ -9,35 +8,36 @@
     <link href="{{ URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
 @endsection
-@section('title')
-    ادارة المستخدمين
-@endsection
 @section('page-header')
     <!-- breadcrumb -->
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto">المستخدمين</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">
-                    الرئيسية</span>
+                <h4 class="content-title mb-0 my-auto">المستخدمين</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                    عرض المستخدمين</span>
             </div>
         </div>
+        <div class="d-flex my-xl-auto right-content">
+            <div class="pr-1 mb-3 mb-xl-0">
+                <button type="button" class="btn btn-info btn-icon ml-2"><i class="mdi mdi-filter-variant"></i></button>
+            </div>
+            <div class="pr-1 mb-3 mb-xl-0">
+                <button type="button" class="btn btn-danger btn-icon ml-2"><i class="mdi mdi-star"></i></button>
+            </div>
+            <div class="pr-1 mb-3 mb-xl-0">
+                <button type="button" class="btn btn-warning  btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
+            </div>
+            @can('اضافة مستخدم')
+                <div class="mb-3 mb-xl-0">
+                    <a class="btn btn-primary" href="{{ route('users.create') }}">اضافة مستخدم</a>
+                </div>
+            @endcan
 
+        </div>
     </div>
     <!-- breadcrumb -->
 @endsection
 @section('content')
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-
-        </div>
-    @endif
-
     @if (session()->has('edit'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>{{ session()->get('edit') }}</strong>
@@ -71,122 +71,69 @@
             </button>
         </div>
     @endif
-
-
-    <!-- row -->
+    <!-- row opened -->
     <div class="row row-sm">
-
-
-
+        <!--div-->
         <div class="col-xl-12">
-            @if (session()->has('massage'))
-                <div class="alert alert-success">{{session()->get('massage')}}</div>
-            @endif
             <div class="card mg-b-20">
                 <div class="card-header pb-0">
-                    <div class="col-sm-6 col-md-4 col-xl-3">
-                        <a class="btn btn-outline-primary btn-block"
-                             href="{{ route('registeruser') }}">إضافة مستخدم</a>
+                    <div class="d-flex justify-content-between">
+                        <h4 class="card-title mg-b-0">جدول المستخدمين</h4>
+                        <i class="mdi mdi-dots-horizontal text-gray"></i>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        @if (@isset($user) && !@empty($user) && count($user) > 0)
-                            <table id="example1" class="table key-buttons text-md-nowrap">
-                                <thead>
+                        <table id="example1" class="table text-md-nowrap">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th class="border-bottom-0">الاسم</th>
+                                    <th class="border-bottom-0">البريد الالكتروني</th>
+                                    <th class="border-bottom-0">التحكم</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($users as $key => $item)
                                     <tr>
-                                        <th class="border-bottom-0">ر.ت</th>
-                                        <th class="border-bottom-0">اسم المستخدم</th>
-                                        <th class="border-bottom-0">البريد الإلكتروني</th>
-                                        {{-- <th class="border-bottom-0">كلمة المرور</th> --}}
-                                        <th class="border-bottom-0">نوع المستخدم</th>
-										<th class="border-bottom-0">تاريخ الإنشاء</th>
-                                        {{-- <th class="border-bottom-0">السعر</th> --}}
-                                        {{-- <th></th> --}}
-                                        {{-- <th class="border-bottom-0">بواسطة</th> --}}
-                                        {{-- <th class="border-bottom-0">العمليات</th> --}}
-
+                                        <td>{{ $key + 1 }}</td>
+                                        <td>{{ $item->name }}</td>
+                                        <td>{{ $item->email }}</td>
+                                        <td>
+                                            @if ($item->user_type != 1)
+                                                @can('تعديل المستخدمين')
+                                                    <a href="{{ route('users.edit', $item->id) }}"
+                                                        class="btn btn-warning text-white"><i class="fa fa-edit"></i></a>
+                                                @endcan
+                                                @can('حذف المستخدمين')
+                                                    <button class="btn btn-danger text-white delete"
+                                                        data-id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
+                                                    <form action="{{ route('users.delete', $item->id) }}" method="post"
+                                                        id="delete-user-{{ $item->id }}">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                    </form>
+                                                @endcan
+                                            @elseif(Auth::user()->user_type == 1)
+                                                @can('تعديل المستخدمين')
+                                                    <a href="{{ route('users.edit', $item->id) }}"
+                                                        class="btn btn-warning text-white"><i class="fa fa-edit"></i></a>
+                                                @endcan
+                                                @can('حذف المستخدمين')
+                                                    <button class="btn btn-danger text-white delete"
+                                                        data-id="{{ $item->id }}"><i class="fa fa-trash"></i></button>
+                                                    <form action="{{ route('users.delete', $item->id) }}" method="post"
+                                                        id="delete-user-{{ $item->id }}">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                    </form>
+                                                @endcan
+                                            @endif
+                                        </td>
                                     </tr>
-
-                                </thead>
-
-                                <tbody>
-                                    @php
-                                        $i = 0;
-                                    @endphp
-                                    <tr>
-
-
-
-                                        @foreach ($user as $dates)
-                                            @php
-                                                $i++;
-                                            @endphp
-
-
-
-                                            </td>
-                                            <td>{{ $i }}</td>
-                                            <td>{{ $dates->name }}</td>
-                                            <td>{{ $dates->email }}</td>
-                                            {{-- <td>{{ $dates->password }}</td> --}}
-                                            <td>@if ($dates->user_type == 1 || $dates->user_type == 0)
-												ادمن
-												@elseif ($dates->user_type == 3)
-												موظف
-                                                @elseif ($dates->user_type == 4)
-                                                فني
-                                                @else
-                                                ادارة
-											@endif </td>
-                                            <td>{{ $dates->created_at }}</td>
-                                            {{-- <td></td>
-                                            <td></td> --}}
-                                            <td>
-                                                {{-- <button class="btn btn-outline-success btn-sm"
-                                                    data-name="{{ $dates->name }}" data-user_id="{{ $dates->id }}"
-                                                    data-password="{{ $dates->password}}"
-                                                    data-toggle="modal"
-                                                    data-target="#edit_Product">تعديل</button> --}}
-                                                    
-                                                        @if ($dates->user_type == 1 && Auth::user()->user_type == 1)
-                                                        <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale" 
-														data-id="{{ $dates->id }}" data-name="{{ $dates->name }}"
-														data-password="{{ $dates->password }}" data-email="{{ $dates->email }}"
-                                                         data-user_type="{{ $dates->user_type }}"   data-toggle="modal" href="#exampleModal2"
-														title="تعديل"><i class="las la-pen"></i></a>
-                                                        <button class="btn btn-outline-danger delete-user btn-sm "
-                                                        id="{{ $dates->id }}">حذف</button>
-                                                        @elseif($dates->user_type != 1)
-
-                                                        <a class="modal-effect btn btn-sm btn-info" data-effect="effect-scale" 
-														data-id="{{ $dates->id }}" data-name="{{ $dates->name }}"
-														data-password="{{ $dates->password }}" data-email="{{ $dates->email }}"
-                                                         data-user_type="{{ $dates->user_type }}"   data-toggle="modal" href="#exampleModal2"
-														title="تعديل"><i class="las la-pen"></i></a>
-
-                                                        <button class="btn btn-outline-danger delete-user btn-sm "
-                                                        id="{{ $dates->id }}">حذف</button>
-
-                                                        <a href="{{ route('sataususer',$dates->id) }}" class="btn btn-sm @if($dates->status) btn-danger @else btn-success @endif">
-                                                            @if($dates->status) حظر @else فك الحظر @endif
-                                                        </a>
-                                                        @endif
-                                            </td>
-                                    </tr>
-                        @endforeach
-                    @else
-                        <span> لاتوجد مستخدمين بالنظام</span>
-                        @endif
-
-                        </tbody>
-
-
-
-                        {{-- @endforeach --}}
-
-
-
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -194,165 +141,13 @@
         </div>
         <!--/div-->
 
-        <!--div-->
-        <!-- Basic modal -->
-
-        <!-- End Basic modal -->
     </div>
-
-
-    <!-- edit -->
-    <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-   <div class="modal-dialog" role="document">
-       <div class="modal-content">
-           <div class="modal-header">
-               <h5 class="modal-title" id="exampleModalLabel">تعديل القسم</h5>
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                   <span aria-hidden="true">&times;</span>
-               </button>
-           </div>
-           <div class="modal-body">
-
-               <form action="{{ url('users/update') }}" method="post" autocomplete="off">
-                   {{method_field('patch')}}
-                   @csrf
-                   <div class="form-group">
-                       <input type="hidden" name="id" id="id" value="">
-                       <label for="recipient-name" class="col-form-label">اسم المستخدم:</label>
-                       <input class="form-control" name="name" id="name" type="text">
-                   </div>
-                   <div class="form-group">
-                       <label for="message-text" class="col-form-label">كلمة المرور:</label>
-                       <input type="password" class="form-control" id="password" name="password">
-                   </div>
-                   <div class="form-group">
-                    <label for="message-text" class="col-form-label">البريد الإلكتروني:</label>
-                    <input type="email" class="form-control" id="email" name="email">
-                </div>
-                <div class="form-group">
-                <label for="message-text" class="col-form-label">نوع المستخدم:</label>
-                {{-- <label class="my-1 mr-2" for="inlineFormCustomSelectPref">القسم</label> --}}
-                <select name="user_type" id="user_type" class="form-control" required>
-                    {{-- @foreach ($user as $dates) --}}
-<option value="">اختر الحالة</option>
-
-
- 
-<option @selected($dates->user_type  == 1) value="1">مسؤول</option>
-<option value="0" @selected($dates->user_type  == 0)>2مسؤول</option>
-<option value="2" @selected($dates->user_type  == 2)>ادارة</option>
-<option value="3" @selected($dates->user_type  == 3)>مبيعات</option>
-<option value="4" @selected($dates->user_type  == 4)>فني</option>
-                    {{-- @endforeach --}}
-                </select>
-                </div>
-         
-           <div class="modal-footer">
-               <button type="submit" class="btn btn-primary">تاكيد</button>
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-           </div>
-           </form>
-       </div>
-   </div>
-</div>
-
-
-
-    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">حذف المستخدم</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="users/destroy" method="post">
-                {{ method_field('delete') }}
-                {{ csrf_field() }}
-                <div class="modal-body">
-                    <p>هل انت متاكد من عملية الحذف ؟</p><br>
-                    <input type="hidden" name="pro_id" id="pro_id" value="">
-                    <input class="form-control" name="product_name" id="product_name" type="text" readonly>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-                    <button type="submit" class="btn btn-danger">تاكيد</button>
-                </div>
-            </form>
-        </div>
+    <!-- /row -->
     </div>
-</div>
-
-    <!-- edit -->
-    {{-- <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">تعديل القسم</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-
-                                        <form action="{{ url('sections/update') }}" method="post" autocomplete="off">
-                                            {{method_field('patch')}}
-                                            @csrf
-                                            <div class="form-group">
-                                                <input type="hidden" name="id" id="id" value="">
-                                                <label for="recipient-name" class="col-form-label">اسم القسم:</label>
-                                                <input class="form-control" name="section_name" id="section_name" type="text">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="message-text" class="col-form-label">ملاحظات:</label>
-                                                <textarea class="form-control" id="description" name="description"></textarea>
-                                            </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">تاكيد</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
-                                    </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div> --}}
-
-    <!-- delete -->
-    {{-- <div class="modal" id="exampleModal11">
-							<div class="modal-dialog modal-dialog-centered" role="document">
-								<div class="modal-content modal-content-demo">
-									<div class="modal-header">
-										<h6 class="modal-title">حذف القسم</h6><button aria-label="Close" class="close" data-dismiss="modal"
-																					   type="button"><span aria-hidden="true">&times;</span></button>
-									</div>
-									<form action="sections/destroy" method="post">
-										{{method_field('delete')}}
-										{{csrf_field()}}
-										<div class="modal-body">
-											<p>هل انت متاكد من عملية الحذف ؟</p><br>
-											<input type="hidden" name="id" id="id" value="">
-											<input class="form-control" name="section_name" id="section_name" type="text" readonly>
-										</div>
-										<div class="modal-footer">
-											<button type="button" class="btn btn-secondary" data-dismiss="modal">الغاء</button>
-											<button type="submit" class="btn btn-danger">تاكيد</button>
-										</div>
-								</div>
-								</form>
-							</div>
-						</div> --}}
-
-    <!-- row closed -->
-
     <!-- Container closed -->
-
+    </div>
     <!-- main-content closed -->
 @endsection
-
 @section('js')
     <!-- Internal Data tables -->
     <script src="{{ URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
@@ -372,54 +167,25 @@
     <script src="{{ URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
     <!--Internal  Datatable js -->
-    
-    <script>
-	$('#exampleModal2').on('show.bs.modal', function(event) {
-		var button = $(event.relatedTarget)
-		var id = button.data('id')
-		var section_name = button.data('name')
-		var description = button.data('email')
-        var password = button.data('password')
-        var user_type = button.data('user_type')
-		var modal = $(this)
-		modal.find('.modal-body #id').val(id);
-		modal.find('.modal-body #name').val(section_name);
-		modal.find('.modal-body #email').val(description);
-        modal.find('.modal-body #password').val(password);
-        modal.find('.modal-body #user_type').val(user_type);
-
-	})
-</script>
-
-<script>
-$('#modaldemo9').on('show.bs.modal', function(event) {
-    var button = $(event.relatedTarget)
-    var pro_id = button.data('pro_id')
-    var product_name = button.data('product_name')
-    var modal = $(this)
-
-    modal.find('.modal-body #pro_id').val(pro_id);
-    modal.find('.modal-body #product_name').val(product_name);
-})
-
-$(function(){
-  $(".delete-user").click(function(){
-    Swal.fire({
-        title: 'هل تريد الحذف؟',
-        // showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'حذف',
-        cancelButtonText:"الغاء"
-        }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-            location.replace("{{ route('deleteuser','') }}/"+$(this).attr('id'))
-        }
-        })
-  })  
-})
-</script>
-
     <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
-    <script src="{{ URL::asset('assets/js/modal.js') }}"></script>
+    <script>
+        $(function() {
+            $(".delete").click(function() {
+                var id = $(this).data('id')
+                Swal.fire({
+                    title: 'هل انت متاكد?',
+                    text: "من انك تريد حذف المستخدم!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: ' حذف!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $(`#delete-user-${id}`).submit()
+                    }
+                })
+            })
+        })
+    </script>
 @endsection

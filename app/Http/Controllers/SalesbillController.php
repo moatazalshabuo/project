@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Models\pay_receipt;
 use App\Models\client;
 use App\Models\material_product;
@@ -191,33 +192,37 @@ class SalesbillController extends Controller
 
         $totls = Salesbill::select(DB::raw("SUM(Residual) as Residualsum"))
             ->where("client", $request->client)->get();
-        if (isset($totls[0]) && $totls[0]->Residualsum >= $request->price) {
-            $price = $request->price;
-            $bills = Salesbill::select("id")->where(["client" => $request->client, "status" => '0'])->where("Residual", ">", "0")->orderBy("id", "DESC")->get();
-            foreach ($bills as $val) {
-                $sal = Salesbill::find($val->id);
-                if ($price > 0) {
-                    if ($price <= $sal->Residual) {
-                        $sal->Residual = $sal->Residual - $price;
-                        $sal->sincere = $sal->sincere + $price;
-                        $sal->update();
-                        $price = 0;
-                    } else {
-                        $price = $price - $sal->Residual;
-                        $sal->sincere = $sal->sincere + $sal->Residual;
-                        $sal->Residual = 0;
-                        $sal->update();
+        if (Helper::check_ammount($request->price)) {
+            if (isset($totls[0]) && $totls[0]->Residualsum >= $request->price) {
+                $price = $request->price;
+                $bills = Salesbill::select("id")->where(["client" => $request->client, "status" => '0'])->where("Residual", ">", "0")->orderBy("id", "DESC")->get();
+                foreach ($bills as $val) {
+                    $sal = Salesbill::find($val->id);
+                    if ($price > 0) {
+                        if ($price <= $sal->Residual) {
+                            $sal->Residual = $sal->Residual - $price;
+                            $sal->sincere = $sal->sincere + $price;
+                            $sal->update();
+                            $price = 0;
+                        } else {
+                            $price = $price - $sal->Residual;
+                            $sal->sincere = $sal->sincere + $sal->Residual;
+                            $sal->Residual = 0;
+                            $sal->update();
+                        }
                     }
                 }
+                $data['id'] = pay_receipt::create([
+                    "client_id" => $request->client,
+                    "price" => $request->price,
+                    "created_by" => Auth::id()
+                ])->id;
+                $data['done'] = "تم تسجيل العملية بنجاح ";
+            } else {
+                $data['error'] = "القمية المدخلة اكبر من القيمة المتبقي";
             }
-            $data['id'] = pay_receipt::create([
-                "client_id" => $request->client,
-                "price" => $request->price,
-                "created_by" => Auth::id()
-            ])->id;
-            $data['done'] = "تم تسجيل العملية بنجاح ";
         } else {
-            $data['error'] = "القمية المدخلة اكبر من القيمة المتبقي";
+            $data['error'] = "القمية المدخلة اكبر من القيمة الموجودة في الخزينة";
         }
 
         echo json_encode($data);

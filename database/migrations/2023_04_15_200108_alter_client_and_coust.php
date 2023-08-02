@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-    
+
         Schema::table("customers",function(Blueprint $table){
-            $table->string("email")->nullable();
-            $table->string("address")->nullable();
             $table->bigInteger("phone_2")->nullable();
         });
         //

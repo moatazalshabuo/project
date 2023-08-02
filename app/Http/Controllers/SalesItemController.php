@@ -19,7 +19,6 @@ class SalesItemController extends Controller
     {
         //
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -28,13 +27,12 @@ class SalesItemController extends Controller
         $salesbill = Salesbill::find($request->id);
         // print($salesbill->id);die();
         if($salesbill->status == 1):
-            
             $rules = ["product"=>"required|numeric",];
             $message = ["product.required"=>"يجب ادخال صنف",
             "product.numeric"=>"يجب ادخال صنف"];
             if(isset($request->quant)){
                 if(isset(Product::find($request->product)->id) &&  Product::find($request->product)->type_Q == 2){
-                    $rules['quant'] = "required|integer|min:0.0001|max:9999999";    
+                    $rules['quant'] = "required|integer|min:0.0001|max:9999999";
                 }else{
                     $rules['quant'] = "required|numeric|min:0.0001|max:9999999";
                 }
@@ -50,16 +48,16 @@ class SalesItemController extends Controller
             if($product->price > 0){
             $error = Helper::check_materil($request->product,$quantity);
             if(empty($error)){
-                $price = !empty($request->descont)?$request->descont:$product->price;
+                $price = $product->price;
                 $descout = 0;
                 // if(!empty($))
                 $id = SalesItem::create(['prodid'=>$request->product,
                 "sales_id"=>$salesbill->id,
                 "qoun"=>$quantity,
-                "new_price"=>$request->descont,
-                "descont"=>ceil(($quantity*$product->price)-($quantity*$price)),
+                "new_price"=>$request->descont1,
+                "descont"=>$request->descont,
                 "descripe"=>$request->descripe,
-                "total"=>ceil($quantity*$price),
+                "total"=>ceil($quantity*$price-$request->descont),
                 "length"=>$request->length,
                 "width"=>$request->width,
                 "count"=>$quan,
@@ -125,15 +123,16 @@ class SalesItemController extends Controller
     {
         //
 
-        $salesItem = SalesItem::select('sales_items.*',"products.type_Q")->join('products',"products.id","=","sales_items.prodid")->where("sales_items.id",$id)->get()->first();
+        $salesItem = SalesItem::select('sales_items.*','products.price as pprice',"products.type_Q")->join('products',"products.id","=","sales_items.prodid")->where("sales_items.id",$id)->get()->first();
         $salesbill = Salesbill::find($salesItem->sales_id);
         if($salesbill->status == 1){
         $data = array(
             "type"=>1,
             "product" => $salesItem->prodid,
-            "price" => ($salesItem->total + $salesItem->descont)/$salesItem->qoun,
+            "price" => $salesItem->pprice,
             "qoun"=>$salesItem->qoun,
-            "total"=>$salesItem->total+$salesItem->descont,
+            "total"=>$salesItem->total,
+            "descont1"=>$salesItem->new_price,
             "descont"=>$salesItem->descont,
             "length"=>$salesItem->length,
             "width"=>$salesItem->width,
@@ -141,18 +140,18 @@ class SalesItemController extends Controller
             'type_q'=>$salesItem->type_Q
         );
         $de = Helper::add_from_mate($salesItem->id);
-        
+
         $salesItem->delete();
         $re = Helper::Collect_bill($salesItem->sales_id);
         }else{
             $data=array("type"=>2,"massege"=>"الفتورة مغلقة");
-            
+
         }
         echo json_encode($data);
-        
+
     }
 
- 
+
     /**
      * Remove the specified resource from storage.
      */

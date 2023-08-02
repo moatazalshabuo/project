@@ -120,10 +120,10 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>
-                                                @if (Auth::user()->user_type == 1 || Auth::user()->user_type == 0)
-                                                    <button class="btn btn-danger dele" id="{{ $item->id }}"><i
+                                                @can("حذف ايصال")
+                                                        <button class="btn btn-danger dele" id="{{ $item->id }}"><i
                                                             class='mdi mdi-transcribe'></i></button>
-                                                @endif
+                                                @endcan
                                                 <button class="btn btn-primary print" id="{{ $item->id }}"><i
                                                         class="fa fa-print"></i></button>
                                             </td>
