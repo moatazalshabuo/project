@@ -31,6 +31,7 @@ class Helper
         $mymaterial = DB::table('sales_items')->select(DB::raw("SUM(total) as totalsum"))
         ->where(['sales_id'=> $salesbill->id])->get();
         $salesbill->total = isset($mymaterial[0]->totalsum)?$mymaterial[0]->totalsum:0;
+        $salesbill->Residual = $salesbill->total - $salesbill->sincere;
         $salesbill->update();
     }
     public static function Collect_purbill($id){
@@ -39,6 +40,7 @@ class Helper
         ->where(['purchases_id'=> $salesbill->id])->get();
 
             $salesbill->tolal = isset($mymaterial[0]->totalsum)?$mymaterial[0]->totalsum:0;
+            $salesbill->Residual = $salesbill->tolal - $salesbill->sincere;
         $salesbill->update();
     }
     public static function check_materil($id,$total){
@@ -85,12 +87,13 @@ class Helper
 
     public static function check_ammount($val)
     {
-        $treasury = Treasury::find(1);
-        if(isset($treasury->amount))
-        {
-            return $treasury->amount > $val?true:false;
-        }else{
-            return false;
-        }
+        // $treasury = Treasury::find(1);
+        // if(isset($treasury->amount))
+        // {
+        //     return $treasury->amount > $val?true:false;
+        // }else{
+        //     return false;
+        // }
+        return true;
     }
 }

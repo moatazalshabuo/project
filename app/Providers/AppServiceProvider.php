@@ -31,9 +31,9 @@ class AppServiceProvider extends ServiceProvider
         //
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
-        pay_receipt::observe(PayObserver::class);
-        WDTreasury::observe(WDObserver::class);
-        Asset::observe(ObAsset::class);
-        ControlMaterial::observe(CRQuantityObserve::class);
+        // pay_receipt::observe(PayObserver::class);
+        // WDTreasury::observe(WDObserver::class);
+        // Asset::observe(ObAsset::class);
+        // ControlMaterial::observe(CRQuantityObserve::class);
     }
 }

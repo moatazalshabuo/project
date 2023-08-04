@@ -448,8 +448,8 @@
                                 if (data['done']) {
                                     $("#modaldemo17").modal("hide")
                                     Swal.fire(data['done'])
-                                    window.open("{{ route('inviceexc', '') }}/" + data['id'],
-                                        "mywindow", "menubar=1,resizable=1,width=1300,height=1000");
+                                    // window.open("{{ route('inviceexc', '') }}/" + data['id'],
+                                    //     "mywindow", "menubar=1,resizable=1,width=1300,height=1000");
                                     $("#custom_price_recep").val("")
                                     $("#purbill_no_id").val().change()
                                     $("#pay_custom").removeAttr("disabled")
@@ -494,8 +494,8 @@
                                 if (data['done']) {
                                     $("#modeExchange").modal("hide");
                                     Swal.fire(data['done'])
-                                    window.open("{{ route('inviceexc', '') }}/" + data['id'],
-                                        "mywindow", "menubar=1,resizable=1,width=1300,height=1000");
+                                    // window.open("{{ route('inviceexc', '') }}/" + data['id'],
+                                    //     "mywindow", "menubar=1,resizable=1,width=1300,height=1000");
                                     $("#descripe_exc").val("")
                                     $("#price_exc").val("")
                                     $("#exchange_send").removeAttr("disabled")

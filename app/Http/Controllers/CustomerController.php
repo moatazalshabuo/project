@@ -12,10 +12,10 @@ class CustomerController extends Controller
     /**
      * Display a listing of the resource.
      */
-    
+
     public function __construct()
     {
-        
+
     }
     public function show_select($id = "")
     {
@@ -34,7 +34,7 @@ class CustomerController extends Controller
     {
         $request->validate([
             'name'=>["required",'max:255'],
-            "phone"=>["unique:clients,phone",'max:30'],
+            "phone"=>["unique:customers,phone",'max:30'],
             "email"=>['max:80'],
             "address"=>['max:191']
         ],
@@ -55,7 +55,7 @@ class CustomerController extends Controller
     {
         # code...
         $product = Customer::all();
-        
+
         return view("frontend/costum",['product'=>$product]);
     }
     public function search_cust(Request $request)
@@ -82,8 +82,8 @@ class CustomerController extends Controller
         }
        //    $i=0;
 
-       
-       
+
+
         // print_r($dateArr);die();
        if(isset($date['from']) && isset($date['to'])){
 
@@ -95,8 +95,8 @@ class CustomerController extends Controller
 
         $prus1 = Purchasesbill::select("purchasesbills.*","users.name")->
         join("users","users.id","=","purchasesbills.created_by")->
-        where('custom',$client)->     
-        whereBetween('purchasesbills.created_at',[$date])->get();  
+        where('custom',$client)->
+        whereBetween('purchasesbills.created_at',[$date])->get();
 
         }else{
 
@@ -107,7 +107,7 @@ class CustomerController extends Controller
 
             $prus1 = Purchasesbill::select("purchasesbills.*","users.name")->
             join("users","users.id","=","purchasesbills.created_by")->
-            where('custom',$client)->get();        
+            where('custom',$client)->get();
         }
         foreach($prus as $val){
             array_push($data1,
@@ -119,7 +119,7 @@ class CustomerController extends Controller
             "type_n"=>'1'
             ]
            );
-           }   
+           }
            foreach($prus1 as $val){
             array_push($data1,
             ['id_bill'=>$val->id,
@@ -131,7 +131,7 @@ class CustomerController extends Controller
             "type"=>"فاتورة مشتريات",
             "type_n"=>'2'
             ]
-            
+
            );
            $sincere_s += $val->sincere;
             $Residual_s += $val->Residual;
@@ -140,7 +140,7 @@ class CustomerController extends Controller
            $data = collect($data1)->sortBy('created_at')->reverse()->toArray();
         //    echo $data[0]['type_n'] == '1';
         //    var_dump($data);die();
-        
+
         return redirect()->route('cust_index')->with(['data'=>$data,
             'sincere_s'=>empty($sincere_s)?'0':$sincere_s,
             'Residual_s'=>empty($Residual_s)?'0':$Residual_s

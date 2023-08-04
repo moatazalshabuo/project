@@ -23,7 +23,7 @@
   background-color: #eee;
   z-index: 9999;
 /*  display: none;*/
-/* } */ 
+/* } */
 </style>
 {{-- @endsection --}}
 
@@ -53,7 +53,7 @@
 @endsection
 @section('page-header')
 				<!-- breadcrumb -->
-				
+
 
 				<div class="breadcrumb-header row">
 					<div class="my-auto col-md-4">
@@ -69,16 +69,16 @@
 							<a href="{{ route("purchasesbill_edit",$data->id) }}" @if($data->status)disabled @endif class="btn btn-info m-1">تعديل فاتورة</a>
 							<button id="print-bill" class="btn btn-info m-1">طباعة فاتورة</button>
 							<button class="btn btn-info m-1" id="close-bill" @if($data->status == 0)disabled @endif>حفظ الفاتورة</button>
-							<a href="{{ route("Purchasesbill_create") }}" type="button" class="btn btn-danger m-1">فاتورة جديدة </a>							
+							<a href="{{ route("Purchasesbill_create") }}" type="button" class="btn btn-danger m-1">فاتورة جديدة </a>
 						</div>
 					</div>
-				</div>				
+				</div>
 				<div class="row m-1">
 					<div class="col-md-5 col-10">
 						<select id="custom" class="form-control select2-no-search mb-1 select" @if($data->status == 0) disabled @endif>
 							<option label="المورد">
 							</option>
-							
+
 						</select>
 						<div class="text-danger" id="client-err"></div>
 					</div>
@@ -102,7 +102,7 @@
 											<select name="material" class="form-control select" id="mate">
 												<option >اختر الصنف</option>
 												@foreach ($mate as $item)
-												<option value="{{$item->id}}">{{$item->material_name}}</option>													
+												<option value="{{$item->id}}">{{$item->material_name}}</option>
 												@endforeach
 											</select>
 											<div class="text-danger" id="product_error"></div>
@@ -110,7 +110,7 @@
 										<div class="col-md-3 col-6">
 											<label>الكمية الموجودة</label>
 											<input class="form-control" disabled placeholder="الكمية" id="old_quant" type="number">
-											
+
 										</div>
 										<div class="col-md-3 col-6">
 											<label>اخر سعر</label>
@@ -141,13 +141,13 @@
 										</div>
 										<div class="text-warning war"></div>
 									</div>
-								</form>		
+								</form>
 							</div>
 
 						</div>
 					</div>
 				</div>
-			
+
 				<div class="row">
 					<div class="col-lg-10 col-md-10">
 						<div class="card card-primary">
@@ -167,13 +167,13 @@
 										</thead>
 									</table>
 								</div>
-								
+
 							</div>
 							<div class="card-body" style="height: 330px;overflow-y:scroll">
 								<div class="table-responsive">
 									<table class="table mg-b-0 text-md-nowrap text-left">
 										<tbody>
-											
+
 										</tbody>
 									</table>
 								</div>
@@ -237,7 +237,7 @@
 								<input type="text" name="address" id="address" class="form-control">
 								<p id="phone_err" class="text-danger"></p>
 							</div>
-						</form>						
+						</form>
 						<!-- Select2 -->
 					</div>
 					<div class="modal-footer">
@@ -256,7 +256,7 @@
 					</div>
 					<form action="{{ route('rawmaterials.store') }}" id="form-add" method="POST">
 						@csrf
-					
+
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="exampleInputEmail1">اسم المادة</label>
@@ -286,7 +286,7 @@
 							<label for="exampleFormControlTextarea1">السعر</label>
                             <input type="number" class="form-control" id="price_mate" name="price" required>
 						</div>
-						<div class="text text-danger error_add" id="error_price_mate"></div>						
+						<div class="text text-danger error_add" id="error_price_mate"></div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-outline-primary" id="add-mate"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">تاكيد</span></button>
@@ -306,7 +306,7 @@
 <!--Internal  Datepicker js -->
 <script src="{{URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js')}}"></script>
 <!-- Internal Select2 js-->
-<script src="{{URL::asset('assets/plugins/select2/js/select2.min.js')}}"></script>	
+<script src="{{URL::asset('assets/plugins/select2/js/select2.min.js')}}"></script>
 <!--- Internal Accordion Js -->
 <script src="{{URL::asset('assets/plugins/accordion/accordion.min.js')}}"></script>
 <script src="{{URL::asset('assets/js/accordion.js')}}"></script>
@@ -319,7 +319,7 @@
 				location.replace("{{ route('Purchasesbill','') }}/"+$(this).val())
 			}
 		})
-		// ====================================== 
+		// ======================================
 
 		function get_totel(){
 		$.ajax({
@@ -394,7 +394,7 @@ $("#mate").change(function(){
 				if(r == 1){
 				get_totel()
 				alertify.success('تم الاضافة بنجاح');
-				$("#input-item").trigger("reset");	
+				$("#input-item").trigger("reset");
 			}else{
 					Swal.fire(r)
 				}
@@ -421,14 +421,14 @@ $(".m3").hide()
 	})
 
 	$('#price').keypress(function(e){
-			if (e.which ==13) 
+			if (e.which ==13)
 			{
 				add_item()
 			}
 			})
 //========================================
 			$("#price").keyup(function(){
-				var quan = $("#quant").val() || $("#length").val()*$("#width").val() 
+				var quan = $("#quant").val() || $("#length").val()*$("#width").val()
 		$("#totel").val(Math.ceil($(this).val()*quan))
 	});
 
@@ -503,7 +503,7 @@ $(".m3").hide()
 				// console.log(re.responseJSON)
 			}
 		})
-		
+
 	}
 
 	client = "{{ $data->custom }}"
@@ -538,12 +538,10 @@ $(".m3").hide()
 		// console.log($("#form-client").serialize())
 		saveClient()
 	})
-	
+
 
 	$("#close-bill").click(function(){
-		// console.log($('#form-client').serialize())
-		// console.log("_token={{ csrf_token() }}"+$('#form-client').serialize()+"&sincere="+$("#sincere").val()+"&id={{ $data->id }}")
-		// console.log($("#custom").val())
+
 		$(this).attr("disabled","disabled")
 		$.ajax({
 			url:"{{ route('purchasesbill_save') }}",
@@ -623,7 +621,7 @@ $("#price_mate").keypress(function(e){
 	if(e.which == 13){
 		reset_add_form();
 		sendMetadata();
-		location.reload()	
+		location.reload()
 	}
 })
 $('#print-bill').click(function(){
@@ -646,9 +644,9 @@ $('#print-bill').click(function(){
 @if (session()->get('err'))
 	<script>
 		Swal.fire(
-		'نجاح العملية!',
+		'تنبيه',
 		'{{ session()->get('err') }}!',
-		'success'
+		'warning'
 		)
 	</script>
 @endif
