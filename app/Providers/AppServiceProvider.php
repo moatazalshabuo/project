@@ -34,6 +34,6 @@ class AppServiceProvider extends ServiceProvider
         // pay_receipt::observe(PayObserver::class);
         // WDTreasury::observe(WDObserver::class);
         // Asset::observe(ObAsset::class);
-        // ControlMaterial::observe(CRQuantityObserve::class);
+        ControlMaterial::observe(CRQuantityObserve::class);
     }
 }
