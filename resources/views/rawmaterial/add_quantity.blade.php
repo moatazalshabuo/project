@@ -101,7 +101,7 @@
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label>اختر المادة</label>
-                                    <select class="form-control" name="raw_id">
+                                    <select class="form-control sel" name="raw_id">
                                         <option value="">اختر مادة </option>
                                         @foreach ($raws as $item)
                                             <option value="{{ $item->id }}">{{ $item->material_name }} / الكمية الحالية ({{ $item->quantity }})</option>
