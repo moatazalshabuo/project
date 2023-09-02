@@ -12,8 +12,8 @@
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
     <style>
         /* .m3{
-      display: none !important;
-     } */
+              display: none !important;
+             } */
     </style>
 @endsection
 @section('title')
@@ -35,7 +35,7 @@
                 <button type="button" id="refresh" class="btn btn-danger btn-icon ml-2"><i
                         class="mdi mdi-refresh"></i></button>
             </div>
-            @can("اضافة مادة خام")
+            @can('اضافة مادة خام')
                 <div class="pr-1 mb-3 mb-xl-0">
                     <button type="button" data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo1"
                         class="btn btn-primary ml-2"><i class="mdi mdi-plus"></i> اضافة مادة </button>
@@ -110,6 +110,7 @@
                                     <th class="border-bottom-0">نوع الحسبة</th>
                                     <th class="border-bottom-0">كمية المخزون</th>
                                     <th class="border-bottom-0">السعر</th>
+                                    <th class="wd-10p border-bottom-0">سعر الوحدة</th>
                                     <th>المستخدم</th>
                                     <th class="border-bottom-0">العمليات</th>
 
@@ -139,41 +140,66 @@
                         @csrf
 
                         <div class="modal-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">اسم المادة</label>
-                                <input type="text" class="form-control" id="material_name" name="material_name"
-                                    required>
-                            </div>
-                            <div class="text text-danger error_add" id="error_material_name"></div>
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">نوع الكمية</label>
-                                <select name="hisba_type" id="hisba_type" class="form-control">
-                                    <option value="">حدد نوع الكمية</option>
-                                    <option value="1">بالمتر</option>
-                                    <option value="2">بالطرف</option>
-                                </select>
-                            </div>
-                            <div class="text text-danger error_add" id="error_hisba_type"></div>
-
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">كمية المخزون</label>
-                                <div class="d-flex">
-                                    <input type="number" class="form-control m3 m-1" id="length" disabled
-                                        name="length" placeholder="طول">
-                                    <input type="number" class="form-control m3 m-1" id="width" disabled
-                                        name="width" placeholder="العرض">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">اسم المادة</label>
+                                        <input type="text" class="form-control" placeholder="اسم المادة"
+                                            id="material_name" name="material_name" required>
+                                    </div>
+                                    <div class="text text-danger error_add" id="error_material_name"></div>
                                 </div>
-                                <input type="number" class="form-control m2" id="quantity" name="quantity" required>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">نوع الكمية</label>
+                                        <select name="hisba_type" id="hisba_type" class="form-control">
+                                            <option value="">حدد نوع الكمية</option>
+                                            {{-- <option value="1">متر مربع</option> --}}
+                                            <option value="2"> لتر / متر</option>
+                                            <option value="3">قطعة</option>
+                                        </select>
+                                    </div>
+                                    <div class="text text-danger error_add" id="error_hisba_type"></div>
+                                </div>
+                                <div class="col-md-6 width-div" style="display: none">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">العرض</label>
+                                        <input type="number" class="form-control m2" value="1" id="width"
+                                            placeholder="طول القطعة" name="width" required>
+                                    </div>
+                                    <div class="text text-danger error_add" id="error_width"></div>
+                                </div>
+                                <div class="col-md-6 hiegth-div" style="display: none">
+                                    <div class="form-group">
+                                        <label id="hipa_type1">الطول</label>
+
+                                        <input type="number" class="form-control m2" id="hiegth" placeholder=""
+                                            name="hiegth" required>
+                                    </div>
+                                    <div class="text text-danger error_add" id="error_hiegth"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">كمية العلب في المخزن</label>
+                                        <input type="number" class="form-control m2" id="quantity"
+                                            placeholder="كمية المخزون" name="quantity" required>
+                                    </div>
+                                    <div class="text text-danger error_add" id="error_quantity"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">السعر</label>
+                                        <input type="number" class="form-control" id="price_meta" placeholder="السعر"
+                                            name="price" required>
+                                    </div>
+                                    <div class="text text-danger error_add" id="error_price"></div>
+                                </div>
                             </div>
-                            <div class="text text-danger error_add" id="error_quantity"></div>
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">السعر</label>
-                                <input type="number" class="form-control" id="price_meta" name="price" required>
-                            </div>
-                            <div class="text text-danger error_add" id="error_price"></div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary" id="add-mate"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">تأكيد</span></button>
+                            <button type="button" class="btn btn-outline-primary" id="add-mate"><span
+                                    class="spinner-border spinner-border-sm sp" style="display: none"></span><span
+                                    class="text">تأكيد</span></button>
                             <button type="button" class="btn btn-outline-danger close_add"
                                 data-dismiss="modal">إغلاق</button>
 
@@ -190,44 +216,71 @@
                         <h6 class="modal-title text-white">تعديل </h6><button aria-label="Close" class="close"
                             data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
                     </div>
-                    <form action="{{ route('rawmaterials.store') }}" id="form-edit" method="POST">
+                    <form action="{{ route('materialupdate') }}" id="form-edit" method="POST">
                         @csrf
-                        <!--'material_name'=>'required|unique:rawmaterials|max:255',
-         'hisba_type'=>'required',
-         'quantity'=>'required',
-         'price'=>'required', -->
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">اسم المادة</label>
-                                <input type="text" class="form-control" id="material_name_e" name="material_name"
-                                    required>
-                            </div>
-                            <div class="text text-danger error_edit" id="error_material_name_e"></div>
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">نوع الكمية</label>
-                                <select name="hisba_type" id="hisba_type_e" class="form-control">
-                                    <option value="">حدد نوع الكمية</option>
-                                    <option value="1">بالمتر</option>
-                                    {{-- <option value="3">بالمتر المكعب</option> --}}
-                                    <option value="2">بالطرف</option>
-                                    <input type="hidden" name="id" id="material_id">
-                                </select>
-                            </div>
-                            <div class="text-danger error_edit" id="error_hisba_type_e"></div>
 
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">كمية المخزون</label>
-                                <input type="number" class="form-control" id="quantity_e" name="quantity" required>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">اسم المادة</label>
+                                        <input type="text" class="form-control" id="material_name_e"
+                                            name="material_name" required>
+                                        <input type="hidden" class="form-control" id="id_e" name="id"
+                                            required>
+                                    </div>
+                                    <div class="text text-danger error_edit" id="error_material_name_e"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">نوع الكمية</label>
+                                        <select name="hisba_type" id="hisba_type_e" class="form-control">
+                                            <option value="">حدد نوع الكمية</option>
+                                            {{-- <option value="1">متر مربع</option> --}}
+                                            <option value="2">متر</option>
+                                            <option value="3">قطعة</option>
+                                        </select>
+                                    </div>
+                                    <div class="text text-danger error_edit" id="error_hisba_type_e"></div>
+                                </div>
+                                <div class="col-md-6 width-div" style="display: none">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">العرض</label>
+                                        <input type="number" class="form-control m2" id="width_e"
+                                            placeholder="طول القطعة" name="width" required>
+                                    </div>
+                                    <div class="text text-danger error_edit" id="error_width_e"></div>
+                                </div>
+                                <div class="col-md-6 hiegth-div" style="display: none">
+                                    <div class="form-group">
+                                        <label id="hipa_type2">الطول</label>
+                                        <input type="number" class="form-control m2" id="hiegth_e"
+                                            placeholder="طول القطعة" name="hiegth" required>
+                                    </div>
+                                    <div class="text text-danger error_edit" id="error_hiegth_e"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">كمية العلب المخزون</label>
+                                        <input type="number" class="form-control" id="quantity_e" name="quantity"
+                                            required>
+                                    </div>
+                                    <div class="text text-danger error_edit" id="error_quantity_e"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlTextarea1">السعر</label>
+                                        <input type="number" class="form-control" id="price_e" name="price"
+                                            required>
+                                    </div>
+                                    <div class="text text-danger error_edit" id="error_price_e"></div>
+                                </div>
                             </div>
-                            <div class="text text-danger error_edit" id="error_quantity_e"></div>
-                            <div class="form-group">
-                                <label for="exampleFormControlTextarea1">السعر</label>
-                                <input type="number" class="form-control" id="price_e" name="price" required>
-                            </div>
-                            <div class="text text-danger error_edit" id="error_price_e"></div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary" id="update"><span class="spinner-border spinner-border-sm sp" style="display: none"></span><span  class="text">تأكيد</span></button>
+                            <button type="button" class="btn btn-outline-primary" id="update"><span
+                                    class="spinner-border spinner-border-sm sp" style="display: none"></span><span
+                                    class="text">تأكيد</span></button>
                             <button type="button" class="btn btn-outline-danger close_edit"
                                 data-dismiss="modal">إغلاق</button>
                         </div>
@@ -275,6 +328,7 @@
                     }
                 })
             }
+
             // دالة ارسال بايانات المادة الخام والتاكد منها
             function sendMetadata() {
                 $("#add-mate .sp").show()
@@ -298,9 +352,10 @@
                         $data = e.responseJSON;
                         $("#error_material_name").text($data.errors.material_name)
                         $("#error_hisba_type").text($data.errors.hisba_type)
-                        $("#error_quantity").text($data.errors.quantity || $data.errors.length + " " +
-                            $data.errors.width)
+                        $("#error_quantity").text($data.errors.quantity)
                         $("#error_price").text($data.errors.price)
+                        $("#error_hiegth").text($data.errors.hiegth)
+                        $("#error_width").text($data.errors.width)
                     }
                 })
             }
@@ -313,7 +368,7 @@
                     type: "post",
                     data: $('#form-edit').serialize(),
                     success: function(res) {
-                        // console.log(res);
+                        console.log(res);
                         $("#update .sp").hide()
                         $("#update .text").show()
                         $('#form-edit').trigger("reset");
@@ -322,6 +377,7 @@
                         getitem();
                     },
                     error: function(e) {
+                        console.log(e.responseJSON)
                         $data = e.responseJSON;
                         // console.log($data)
                         $("#update .sp").hide()
@@ -330,39 +386,48 @@
                         $("#error_hisba_type_e").text($data.errors.hisba_type)
                         $("#error_quantity_e").text($data.errors.quantity)
                         $("#error_price_e").text($data.errors.price)
+                        // $("#error_quantity_e").text($data.errors.quantity)
+                        // $("#error_price_e").text($data.errors.price)
 
                     }
                 })
             }
+
+
             // دالة تهيئة رسائل الاخطاء كلها
             function reset_add_form() {
                 $(".error_add").text("")
             }
+
             // دالة تهيئة رسائل الاخطاء كلها
             function reset_edit_form() {
                 $(".error_edit").text("")
             }
+
             $(".close_add").click(function() {
                 reset_add_form();
                 $('#form-add').trigger("reset");
             })
+
             $(".close_edit").click(function() {
                 reset_edit_form();
                 $('#form-edit').trigger("reset");
             })
-            // $("#hisba_type").change(function() {
-            //     if ($(this).val() == 3) {
-            //         $(".m3").removeAttr('disabled');
-            //         $('.m3').show()
-            //         $(".m2").attr('disabled', 'disabled');
-            //         $('.m2').hide()
-            //     } else {
-            //         $(".m2").removeAttr('disabled');
-            //         $('.m2').show()
-            //         $(".m3").attr('disabled', 'disabled');
-            //         $('.m3').hide()
-            //     }
-            // })
+
+            $("#hisba_type,#hisba_type_e").change(function() {
+                if ($(this).val() == 1) {
+                    $(".hiegth-div, .width-div").show()
+                    $('#hipa_type1').text("الطول في القطعة الواحدة")
+                } else if ($(this).val() == 2) {
+                    $(".hiegth-div, .width-div").hide()
+                    $(".hiegth-div").show()
+                    $('#hipa_type1').text("الطول في القطعة الواحدة")
+                } else {
+                    $(".hiegth-div, .width-div").hide()
+                    $(".hiegth-div").show()
+                    $('#hipa_type1').text("العدد في العلبة ")
+                }
+            })
 
             getitem()
             $('#add-mate').click(function() {
@@ -384,20 +449,36 @@
             })
 
             $(document).on("click", ".edit_mate", function() {
-                $.ajax({
-                    url: "{{ route('materialedit', '') }}/" + $(this).attr('id'),
-                    type: "get",
-                    // data:{"id":id,"_token": "{{ csrf_token() }}" },
-                    success: function(res) {
-                        // console.log(res['id']);
-                        $("#material_id").val((res['id']))
-                        $("#material_name_e").val((res['material_name']))
-                        $("#hisba_type_e").val((res['hisba_type'])).change()
-                        $("#quantity_e").val(parseFloat(res['quantity']))
-                        $("#price_e").val(parseFloat(res['price']))
+            $.ajax({
+                url: "{{ route('materialedit', '') }}/" + $(this).attr('id'),
+                type: "get",
+
+                success: function(res) {
+
+                    $("#id_e").val((res['id']))
+                    $("#material_name_e").val((res['material_name']))
+                    $("#hisba_type_e").val((res['material_type'])).change()
+                    $("#quantity_e").val(parseFloat(res['quantity']))
+                    $("#price_e").val(parseFloat(res['price']))
+                    if($("#hisba_type_e").val() == 1){
+                        $(".hiegth-div, .width-div").show();
+                        $("#hiegth_e").val(parseFloat(res['hiegth']))
+                        $("#width_e").val(parseFloat(res['width']))
+                        $('#hipa_type2').text("الطول في القطعة الواحدة")
+                    }else if($("#hisba_type_e").val() == 2){
+                        $(".hiegth-div, .width-div").hide()
+                        $("#hiegth_e").val(parseFloat(res['hiegth']))
+                        $(".hiegth-div").show()
+                        $('#hipa_type2').text("الطول في القطعة الواحدة")
+                    }else{
+                        $(".hiegth-div, .width-div").hide()
+                        $("#hiegth_e").val(parseFloat(res['hiegth']))
+                        $(".hiegth-div").show()
+                        $('#hipa_type2').text("العدد في العلبة ")
                     }
-                })
+                }
             })
+        })
 
             //============================================
             $('#update').click(function() {

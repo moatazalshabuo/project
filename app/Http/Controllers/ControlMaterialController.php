@@ -43,10 +43,15 @@ class ControlMaterialController extends Controller
             "quantity" => ['required'],
         ]);
         $raw = rawmaterials::find($request->raw_id);
+
+        $quantity = $request->quantity / ($raw->hiegth * $raw->width);
+
         if ($request->type == 0 && $raw->quantity < $request->quantity) {
+
             return redirect()->back()->with("error","الكمية المراد ازالتها غير متوفرة");
+
         } else {
-            $quantity = ($raw->hisba_type == 2)?round($request->quantity):$request->quantity;
+
             ControlMaterial::create([
                 'raw_id' => $request->raw_id,
                 "quantity" => $quantity,

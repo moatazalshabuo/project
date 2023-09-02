@@ -10,13 +10,21 @@ class rawmaterials extends Model
 {
     use HasFactory;
     protected $fillable = [
-        "id",
+        'id',
         'material_name',
-        'hisba_type',
+        'material_type',
         'quantity',
         'price',
+        "pace_price",
+        "width",
+        "hiegth",
         'created_by',
     ];
+
+    public function quantity(){
+        return $this->quantity * $this->hiegth * $this->width;
+    }
+
     protected $table = "rawmaterials";
     public static function somcount($date = null)
     {
@@ -30,4 +38,5 @@ class rawmaterials extends Model
 
         return empty($count) ? 0 : $count;
     }
+
 }

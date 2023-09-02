@@ -6,6 +6,7 @@ use App\Models\Purchasesitem;
 use App\Models\rawmaterials;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 class RawmaterialsController extends Controller
 {
     /**
@@ -13,7 +14,7 @@ class RawmaterialsController extends Controller
      */
     public function __construct()
     {
-      
+
     }
     public function index()
     {
@@ -26,46 +27,59 @@ class RawmaterialsController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-        $roule = [
-            'material_name'=>'required|unique:rawmaterials,material_name|max:255',
-            'hisba_type'=>'required',
-            'price'=>'required|numeric|max:9999999|min:0',
+        $rouls = [
+            'material_name' => 'required|unique:rawmaterials|max:255',
+            // 'material_type' => 'required',
+            'hisba_type' => 'required',
+            'quantity' => 'required',
+            'price' => 'required',
+            "hiegth" => "required"
         ];
-        if(!isset($request->quantity)){
-            $roule['length'] = 'required|numeric|max:9999999|min:0';
-            $roule['width'] = 'required|numeric|max:9999999|min:0';
-        }else{
-            $roule['quantity'] = 'required|numeric|max:9999999|min:0';
+
+        $message = [
+            'material_name.required' => 'يرجى ادخال اسم المادة',
+            'material_name.unique' => 'هذه المادة موجدود من قبل!!',
+            'material_type.required' => 'يرجى ادخال نوع الكمية',
+            'quantity.required' => 'يرجى ادخال نوع الكمية',
+            'price.required' => 'يرجى ادخال سعر المادة',
+            "width.required" => "يجب ادخال العرض",
+            "hiegth.required" => "يجب ادخال الطول"
+        ];
+
+        if (isset($request->hisba_type) && $request->hisba_type == 1) {
+            $rouls['hiegth'] = "required";
+            $rouls["width"] = "required";
         }
-        $validtiondata = $request->validate($roule,[
-         'material_name.required'=>'يرجى ادخال اسم المادة',
-         'material_name.unique'=>'هذه المادة موجدود من قبل!!',
-         'hisba_type.required'=>'يرجى ادخال نوع الكمية للمادة',
-        //  'quantity.max'=>' الكمية',
-         'price.required'=>'يرجى ادخال سعر المادة',
-         ]
-     );
-     $quantity = isset($request->quantity)?$request->quantity:$request->length * $request->width;
-             rawmaterials::create([
-                 'material_name'=>$request->material_name,
-                 'hisba_type'=>$request->hisba_type,
-                 'quantity'=>$quantity,
-                 'price'=>$request->price,
-                 'created_by'=>(auth()->user()->name),
-             ]);
-             session()->flash('Add','تم اضافة المادة بنجاح');
-            //  return redirect('/rawmaterials');
+
+        $validtiondata = $request->validate(
+            $rouls,
+            $message
+        );
+
+        $pace_price = $request->price / ($request->hiegth * $request->width);
+
+        $hiegth = (isset($request->hiegth)) ? $request->hiegth : 1;
+        $width = (isset($request->width)) ? $request->width : 1;
+        rawmaterials::create([
+            'material_name' => $request->material_name,
+            'material_type' => $request->hisba_type,
+            'quantity' => $request->quantity,
+            "hiegth" => $hiegth,
+            "width" => $width,
+            'price' => $request->price,
+            "pace_price" => $pace_price,
+            'created_by' => (auth()->user()->name),
+        ]);
+        session()->flash('Add', 'تم اضافة المادة بنجاح');
+        return redirect('/rawmaterials');
     }
 
     /**
      * Display the specified resource.
      */
-    public function getoldprice($id)
+    public function show(rawmaterials $rawmaterials)
     {
-        $material = rawmaterials::find($id);
-        $data = array("price"=>$material->price,"quantity"=>$material->quantity);
-        echo json_encode($data);
+        //
     }
 
     /**
@@ -73,7 +87,7 @@ class RawmaterialsController extends Controller
      */
     public function edit($id)
     {
-        return response()->json(rawmaterials::find($id), 200);;
+        return response()->json(rawmaterials::find($id), 200);
     }
 
     /**
@@ -81,41 +95,70 @@ class RawmaterialsController extends Controller
      */
     public function update(Request $request)
     {
-        
         // $input = $request->all();
         $rouls = [
-            'material_name'=>"required|max:255|unique:rawmaterials,material_name,".$request->id,
-            'hisba_type'=>'required',
-            'quantity'=>'required|numeric|max:9999999|min:0|',
-            'price'=>'required|numeric|max:9999999|min:0',
+            'material_name' => "required|max:255|unique:rawmaterials,material_name," . $request->id,
+            'hisba_type' => 'required',
+            'quantity' => 'required|numeric|max:9999999|min:0|',
+            'price' => 'required|numeric|max:9999999|min:0',
         ];
         $message = [
-            'material_name.required'=>'يرجى ادخال اسم المادة',
-            'material_name.unique'=>'هذه المادة موجدود من قبل!!',
-            'hisba_type.required'=>'يرجى ادخال نوع الكمية للمادة',
-            'quantity.required'=>'يرجى ادخال نوع الكمية',
-            'price.required'=>'يرجى ادخال سعر المادة',
-    
-            ];
-            $request->validate($rouls,$message);
-     $rawmaterials = rawmaterials::find($request->id);
-     $rawmaterials->material_name=$request->material_name;
-     $rawmaterials->hisba_type = $request->hisba_type;
-     $rawmaterials->quantity = $request->quantity;
-     $rawmaterials->price = $request->price;
-     $rawmaterials->update();
+            'material_name.required' => 'يرجى ادخال اسم المادة',
+            'material_name.unique' => 'هذه المادة موجدود من قبل!!',
+            'hisba_type.required' => 'يرجى ادخال نوع الكمية للمادة',
+            'quantity.required' => 'يرجى ادخال نوع الكمية',
+            'price.required' => 'يرجى ادخال سعر المادة',
+
+        ];
+
+        if (isset($request->hisba_type) && $request->hisba_type == 1) {
+            $rouls['hiegth'] = "required";
+            $rouls["width"] = "required";
+        } elseif (isset($request->hisba_type) && $request->hisba_type == 1) {
+            $rouls['hiegth'] = "required";
+        }
+
+        $validtiondata = $request->validate(
+            $rouls,
+            $message
+        );
+
+        $hiegth = (isset($request->hiegth)) ? $request->hiegth : 1;
+        $width = (isset($request->width)) ? $request->width : 1;
+        // return $request->price ." ".$request->hiegth . " ".$request->width;
+        if ($request->hisba_type == 3) {
+            $pace_price = $request->price;
+        } else {
+            $pace_price = $request->price / ($hiegth * $width);
+        }
+
+        $rawmaterials = rawmaterials::find($request->id);
+        $rawmaterials->material_name = $request->material_name;
+        $rawmaterials->material_type = $request->hisba_type;
+        $rawmaterials->quantity = $request->quantity;
+        $rawmaterials->hiegth = $hiegth;
+        $rawmaterials->width = $width;
+        $rawmaterials->price = $request->price;
+        $rawmaterials->pace_price = $pace_price;
+        $rawmaterials->update();
     }
+
 
     public function delete($id)
     {
-        // print_r($id);
-        if(Purchasesitem::where('rawmati',$id)->count() == 0){
+        if (Purchasesitem::where('rawmati', $id)->count() == 0) {
             rawmaterials::find($id)->delete();
-            session()->flash('Add','تم الحذف المادة بنجاح');
-        }else{
-            session()->flash('Add','لا يمكن حذف ماده موجوده في فاتورة مشتريات');
+            session()->flash('Add', 'تم الحذف المادة بنجاح');
+        } else {
+            session()->flash('Add', 'لا يمكن حذف ماده موجوده في فاتورة مشتريات');
         }
-        
         return redirect("/rawmaterials");
+    }
+
+    public function getoldprice($id)
+    {
+        $material = rawmaterials::find($id);
+        $data = array("price" => $material->price, "quantity" => $material->quantity);
+        echo json_encode($data);
     }
 }

@@ -65,16 +65,16 @@ Route::get("get-item",function(){
             echo "</td>
                 <td>".floatval(Helper::cost($item->id))."</td>
                 <td>".floatval($item->price)."</td><td>";
-                if(auth()->user()->can('تعديل المنتجات'))
+                if(request()->user()->can('تعديل المنتجات'))
                 if($item->status == 1){
                     echo " <button class='btn btn-danger ml-1 unactive-prod' id='$item->id' ><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'>ايقاف</span></button>";
                 }else{
                     echo " <button class='btn btn-success ml-1 active-prod' id='$item->id' ><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'>تفعيل</span></button>";
                 }
                 echo "</td><td class='d-flex justify-content-center'>";
-                if(auth()->user()->can('تعديل المنتجات'))
+                if(request()->user()->can('تعديل المنتجات'))
                     echo "<button class='btn btn-danger ml-1 btn-icon dele' id='$item->id' ><span class='spinner-border spinner-border-sm sp' style='display: none'></span><span  class='text'> <i class='mdi mdi-delete'></i></span></button>";
-                if(auth()->user()->can('تعديل المنتجات'))
+                if(request()->user()->can('تعديل المنتجات'))
                     echo " <button  data-target='#modaldemo6' data-toggle='modal' class='btn btn-info btn-icon edit_product' id='$item->id'><i class='mdi mdi-transcribe'></i></button>";
                 echo "</td>
             </tr>";
@@ -84,33 +84,37 @@ Route::get("get-item",function(){
 /*  end product page staff  */
 
 /*  Start get data item material form page rawmaterial */
-Route::get("get-item-mate",function(){
-    $product = rawmaterials::select()->orderBy('id','DESC')->get();
-    $i = 0;
-    foreach ($product as $dates){
-            echo "<tr>
+Route::get("get-item-mate", function () {
+    $product = rawmaterials::select()->orderBy('id', 'DESC')->get();
+    $i = 1;
+    foreach ($product as $dates) {
+        echo "<tr>
             <td>$i</td>
             <td>$dates->material_name</td>
             <td>";
-            if($dates->hisba_type == 1)
-              { echo  "بمقاس المتر";}
-            elseif ($dates->hisba_type == 2)
-             {  echo "بمقاس الطرف";
-            }elseif ($dates->hisba_type == 3)
-            {  echo "بمقاس المتر المربع";
-           }
-            echo "</td><td>" .floatval($dates->quantity)." </td>
-            <td>". floatval($dates->price) ."</td>
+        if ($dates->material_type == 1) {
+            echo  "بمقاس المتر المربع";
+        } elseif ($dates->material_type == 2) {
+            echo "بمقاس المتر";
+        } else {
+            echo "بالقطعة";
+        }
+        echo "</td><td>" . floatval($dates->quantity) . " - " . floatval($dates->quantity()) . " </td>
+            <td>" . floatval($dates->price) . "</td>
+            <td>" . floatval($dates->pace_price) . "</td>
             <td>$dates->created_by </td>";
-            echo "<td class='d-flex'>";
-                if(Auth::user()->can("حذف مادة خام"))
-                    echo "<a class='btn btn-danger ml-1 btn-icon' href='".route('materialdelete',$dates->id)."' ><i class='mdi mdi-delete'></i></a>";
-                if(Auth::user()->can("تعديل مادة خام"))
-                    echo "<button  data-target='#edit_material' data-toggle='modal' class='btn btn-info btn-icon edit_mate' id='$dates->id'><i class='mdi mdi-transcribe'></i></button>
-            </td></tr>";$i+=1;
-            }
-
-})->name("getitem-mate")->middleware(['auth','active',"can:عرض المواد الخام"]);
+        echo "<td class='d-flex'>";
+        if (request()->user()->can("حذف مادة خام")) {
+            echo "<a class='btn btn-danger ml-1 btn-icon' href='" . route('materialdelete', $dates->id) . "' ><i class='mdi mdi-delete'></i></a>";
+        }
+        if (request()->user()->can("تعديل مادة خام")) {
+            echo "<button  data-target='#edit_material' data-toggle='modal' class='btn btn-info btn-icon edit_mate' id='$dates->id'><i class='mdi mdi-transcribe'></i></button>
+           ";
+        }
+        echo "</td></tr>";
+        $i += 1;
+    }
+})->name("getitem-mate")->middleware(['auth', "can:عرض المواد الخام"]);
 
 /* end */
 
